@@ -17,6 +17,14 @@ A fa víz nélkül is nő lassan, amíg van nedvesség a talajban, ezért a ját
 
 A fa valós növekedési szakaszokon megy át: csíranövény (sziklevelek, majd valódi levelek, csúcsrügy), csemete, fiatal fa, lombosodó fa és kifejlett fa. A törzs kúpos, a friss csúcshajtás zöld, alatta fásodott kéreg, évgyűrű-hegekkel. Az oldalágak fentről lefelé öregebbek, az alsók a leghosszabbak. A lombkorona később, a fa magasodásával fejlődik, először csak az ágvégeken jelennek meg levelek. Minden szint elején zárt rügyek vannak, aztán rügyfakadás, hajtásnövekedés és a levelek kibomlása következik (a fiatal levél világosabb zöld).
 
+## Végtelen játék
+
+A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan nő) minden szint új dolgot hoz:
+- **Új állatok:** nyúl, béka, méh, szarvas, bagoly és róka, a **Természetnapló** a menüből mutatja a felfedezetteket és a következő ismeretlen élőlényt.
+- **Évszakok:** a fa lombhullató: ősszel színeződik és hullat, télen kopasz és havazik, tavasszal újra lombosodik, nyáron virágzik és gyümölcsöt hoz.
+- **Események:** eső (a fa gyorsabban nő), eső utáni szivárvány, éjszaka hulló csillag, amire ha rákoppintasz, bónusz növekedést kapsz.
+- **Ősfa:** a 13. szint fölött a fa tovább vastagodik és magasodik (kb. 30. szintig).
+
 ## Képernyők
 
 A játék telefonon és tableten is fut, álló és fekvő tájolásban. A kép mindig négyzetes pixelekből áll (nincs torzítás), a felbontás a kijelző méretéhez igazodik, a fa, a talaj és az élőlények mérete arányosan változik, a biom pedig fekvő módban is kitölti a teljes szélességet. A kijelzőbevágás (notch) mellett a kezelőfelület a biztonságos területen marad. Forgatáskor a játékállás megmarad.
