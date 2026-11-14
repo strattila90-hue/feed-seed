@@ -17,6 +17,10 @@ A fa víz nélkül is nő lassan, amíg van nedvesség a talajban, ezért a ját
 
 A fa valós növekedési szakaszokon megy át: csíranövény (sziklevelek, majd valódi levelek, csúcsrügy), csemete, fiatal fa, lombosodó fa és kifejlett fa. A törzs kúpos, a friss csúcshajtás zöld, alatta fásodott kéreg, évgyűrű-hegekkel. Az oldalágak fentről lefelé öregebbek, az alsók a leghosszabbak. A lombkorona később, a fa magasodásával fejlődik, először csak az ágvégeken jelennek meg levelek. Minden szint elején zárt rügyek vannak, aztán rügyfakadás, hajtásnövekedés és a levelek kibomlása következik (a fiatal levél világosabb zöld).
 
+## Képernyők
+
+A játék telefonon és tableten is fut, álló és fekvő tájolásban. A kép mindig négyzetes pixelekből áll (nincs torzítás), a felbontás a kijelző méretéhez igazodik, a fa, a talaj és az élőlények mérete arányosan változik, a biom pedig fekvő módban is kitölti a teljes szélességet. A kijelzőbevágás (notch) mellett a kezelőfelület a biztonságos területen marad. Forgatáskor a játékállás megmarad.
+
 ## Funkciók
 
 - Főmenü, szünet gomb, teljes képernyős játék
@@ -48,7 +52,7 @@ A repóban benne van a `.github/workflows/build-apk.yml`, ami minden `main`-re k
 3. Az APK két helyen érhető el: a futás alján az **Artifacts → feed-seed-apk**, illetve a repó **Releases → latest** oldalán.
 4. Telepítsd a telefonra (ismeretlen forrásból telepítés engedélyezése kell). Az APK debug-aláírású, Play Áruházba való feltöltéshez saját kulcs kell.
 
-Az APK teljes képernyős és álló tájolású. A játék helyi másolatot használ, így internet nélkül is megy.
+Az APK teljes képernyős, és követi a telefon forgatását (álló és fekvő). A játék helyi másolatot használ, így internet nélkül is megy.
 
 ## Fejlesztés
 

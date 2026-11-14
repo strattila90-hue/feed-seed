@@ -20,8 +20,7 @@ jobs:
           mkdir -p www
           cp index.html manifest.json sw.js icon-192.png icon-512.png www/
           npx cap add android
-          sed -i 's|<style name="AppTheme.NoActionBar"[^>]*>|&\n        <item name="android:windowFullscreen">true</item>|' android/app/src/main/res/values/styles.xml
-          sed -i '0,/<activity/s//<activity android:screenOrientation="portrait"/' android/app/src/main/AndroidManifest.xml
+          sed -i 's|<style name="AppTheme.NoActionBar"[^>]*>|&\n        <item name="android:windowFullscreen">true</item>\n        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>|' android/app/src/main/res/values/styles.xml
           npx cap sync android
       - name: APK build
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
