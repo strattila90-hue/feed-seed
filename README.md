@@ -13,6 +13,10 @@ Nyugtató, retro pixel art természetjáték. Egyetlen facsemetét gondozol: el�
 
 A fa víz nélkül is nő lassan, amíg van nedvesség a talajban, ezért a játék napi néhány perc játékidőre van méretezve.
 
+## A fa fejlődése
+
+A fa valós növekedési szakaszokon megy át: csíranövény (sziklevelek, majd valódi levelek, csúcsrügy), csemete, fiatal fa, lombosodó fa és kifejlett fa. A törzs kúpos, a friss csúcshajtás zöld, alatta fásodott kéreg, évgyűrű-hegekkel. Az oldalágak fentről lefelé öregebbek, az alsók a leghosszabbak. A lombkorona később, a fa magasodásával fejlődik, először csak az ágvégeken jelennek meg levelek. Minden szint elején zárt rügyek vannak, aztán rügyfakadás, hajtásnövekedés és a levelek kibomlása következik (a fiatal levél világosabb zöld).
+
 ## Funkciók
 
 - Főmenü, szünet gomb, teljes képernyős játék
