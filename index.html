@@ -235,7 +235,7 @@ function updateDz(dt){const m=dmg()*(dz?dz.I.d:1);if(dzCool>0)dzCool-=dt;
  S.trees.forEach(t=>{if(t.g<1)t.g=Math.min(1,t.g+dt*.0006*(S.wat>.1?1:.3)*S.hp/100);else coin(.04*dt)});
  if(tn){const c=DZ.tornado,m2=dmg()*tn.I.d;tn.x+=tn.dir*tn.v*dt+Math.sin(time*1.7)*4*dt;
   for(const tr of allTrees()){const d=Math.abs(cxOf(tr)-tn.x);if(d<tn.r){S.hp-=c.d*m2*dt*.5;const R=rt(tr);if(Math.random()<dt*3)R.bk[Math.random()*SP[tr.sp].np|0]=100;
-   if(!tr.main&&c.up&&tn.I.d>1.3&&d<tn.r*.4&&((tr.hold=(tr.hold||0)+dt)>1.5)){S.trees.splice(S.trees.indexOf(tr),1);if(dz)dz.hit=1;toast('A tornádó kitépett egy fát!')}}}
+   if(!tr.main&&c.up&&tn.I.d>1.3&&d<tn.r*.6&&((tr.hold=(tr.hold||0)+dt)>1)){S.trees.splice(S.trees.indexOf(tr),1);if(dz)dz.hit=1;toast('A tornádó kitépett egy fát!')}}}
   for(let i=0;i<4;i++)parts.push({k:'z',x:tn.x+(Math.random()-.5)*tn.r*.8,y:GY-Math.random()*60,vx:tn.dir*30+(Math.random()-.5)*60,vy:-40-Math.random()*60,l:1,c:['#8a6a3a','#4caf3d','#6b4426','#cfc9b8'][Math.random()*4|0]});
   if(tn.x<-tn.r*2||tn.x>W+tn.r*2)tn=null}
  if(S.cfg.auto&&!dz&&dzCool<=0&&S.lvl>=3){autoT-=dt;if(autoT<=0){autoT=(S.cfg.auto==1?240:100)*(.7+Math.random()*.6);const ks=Object.keys(DZ);startDz(ks[Math.random()*ks.length|0],1)}}
