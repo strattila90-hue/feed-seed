@@ -35,12 +35,16 @@ A fa víz nélkül is nő lassan, amíg van nedvesség a talajban, ezért a ját
 2. **Settings → Pages → Deploy from a branch → `main` / `(root)`**
 3. Pár perc múlva elérhető a fenti címen.
 
-## APK készítése
+## APK készítése (automatikusan, GitHub Actions)
 
-1. Nyisd meg a [pwabuilder.com](https://www.pwabuilder.com) oldalt, és add meg a játék Pages-címét.
-2. Válaszd az **Android** csomagot, és töltsd le.
-3. Beállításoknál használd a `fullscreen` / immersive módot, hogy semmi ne lógjon be.
-4. A kapott APK-t telepítheted a telefonra (ismeretlen forrásból telepítés engedélyezése kell hozzá).
+A repóban benne van a `.github/workflows/build-apk.yml`, ami minden `main`-re küldött módosításnál (vagy az **Actions → Build APK → Run workflow** gombbal) legyártja az Androidos APK-t Capacitorral.
+
+1. Töltsd fel a repóba az összes fájlt, a `.github` mappát is (`package.json`, `capacitor.config.json`, `.gitignore`).
+2. Várd meg, amíg lefut az **Actions** fül alatt a *Build APK* (kb. 4–6 perc).
+3. Az APK két helyen érhető el: a futás alján az **Artifacts → feed-seed-apk**, illetve a repó **Releases → latest** oldalán.
+4. Telepítsd a telefonra (ismeretlen forrásból telepítés engedélyezése kell). Az APK debug-aláírású, Play Áruházba való feltöltéshez saját kulcs kell.
+
+Az APK teljes képernyős és álló tájolású. A játék helyi másolatot használ, így internet nélkül is megy.
 
 ## Fejlesztés
 
@@ -53,3 +57,9 @@ python3 -m http.server 8000
 Majd nyisd meg a `http://localhost:8000` címet. A játék értékei (szintenkénti szükséges tapasztalat, passzív növekedés, vízcseppek értéke) az `index.html` elején és a `gain()` / `update()` függvényekben állíthatók.
 
 Frissítéskor növeld a `sw.js`-ben a `feedseed-v2` gyorsítótár-verziót, hogy a telepített változat is frissüljön.
+
+## Hibakeresés
+
+- Nyisd meg a játékot `?debug` paraméterrel (`.../feed-seed/?debug`), vagy koppints ötször a főmenü címére (APK-ban is működik): bal alul megjelenik az FPS, a felbontás, a szint, a részecskék száma és az utolsó hibák.
+- A hibák a böngésző konzoljában is megjelennek `[Feed&Seed]` előtaggal (Chrome: `chrome://inspect` a telefonhoz).
+- Ha elromlik a mentés, törölheted: konzolban `localStorage.removeItem('feedseed_v1')`.
