@@ -30,9 +30,19 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;f
 #dbg{position:fixed;left:6px;bottom:6px;margin:0;padding:6px 8px;font:11px monospace;background:#000b;color:#9be15d;pointer-events:none;white-space:pre-wrap;max-width:92%;z-index:9}
 @media (orientation:landscape) and (max-height:520px){#menu{gap:8px}#menu h1{font-size:30px}#menu small{margin-bottom:4px}.b{padding:8px;width:210px;font-size:14px}#hint{bottom:12%}}
 @media (min-width:700px) and (min-height:700px){#menu h1{font-size:56px}#menu small{font-size:15px}.b{width:320px;font-size:20px;padding:16px}#lv{font-size:15px}#bar{height:18px;max-width:560px}#pb{width:48px;height:48px}#hint,#toast{font-size:19px}}
-#jr{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;gap:10px;padding:max(16px,env(safe-area-inset-top)) 16px 20px;background:linear-gradient(#0d1b2af6,#10261ff6);overflow:auto;touch-action:pan-y;z-index:5}
-#jr h2{margin:6px 0;color:#b8f56d;letter-spacing:2px}#jl{width:min(520px,100%);display:grid;gap:6px;font-size:13px}
+#jr,#mk,#dz{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;gap:10px;padding:max(16px,env(safe-area-inset-top)) 16px 20px;background:linear-gradient(#0d1b2af6,#10261ff6);overflow:auto;touch-action:pan-y;z-index:5}
+#jr h2,#mk h2,#dz h2{margin:6px 0;color:#b8f56d;letter-spacing:2px}#jl,#ml,#zl{width:min(520px,100%);display:grid;gap:6px;font-size:13px}
 .ji{display:flex;gap:10px;padding:8px 10px;background:#0a1a2acc;border:2px solid #2d5a27}.ji.lk{opacity:.45;border-color:#33425a}.ji b{min-width:34px;color:#ffe27a}
+.ib{display:grid;place-items:center;width:38px;height:38px;padding:0;font-size:18px;color:#fff;background:linear-gradient(#35506e,#1d3047);border:2px solid #0a1420;outline:2px solid #9fc3e8;box-shadow:inset 0 2px 0 #ffffff40,0 3px 0 #0a1420}
+.ib:active{transform:translateY(3px)}
+#side{position:fixed;right:max(14px,env(safe-area-inset-right));top:calc(env(safe-area-inset-top,0px) + 62px);display:flex;flex-direction:column;gap:10px}
+#cn{position:fixed;left:max(12px,env(safe-area-inset-left));top:calc(env(safe-area-inset-top,0px) + 54px);padding:4px 8px;font:bold 13px "Courier New",monospace;color:#ffe27a;background:#0a1a2acc;border:2px solid #ffe27a;pointer-events:none}
+#inv{position:fixed;bottom:max(10px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:94%}
+.ch{padding:7px 10px;font:bold 12px "Courier New",monospace;color:#e8f5d0;background:#1d3047;border:2px solid #9fc3e8;box-shadow:0 3px 0 #0a1420}.ch.on{background:#4a9a3c;border-color:#ffe27a}
+.bb{margin-left:auto;align-self:center;padding:6px 10px;font:bold 12px "Courier New",monospace;color:#fff;background:#4a9a3c;border:2px solid #0d2a12;white-space:nowrap}.bb:disabled{opacity:.4}
+#zl{gap:10px}#zl .b{width:100%}
+.zr{display:flex;gap:8px;align-items:center;width:100%;font-size:13px}#zl .zr .b{flex:1;width:auto;padding:10px 6px;font-size:14px}
+.st{display:flex;align-items:center;gap:4px;min-width:118px;justify-content:center;font-size:12px}.sb{width:28px;height:30px;padding:0;font:bold 12px "Courier New",monospace;color:#fff;background:#35506e;border:2px solid #0a1420}
 .hide{display:none!important}
 @keyframes bob{50%{transform:translateY(-6px)}}
 @keyframes drift{to{background-position:0 460px,23px 600px}}
@@ -41,11 +51,14 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;f
 </style></head><body>
 <canvas id="c"></canvas><div id="vig"></div>
 <div id="hud" class="hide"><span id="lv"></span><div id="bar"><div id="fill"></div></div><button id="pb" aria-label="Szünet"></button></div>
+<div id="cn" class="hide"></div><div id="side" class="hide"><button class="ib" id="mb" aria-label="Piac">🛒</button><button class="ib" id="db" aria-label="Csapások">⚡</button></div><div id="inv"></div>
 <div id="hint" class="hide">Koppints a mag elültetéséhez</div><div id="toast"></div><pre id="dbg" class="hide"></pre>
 <div id="menu"><h1>Feed&amp;Seed</h1><small>a növekedés nyugodt játéka</small><button class="b" id="go">Játék indítása</button><button class="b" id="nw">Új játék</button><button class="b s" id="jb">Napló</button><button class="b s" id="snd">Zene: be</button></div>
+<div id="mk" class="hide"><h2>Piac</h2><div id="mc" style="color:#ffe27a;font-weight:bold"></div><div id="ml"></div><button class="b" id="mx">Vissza</button></div>
+<div id="dz" class="hide"><h2>Természeti csapások</h2><p style="max-width:460px;text-align:center;font-size:13px;margin:0 12px">A csapások károsítják az erdő egészségét (♥), de túlélésükért érmét kapsz. Vihar: villám csap a fákba. Aszály: tartsd nedvesen a talajt. Erdőtűz: koppintással oltsd el. Fagy: kitartás. Sáskák: koppints rájuk. Tornádó és szupercella: jég, villám, letört ágak, az Erős fokozat kitéphet kisebb fákat. Árvíz: a víz tápanyagot hagy maga után. A ◀ ▶ gombokkal állítsd be az erősséget (Gyenge, Közepes, Erős), vagy kapcsold be az automatikus csapásokat. A piacon védelmet vehetsz.</p><div id="zl"></div><button class="b s" id="zx">Vissza</button></div>
 <div id="jr" class="hide"><h2>Természetnapló</h2><div id="jl"></div><button class="b" id="jx">Vissza</button></div>
 <script>
-const $=id=>document.getElementById(id),cv=$('c'),ctx=cv.getContext('2d');
+const $=id=>document.getElementById(id),cv=$('c');let ctx=cv.getContext('2d');
 const hs=n=>{n=Math.sin(n*127.1+311.7)*43758.5453;return n-Math.floor(n)},cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const lA=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t),rgb=a=>'rgb('+a.map(v=>v|0)+')';
 const rc=(x,y,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),w,h)},px=(x,y,c)=>rc(x,y,1,1,c);
@@ -54,13 +67,13 @@ let W=320,CX=160,U=1;const TL=8,MAXL=1e9,DAY=260,KEY='feedseed_v1';let LEAF=['#1
 let H=320,GY=240,S,paused=true,time=0,parts=[],ents=[],roots=[],pw=18,acc=0;
 const soil=document.createElement('canvas');
 const need=l=>6+l*5+Math.max(0,l-13)*4;
-const fresh=()=>({v:3,pl:0,lvl:1,xp:0,wat:0,t:26,seed:1+Math.random()*900|0,fl:[],last:Date.now()});
+const fresh=()=>({v:4,c:30,hp:100,trees:[],inv:{s:[0,0,0,0,0],p:{storm:0,drought:0,frost:0,tornado:0,flood:0,supercell:0}},cfg:{auto:0,storm:1,supercell:1,tornado:1,fire:1,flood:1,drought:1,frost:1,locust:1},pl:0,lvl:1,xp:0,wat:0,t:26,seed:1+Math.random()*900|0,fl:[],last:Date.now()});
 function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
 function save(){S.last=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 {const L0=load();S=L0?Object.assign(fresh(),L0,{v:L0.v|0}):fresh();if(!Array.isArray(S.fl))S.fl=[];
- ['xp','wat','t'].forEach(k=>{if(!isFinite(S[k]))S[k]=0});S.lvl=Math.max(1,S.lvl|0||1);
+ ['xp','wat','t'].forEach(k=>{if(!isFinite(S[k]))S[k]=0});S.lvl=Math.max(1,S.lvl|0||1);if(!Array.isArray(S.trees))S.trees=[];S.hp=cl(+S.hp||100,8,100);S.c=+S.c||0;S.cfg=Object.assign({auto:0,storm:1,supercell:1,tornado:1,fire:1,flood:1,drought:1,frost:1,locust:1},S.cfg||{});['storm','drought','frost','tornado','flood','supercell'].forEach(k=>S.inv.p[k]=S.inv.p[k]|0);
  if(S.v<3){S.fl.forEach(f=>{if(f.dx==null){f.dx=(f.x||120)-120;delete f.x}});S.v=3}}
-function size(){const iw=innerWidth,ih=innerHeight,P=ih>=iw;let ps=cl(P?iw/320:ih/420,.9,2.2);W=Math.round(iw/ps);H=Math.round(ih/ps);while(W*H>450000){ps*=1.1;W=Math.round(iw/ps);H=Math.round(ih/ps)}H=Math.max(H,260);cv.width=W;cv.height=H;GY=H*.75|0;CX=W>>1;U=GY/(P?380:300);
+function size(){const iw=innerWidth,ih=innerHeight,P=ih>=iw;let ps=cl(P?iw/320:ih/420,.9,2.2);W=Math.round(iw/ps);H=Math.round(ih/ps);while(W*H>450000){ps*=1.1;W=Math.round(iw/ps);H=Math.round(ih/ps)}H=Math.max(H,260);cv.width=W;cv.height=H;ctx.imageSmoothingEnabled=false;GY=H*.75|0;CX=W>>1;U=GY/(P?300:240);
  soil.width=W;soil.height=H-GY;const c=soil.getContext('2d');
  for(let y=0;y<soil.height;y++)for(let x=0;x<W;x++){const r=hs(x*1.7+y*31.3),d=y/soil.height;
   const dd=d+Math.sin(x*.05+d*9)*.03,b=y<2?[66+(r*44|0),112,44]:y<4?(r>.5?[56,92,40]:[84,60,38]):dd<.35?[118,82,52]:dd<.7?[136,100,64]:[100,72,52],k=(r-.5)*18+(r>.93?20:0)-(r<.05?25:0)-(y>3?d*40:0);
@@ -96,61 +109,173 @@ function mkEnts(){ents=[];const K=Math.max(1,W/320),L=S.lvl,A=(k,n,f)=>{for(let 
 const MSG={2:'Virágok bújnak elő',3:'Gombák, páfrányok és hangyák',4:'Bokrok és sűrűbb fű',5:'Giliszták a talajban',6:'Magas virágok nyílnak',7:'Bogarak ásnak a gyökerek közt',8:'A fa szinte kifejlett!',9:'A fa kifejlett – a biom fejlődik: tó és pillangók',10:'Madarak érkeztek',11:'Szentjánosbogarak az éjszakában',12:'Erdőszél nő a láthatáron',13:'Teljes biom – gyönyörű!',14:'Nyulak költöztek az erdőbe',15:'Békák a tó partján',16:'Méhek dongják a virágokat',18:'Szarvas jelent meg a tisztáson',20:'Bagoly vadászik éjszaka',23:'Róka settenkedik a bokrok közt',30:'A fa ősfává érik'};
 let tt;function toast(s){const t=$('toast');t.textContent=s;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2800)}
 function sparkle(x,y,n,c){for(let i=0;i<n;i++)parts.push({k:'z',x:x+(Math.random()-.5)*30,y:y-Math.random()*40,vx:(Math.random()-.5)*20,vy:-10-Math.random()*20,l:1.2,c})}
-function gain(a){if(!S.pl)return;S.xp+=a;if(Math.random()<.4)sparkle(CX,GY-8,1,'#b6ff6b');
- while(S.xp>=need(S.lvl)&&S.lvl<MAXL){S.xp-=need(S.lvl);S.lvl++;addFlora(S.lvl);mkEnts();toast('Szint '+S.lvl+' – '+(MSG[S.lvl]||'az élővilág gazdagodik'));sparkle(CX,GY-20,24,'#d4ff7a');save()}
+function gain(a){if(!S.pl)return;a*=.3+.7*S.hp/100;S.trees.forEach(t=>{if(t.g<1)t.g=Math.min(1,t.g+a*.0035)});S.xp+=a;if(Math.random()<.4)sparkle(CX,GY-8,1,'#b6ff6b');
+ while(S.xp>=need(S.lvl)&&S.lvl<MAXL){S.xp-=need(S.lvl);S.lvl++;coin(10+S.lvl*2);addFlora(S.lvl);mkEnts();toast('Szint '+S.lvl+' – '+(MSG[S.lvl]||'az élővilág gazdagodik'));sparkle(CX,GY-20,24,'#d4ff7a');save()}
  if(S.lvl>=MAXL)S.xp=Math.min(S.xp,need(MAXL))}
-function blob(cx,cy,r,o){cx|=0;cy|=0;r|=0;for(let y=-r;y<=r;y++)for(let x=-r;x<=r;x++){if(x*x+y*y>r*r)continue;
- const l=cl((-x*.5-y)/r*.5+.5+(hs((x+cx)*7.3+(y+cy)*13.1+o)-.5)*.55+(((x+y)&1)?.04:-.04),0,.999);px(cx+x,cy+y,LEAF[l*4|0])}}
+function blob(cx,cy,r,o,pal){pal=pal||LEAF;cx|=0;cy|=0;r|=0;for(let y=-r;y<=r;y++)for(let x=-r;x<=r;x++){if(x*x+y*y>r*r)continue;
+ const l=cl((-x*.5-y)/r*.5+.5+(hs((x+cx)*7.3+(y+cy)*13.1+o)-.5)*.55+(((x+y)&1)?.04:-.04),0,.999);px(cx+x,cy+y,(r>2&&y>0&&x*x+y*y>(r-1.5)*(r-1.5))?pal[0]:pal[l*4|0])}}
 function drawFl(f){const x=cl(Math.round(f.fx!=null?CX+f.fx*W/2:CX+f.dx*U),3,W-3),b=GY,sw=Math.round(Math.sin(time*1.6+x)*.7);
  if(f.t==0){const h=3+(f.s*3|0);rc(x,b-h,1,h,'#3f8f3a');px(x-1,b-2,'#4caf3d');px(x+1,b-3,'#4caf3d');px(x+sw-1,b-h,'#fff8');px(x+sw+2,b-h-1,'#fff8');px(x+sw,b-h-2,'#fff8');rc(x+sw,b-h-1,2,2,['#ff6b8b','#ffd166','#f8f4ff','#b78cff'][f.c*4|0])}
  else if(f.t==1){rc(x,b-2,1,2,'#efe6d0');rc(x-1,b-4,3,2,'#d64545');px(x,b-4,'#fff')}
  else if(f.t==2){const c='#2f7d32';px(x,b-1,c);px(x,b-2,c);[[1,2],[2,3],[3,3],[4,2]].forEach(([i,h])=>{px(x-i,b-h,c);px(x+i,b-h,c)})}
  else if(f.t==3){const o=ctx;blob(x,b-4,4+(f.s*2|0),x)}
  else{rc(x,b-9,1,9,'#3f8f3a');rc(x-1+sw,b-12,3,3,'#ffd166');px(x+sw,b-11,'#7a4a1a')}}
-let br=[];
-function mkBranches(){br=[];const R=i=>hs(S.seed*5.3+i*1.37);let k=0;
- for(let i=0;i<10;i++){const fr=.42+.55*i/9+(R(k++)-.5)*.04;br.push({fr,d:i%2?1:-1,lf:.8+R(k++)*.4,a:.5+R(k++)*.35,tw:[.3+R(k++)*.1,.55+R(k++)*.1,.8+R(k++)*.1]})}}
+const SP=[
+ {n:'Tölgy',cb:.36,np:11,L:.46,a0:.8,up:1,k:.9,dd:3,sh:0,bark:['#3a2412','#6b4426','#9a6a3e'],sz:1},
+ {n:'Nyír',cb:.3,np:14,L:.3,a0:.5,up:.5,k:.7,dd:3,sh:3,mk:1,bark:['#6e6e68','#e8e6dc','#ffffff'],sz:.95},
+ {n:'Fenyő',cb:.2,np:18,L:.36,a0:1.1,up:.3,k:.5,dd:2,sh:1,ev:['#0f3d2a','#175a3a','#218050','#3aa86a'],bark:['#2e1c12','#5a3a24','#7a5232'],sz:1.05},
+ {n:'Szakura',cb:.33,np:9,L:.5,a0:1,up:.8,k:1,dd:3,sh:0,sp0:['#d4688a','#ee92ae','#ffc0d0','#fff0f4'],bark:['#3a2a2a','#5c3f3f','#80585a'],sz:.9},
+ {n:'Akác',cb:.55,np:8,L:.5,a0:.85,up:.5,k:.8,dd:3,sh:2,bark:['#2a2018','#4e3b2a','#7a6045'],sz:.95}];
+const ASH=['#14100d','#241b15','#352a21','#52402f'],RT=new Map(),rt=t=>RT.get(t)||(RT.set(t,{bk:{},burn:0}),RT.get(t));
+let T0={fx:0,sp:0,seed:1,main:1};
+function mkBranches(){T0={fx:0,sp:0,seed:S.seed,main:1}}
+const cxOf=t=>(CX+(t.fx||0)*(W/2-24))|0,allTrees=()=>S.pl?[T0,...S.trees]:[];
 const smooth=t=>t*t*(3-2*t),stg=g=>g<.12?'Csíra':g<.4?'Csemete':g<.7?'Fiatal fa':g<1?'Lombosodó fa':'Kifejlett fa';
 function leafPx(x,y,d,s,c){rc(x,y,s+1,s>1?2:1,c);if(s>1)px(x+(d>0?s:0),y-1,c)}
 function seg(x0,y0,x1,y1,c,th){const n=Math.max(Math.abs(x1-x0),Math.abs(y1-y0))|0;for(let j=0;j<=n;j++)rc(x0+(x1-x0)*j/(n||1),y0+(y1-y0)*j/(n||1),th||1,1,c)}
-// csíranövény: sziklevelek, majd valódi levelek, csúcsrügy
 function seedling(g,hT,tx,top){const cot=g<.07?1:cl(1-(g-.07)/.05,0,1);
  if(cot>.1){leafPx(tx-4,GY-3,-1,2,'#a8e063');leafPx(tx+1,GY-3,1,2,'#a8e063')}
  const n=cl((g-.03)/.025,0,4)|0;
  for(let j=0;j<n;j++){const ly=GY-4-j*3,r=j%2;if(GY-ly>hT)break;leafPx(tx+(r?2:-4),ly,r?1:-1,2,'#4caf3d');px(tx+(r?3:-3),ly,'#8bd84e')}
  rc(tx,top-2,1,2,'#d6f78c')}
-function drawTree(g){if(!S.pl)return;
- const HF=3+84*U,hT=3+g*84*U,sw=Math.sin(time*1.1)*(.5+g*2.4)*U,tw=g<.12?1:2+(g*6*U|0),top=GY-hT,tx=CX+sw,L=S.lvl,
-  fl=L>=MAXL?1:cl(S.xp/need(L),0,1),cf=smooth(cl((g-.4)/.55,0,1))*LF,yt=g<.12?hT:Math.max(3,hT*.07);
- if(g>.08){const sr=(5+g*34)*U;ctx.fillStyle='rgba(0,0,0,.2)';ctx.fillRect(CX-sr|0,GY,2*sr|0,2);ctx.fillRect(CX-sr*.7|0,GY+2,1.4*sr|0,1)}
- // törzs: kúpos, a friss (zöld) csúcshajtás alatt fásodott kéreg, évgyűrű-hegekkel
- for(let i=0;i<hT;i++){const f=i/hT,ox=sw*f*f,w2=Math.max(1,Math.round(tw*(1-.5*f)+(i<tw?(tw-i)>>1:0)));
-  for(let k=0;k<w2;k++){const m=k/(w2-1||1),n=hs(i*3+k*7);let c;
+// élethű ágrendszer: rekurzív elágazás (főág > mellékág > ág > vessző), gravitropizmus, fajonként más koronaforma
+function genSk(seed,sp){let n=0;const R=()=>hs(seed*7.13+(n++)*1.91),P2=Math.PI/2;
+ function mk(ang,len,dep){const m=Math.max(3,Math.round(len*22)),st=len/m,pts=[[0,0]],kids=[];let a=ang,x=0,y=0;
+  for(let i=0;i<m;i++){a+=(R()-.5)*.3;a+=(P2-a)*(dep?.03:.07)*sp.up;if(dep>=2&&sp.sh==3)a+=Math.cos(a)>0?-.07:.07;x+=Math.cos(a)*st;y+=Math.sin(a)*st;pts.push([x,y])}
+  if(dep<sp.dd){const kn=dep?2+(R()*2|0):3+(R()*2|0);
+   for(let j=0;j<kn;j++){const at=Math.max(2,Math.min(m,Math.round(m*(.28+.68*(j+R()*.6)/kn)))),side=(j+dep)%2?1:-1,t=Math.atan2(pts[at][1]-pts[at-1][1],pts[at][0]-pts[at-1][0]);
+    kids.push({at,n:mk(t+side*sp.k*(.7+R()*.5),len*(.6-.08*j/kn)*(.8+R()*.4),dep+1)})}}
+  return{pts,kids}}
+ const out=[];
+ for(let i=0;i<sp.np;i++){const fr=sp.cb+(1-sp.cb)*(i+.3+R()*.4)/sp.np*.97,t=(fr-sp.cb)/(1-sp.cb),side=i%2?1:-1,
+  prof=sp.sh==1?1.05-t*.85:sp.sh==2?.45+.55*Math.pow(t,.7):.55+.45*Math.sin(Math.PI*Math.min(1,t*1.05)),ph=sp.a0*(1.3-t*.8)+.2*R();
+  out.push({fr,s:side,n:mk(P2-side*ph,sp.L*prof*(.85+.3*R()),0)})}
+ return out}
+function drawTree(tr,g,ns){if(!S.pl)return;
+ const R=rt(tr),sp=SP[tr.sp],uu=U*(tr.main?1+Math.min(.35,Math.max(0,S.lvl-13)*.012):.78*sp.sz),cx=cxOf(tr),HF=3+84*uu,hT=3+g*84*uu,burn=R.burn>0,
+  pal=burn?ASH:sp.ev||(sp.sp0&&SID==0?sp.sp0:LEAF),L=S.lvl,lfE=burn?.15:sp.ev?1:LF*(.4+.6*S.hp/100),sw=ns?0:Math.sin(time*1.1+tr.seed)*(.5+g*2.4)*uu*wind,
+  tw=g<.12?1:2+(g*5*uu|0),top=GY-hT,tx=cx+sw*Math.pow(hT/HF,2),fl=tr.main?cl(S.xp/need(L),0,1):.6,cf=smooth(cl((g-.4)/.55,0,1))*lfE,ts=HF/87,
+  yt=g<.12?hT:Math.max(3,hT*.07),bk=burn?['#14100d','#241b15','#352a21']:sp.bark,dm=tr.main?sp.dd:Math.max(1,sp.dd-1);
+ if(g>.08){const sr=(5+g*34)*uu;ctx.fillStyle='rgba(0,0,0,.2)';ctx.fillRect(cx-sr|0,GY,2*sr|0,2);ctx.fillRect(cx-sr*.7|0,GY+2,1.4*sr|0,1)}
+ if(!tr.main&&g>.15)for(let j=0;j<5;j++){const a=Math.PI*(.2+.6*j/4);seg(cx,GY+1,cx+Math.cos(a)*30*g*uu,GY+1+Math.sin(a)*30*g*uu,'#d8b27c')}
+ for(let i=0;i<hT;i++){const ox=sw*(i/HF)*(i/HF),w2=Math.max(1,Math.round(tw*(1-.45*i/hT)+(i<tw?(tw-i)>>1:0)));
+  for(let k=0;k<w2;k++){const m=k/(w2-1||1),n=hs(i*3+k*7+tr.seed);let c;
    if(i>hT-yt)c=k%2?'#9cc55c':'#7fae4a';
-   else{c=m<.25?'#3a2412':m>.75?'#9a6a3e':'#6b4426';if(hs(k*9.7+S.seed)>.72&&m>.1&&w2>3)c='#3b2413';else if(n>.86)c='#3b2413';else if(n<.08)c='#a87a4a';if(i==(hT-yt|0)&&w2>1)c='#4a2f1a'}
-   rc(CX-(w2>>1)+k+ox,GY-1-i,1,1,c)}}
+   else{c=m<.25?bk[0]:m>.75?bk[2]:bk[1];if(sp.mk&&hs(i*.37+k*3.1+tr.seed)>.9&&w2>2)c='#2a2a28';else if(hs(k*9.7+tr.seed)>.72&&m>.1&&w2>3)c=bk[0];else if(n>.88)c=bk[0];else if(n<.07)c=bk[2];if(i==(hT-yt|0)&&w2>1)c=bk[0]}
+   rc(cx-(w2>>1)+k+ox,GY-1-i,1,1,c)}}
  if(g<.12){seedling(g,hT,tx,top);return}
- // oldalágak: az alsók a legrégebbiek és a leghosszabbak, felfelé újabbak
- const tips=[{x:tx,y:top,d:0,big:1}];
- br.forEach(b=>{const nh=HF*b.fr;if(nh>hT-4)return;const age=cl((hT-nh)/(HF*.5),0,1),len=(8+30*(1-Math.abs(b.fr-.7)*1.5))*U*b.lf*age;if(len<2)return;
-  const f=nh/hT,bx=CX+sw*f*f+b.d*(tw>>1),by=GY-nh,P=q=>[bx+b.d*Math.cos(b.a)*q+sw*.3*(q/len),by-Math.sin(b.a)*q+q*q/len*.55];
-  let p0=P(0);for(let q=2;q<=len;q+=2){const p1=P(q);seg(p0[0],p0[1],p1[0],p1[1],q>len*.8?'#8a9a4a':'#5a3820',q<len*.35?2:1);
-   if(cf<.6&&LF>.3&&q%4==0)leafPx(p1[0],p1[1]-1,b.d,1+(fl*1.5|0),'#4caf3d');p0=p1}
-  tips.push({x:p0[0],y:p0[1],d:b.d,big:1});
-  b.tw.forEach((t,j)=>{const pp=P(len*t),tl=len*.38*(1-.3*t),ex=pp[0]+b.d*tl*.8,ey=pp[1]-tl*(j%2?.7:-.1);seg(pp[0],pp[1],ex,ey,'#6a5a30');tips.push({x:ex,y:ey,d:b.d,big:0})})});
- // lombkorona: csak később, a fa magasodásával fejlődik (cf), a hajtásvégeken kezdődik
- const rC=3+36*U;
- if(cf>.25){const r=rC*cf;blob(tx-r*.6,top+r*.25,r*.62,1);blob(tx+r*.6,top+r*.25,r*.62,2);blob(tx,top-r*.1,r,3);blob(tx,top-r*.55,r*.6,4)}
- if(cf>.04)tips.forEach((t,i)=>blob(t.x,t.y,(1.5+(t.big?7:5)*U*cf)*(t.d==0?1.3:1),9+i));
- if(cf>.3){const r=rC*cf;for(let i=0;i<r*2;i++){const a=hs(i*1.7)*6.283,d=Math.sqrt(hs(i*2.9))*r*.95,x=tx+Math.cos(a)*d,y=top-r*.1+Math.sin(a)*d*.9;
-  if(Math.sin(time*.8+i)>-.4)px(x,y,y<top-r*.1?'#d6f78c':'#173f20')}}
- // rügyfakadás és hajtásnövekedés: minden szint elején zárt rügyek, majd a hajtás megnyúlik, a levelek kibomlanak
- tips.forEach(t=>{const z=t.big?2:1;
-  if(fl<.25||LF<.3){rc(t.x,t.y-1,z,z+1,'#6b3a22');px(t.x,t.y-z-1,fl>.12?'#b6e86a':'#c4563a')}
-  else{const q=(fl-.25)/.75,sl=q*(t.big?7:4)*U,n=t.big?3:2;seg(t.x,t.y,t.x+t.d*sl*.4,t.y-sl,'#9cc55c');
-   for(let j=1;j<=n;j++){const o=j%2?-1:1;leafPx(t.x+t.d*sl*.4*j/(n+1)+o,t.y-sl*j/(n+1),o,1+(q*2.2|0),q<.6?'#c9f27a':'#7fcf4a')}
-   px(t.x+t.d*sl*.4,t.y-sl-1,'#e3ffa0')}});
- if(L>TL&&(SID==0||SID==2&&L>=12))tips.forEach((t,i)=>{for(let j=0;j<3;j++)rc(t.x+(hs(i*7+j)-.5)*12*U,t.y+(hs(i*3+j*5)-.5)*10*U,2,2,SID==2?'#e0453a':'#ffb3d1')})}
+ const tips=[],sk=R.sk||(R.sk=genSk(tr.seed,sp));
+ const node=(n,ux,uy,sc,a,dep)=>{const P=n.pts,m=P.length-1;let x0=ux+sw*Math.pow((GY-uy)/HF,2),y0=uy;
+  for(let i=1;i<=m;i++){const qx=ux+P[i][0]*sc,qy=uy-P[i][1]*sc,h=GY-qy,x1=qx+sw*h*h/(HF*HF);
+   seg(x0,y0,x1,qy,burn?bk[1]:i>m*.8?'#8a9a4a':bk[dep?2:1],dep==0&&i<m*.5?2:1);
+   if(cf<.6&&lfE>.3&&dep&&i%2==0)leafPx(x1,qy-1,1,1+(fl*1.5|0),pal[2]);
+   if(sp.sh==1&&dep&&i%2==0)tips.push({x:x1,y:qy,o:0,c:1});
+   for(const k of n.kids)if(k.at==i&&dep<dm){const kg=cl((a-.3)/.6,0,1);if(kg>0)node(k.n,qx,qy,HF*kg,kg,dep+1)}
+   x0=x1;y0=qy}
+  tips.push({x:x0,y:y0,o:dep>=dm||!n.kids.length?1:0,d:P[m][0]>0?1:-1})};
+ sk.forEach((p,idx)=>{const nh=HF*p.fr;if(nh>hT-4)return;const b=R.bk[idx]>0?1-.75*R.bk[idx]/100:1,a=cl((hT-nh)/(HF*.45),0,1)*b;if(a<.05)return;
+  node(p.n,cx+p.s*(tw>>1),GY-nh,HF*a,b<.6?0:a,0)});
+ if(cf>.04){const cy=GY-hT*(sp.cb+(1-sp.cb)*.55);
+  if(cf>.25&&sp.sh!=1){const r=HF*.2*cf*(sp.sh==3?.75:1),sx=sw*Math.pow(hT*.7/HF,2);blob(cx+sx,cy,r,3,pal);blob(cx+sx-r*.8,cy+r*.3,r*.7,4,pal);blob(cx+sx+r*.8,cy+r*.3,r*.7,5,pal)}
+  tips.forEach((t,i)=>blob(t.x,t.y,t.c?(1+2*cf)*ts:(1.2+(t.o?4.6:2.4)*cf)*ts,9+i,pal))}
+ // rügyfakadás és hajtásnövekedés az ágvégeken
+ tips.forEach(t=>{if(!t.o)return;
+  if(fl<.25||lfE<.3){rc(t.x,t.y-1,1,2,burn?bk[1]:'#6b3a22');px(t.x,t.y-2,fl>.12?'#b6e86a':'#c4563a')}
+  else if(!burn){const q=(fl-.25)/.75,sl=q*4*uu,d=t.d||0;seg(t.x,t.y,t.x+d*sl*.4,t.y-sl,'#9cc55c');
+   for(let j=1;j<=2;j++){const o=j%2?-1:1;leafPx(t.x+d*sl*.4*j/3+o,t.y-sl*j/3,o,1+(q*2.2|0),q<.6?'#c9f27a':'#7fcf4a')}px(t.x+d*sl*.4,t.y-sl-1,'#e3ffa0')}});
+ if(tr.main&&L>TL&&(SID==0||SID==2&&L>=12))tips.forEach((t,i)=>{if(t.o)for(let j=0;j<2;j++)rc(t.x+(hs(i*7+j)-.5)*10*ts,t.y+(hs(i*3+j*5)-.5)*8*ts,2,2,SID==2?'#e0453a':'#ffb3d1')})}
+// a másodlagos fák gyorsítótárazott sprite-ként rajzolódnak, a szél nyírással mozgatja őket
+function drawTreeC(tr,g){const R=rt(tr),sp=SP[tr.sp],uu=U*(tr.main?1+Math.min(.35,Math.max(0,S.lvl-13)*.012):.78*sp.sz),HF=3+84*uu,bw=(HF*.85+30)|0,bh=(HF*1.25+12)|0,
+ key=[g*120|0,tr.main?S.lvl+':'+(S.xp/need(S.lvl)*24|0):0,SID,LF*12|0,S.hp/10|0,R.burn>0?1:0,Object.keys(R.bk).length,W,H].join();
+ if(R.key!==key){R.key=key;const c2=R.cv||(R.cv=document.createElement('canvas')),c0=ctx;c2.width=2*bw;c2.height=bh+45;ctx=c2.getContext('2d');ctx.translate(bw-cxOf(tr),bh-GY);drawTree(tr,g,1);ctx=c0}
+ const k=Math.sin(time*1.1+tr.seed)*(.5+g*2.4)*uu*wind/HF*.9;ctx.save();ctx.translate(cxOf(tr),GY);ctx.transform(1,0,-k,1,0,0);ctx.drawImage(R.cv,-bw,-bh);ctx.restore()}
+// ---- piac, ültetés, természeti csapások ----
+const MK=[['s',0,'Tölgy mag',60,'Lassan nő, hatalmas, kerek lombkorona.'],['s',1,'Nyír mag',100,'Fehér kéreg, karcsú, hajladozó ágak.'],['s',2,'Fenyő mag',160,'Örökzöld, kúp alakú, vízszintes ágak.'],['s',3,'Szakura mag',300,'Tavasszal rózsaszín virágfelhő.'],['s',4,'Akác mag',220,'Lapos, ernyős lombkorona.'],
+ ['p','storm','Villámhárító',80,'Kivédi a következő vihart.'],['p','drought','Csepegtető öntözés',80,'Kivédi a következő aszályt.'],['p','frost','Fagytakaró',80,'Kivédi a következő fagyot.'],['p','tornado','Szélfogó erdősáv',110,'Kivédi a következő tornádót.'],['p','supercell','Jégháló',110,'Kivédi a következő szupercellát.'],['p','flood','Hullámtörő gát',100,'Kivédi a következő árvizet.']];
+const INT=[{n:'Gyenge',d:.6,r:.7,t:.8},{n:'Közepes',d:1,r:1,t:1},{n:'Erős',d:1.6,r:1.8,t:1.25}];
+// ===== CSAPÁS-BEÁLLÍTÁSOK: itt egyszerűen testreszabhatod őket =====
+// nm: név · e: ikon · t: időtartam (mp) · d: sebzés/mp az erdő egészségére · a többi csapás-specifikus
+// (strike: villámgyakoriság, hail: jégszem/mp, tornado: tornádó esélye, speed: sebesség, r: sugár, cnt: darabszám, hp: tűzfront élete, h: árvízszint, up: kitépheti a kisebb fákat)
+const DZ={
+ storm:{nm:'Vihar',e:'⛈',t:30,d:2.2,strike:.22},
+ supercell:{nm:'Szupercella',e:'🌩',t:45,d:1.8,hail:14,strike:.45,tornado:.5},
+ tornado:{nm:'Tornádó',e:'🌪',t:40,d:14,speed:16,r:34,up:1},
+ fire:{nm:'Erdőtűz',e:'🔥',t:35,d:14,cnt:4,speed:7,hp:4},
+ flood:{nm:'Árvíz',e:'🌊',t:40,d:1.6,h:22},
+ drought:{nm:'Aszály',e:'☀',t:45,d:2.6},
+ frost:{nm:'Fagy',e:'❄',t:40,d:1.5},
+ locust:{nm:'Sáskajárás',e:'🦗',t:30,d:.15,cnt:24}},
+ dmg=()=>1/(1+S.lvl*.06),coin=n=>{S.c=(S.c||0)+n};
+let sel=-1,dz=null,dzCool=0,wind=1,flash=0,bolt=null,fires=[],lo=[],tn=null,fd=null,scorch=[],autoT=150;
+function renderInv(){$('inv').innerHTML=SP.map((p,i)=>S.inv.s[i]>0?'<button class="ch'+(sel==i?' on':'')+'" data-i="'+i+'">🌰 '+p.n+' ×'+S.inv.s[i]+'</button>':'').join('')}
+function showMk(){paused=true;$('mc').textContent='🪙 '+(S.c|0);$('ml').innerHTML=MK.map((m,i)=>'<div class="ji"><span><strong>'+m[2]+'</strong> (nálad: '+(m[0]=='s'?S.inv.s[m[1]]:S.inv.p[m[1]])+')<br>'+m[4]+'</span><button class="bb" data-i="'+i+'"'+(S.c<m[3]?' disabled':'')+'>'+m[3]+' 🪙</button></div>').join('');$('mk').classList.remove('hide')}
+function buy(i){const m=MK[i];if(S.c<m[3])return;S.c-=m[3];if(m[0]=='s')S.inv.s[m[1]]++;else S.inv.p[m[1]]++;renderInv();showMk();save()}
+function plant(x){if(S.trees.length>=7)return toast('Nincs több hely az erdőben');const fx=cl((x-CX)/(W/2-24),-1,1),px0=CX+fx*(W/2-24);
+ if(!allTrees().every(t=>Math.abs(cxOf(t)-px0)>46))return toast('Túl közel van egy másik fához');
+ S.trees.push({fx,sp:sel,g:0,seed:1+Math.random()*900|0});toast(SP[sel].n+' elültetve');S.inv.s[sel]--;if(S.inv.s[sel]<=0)sel=-1;renderInv();
+ for(let j=0;j<8;j++)parts.push({k:'s',x:px0,y:GY-1,vx:(Math.random()-.5)*40,vy:-30-Math.random()*20,l:.5,c:'#6b4426'});save()}
+function spawnTn(c,I){tn={x:Math.random()<.5?-c.r*U*.6:W+c.r*U*.6,v:c.speed*(.8+.3*I.d),r:c.r*U*.55*(.8+.2*I.d),I};tn.dir=tn.x<0?1:-1}
+function startDz(k,auto){if(dz)return auto?0:toast('Már zajlik egy csapás');if(dzCool>0)return auto?0:toast('Várj még '+(dzCool|0)+' mp-et');
+ const c=DZ[k],I=INT[S.cfg[k]]||INT[1];
+ if(S.inv.p[k]>0){S.inv.p[k]--;coin(5);toast('A védelem kivédte: '+c.nm+' (+5 🪙)');save();return}
+ dz={k,T:c.t*I.t,t:c.t*I.t,win:0,hit:0,I,tr:0};toast(c.e+' '+c.nm+' kezdődik! ('+I.n+')');
+ if(k=='fire'){fires=[];const n=Math.round(c.cnt*I.d);for(let i=0;i<n;i++)fires.push({x:i%2?W-6-(i>>1)*W*.18:6+(i>>1)*W*.18,hp:c.hp,v:c.speed*(.8+.3*I.d)})}
+ if(k=='locust'){lo=[];const n=Math.round(c.cnt*I.d);for(let i=0;i<n;i++)lo.push({x:Math.random()*W,y:-10-Math.random()*60,vx:0,vy:0,ph:Math.random()*9})}
+ if(k=='tornado')spawnTn(c,I);
+ if(k=='flood')fd={h:0,max:c.h*U*I.d*.9}}
+function strike(){const ts=allTrees(),t=ts[Math.random()*ts.length|0],R=rt(t);R.burn=8;R.bk[Math.random()*SP[t.sp].np|0]=100;S.hp-=8*dmg();flash=.8;bolt={x:cxOf(t),t:.3,s:Math.random()*99};sparkle(cxOf(t),GY-60,10,'#ffe27a')}
+function hailHit(p){p.l=0;for(let j=0;j<2;j++)parts.push({k:'z',x:p.x,y:GY-1,vx:(Math.random()-.5)*40,vy:-30-Math.random()*30,l:.4,c:'#e8f4ff'});if(dz&&dz.I&&allTrees().some(t=>Math.abs(cxOf(t)-p.x)<60))S.hp-=.3*dmg()*dz.I.d}
+function endDz(){const L=S.lvl,c=Math.round((12+L*3+(dz.win?10+L*2:0))*dz.I.r);coin(c);
+ if(dz.k=='flood'){S.wat=3;gain(2+L*.5);toast('Az árvíz tápanyagot hagyott a talajban. +'+c+' 🪙')}else toast((dz.win?'Sikeres védekezés! ':'Túlélted a csapást. ')+'+'+c+' 🪙');
+ dz=null;dzCool=20;fires=[];lo=[];fd=null;save()}
+function updateDz(dt){const m=dmg()*(dz?dz.I.d:1);if(dzCool>0)dzCool-=dt;
+ wind+=((dz&&(dz.k=='storm'||dz.k=='supercell')?3.2:tn?4:1)-wind)*Math.min(1,dt*1.5);if(flash>0)flash-=dt*1.8;if(bolt&&(bolt.t-=dt)<=0)bolt=null;
+ if(scorch.length){scorch.forEach(q=>q.t-=dt);scorch=scorch.filter(q=>q.t>0)}
+ for(const tr of allTrees()){const R=rt(tr);if(R.burn>0){R.burn-=dt;if(Math.random()<dt*25)parts.push({k:'z',x:cxOf(tr)+(Math.random()-.5)*60,y:GY-20-Math.random()*90,vx:0,vy:-25,l:.8,c:['#ff9a2a','#ffd23f','#d6401a'][Math.random()*3|0]})}for(const i in R.bk){R.bk[i]-=dt*.8;if(R.bk[i]<=0)delete R.bk[i]}}
+ S.trees.forEach(t=>{if(t.g<1)t.g=Math.min(1,t.g+dt*.0006*(S.wat>.1?1:.3)*S.hp/100);else coin(.04*dt)});
+ if(tn){const c=DZ.tornado,m2=dmg()*tn.I.d;tn.x+=tn.dir*tn.v*dt+Math.sin(time*1.7)*4*dt;
+  for(const tr of allTrees()){const d=Math.abs(cxOf(tr)-tn.x);if(d<tn.r){S.hp-=c.d*m2*dt*.5;const R=rt(tr);if(Math.random()<dt*3)R.bk[Math.random()*SP[tr.sp].np|0]=100;
+   if(!tr.main&&c.up&&tn.I.d>1.3&&d<tn.r*.4&&((tr.hold=(tr.hold||0)+dt)>1.5)){S.trees.splice(S.trees.indexOf(tr),1);if(dz)dz.hit=1;toast('A tornádó kitépett egy fát!')}}}
+  for(let i=0;i<4;i++)parts.push({k:'z',x:tn.x+(Math.random()-.5)*tn.r*.8,y:GY-Math.random()*60,vx:tn.dir*30+(Math.random()-.5)*60,vy:-40-Math.random()*60,l:1,c:['#8a6a3a','#4caf3d','#6b4426','#cfc9b8'][Math.random()*4|0]});
+  if(tn.x<-tn.r*2||tn.x>W+tn.r*2)tn=null}
+ if(S.cfg.auto&&!dz&&dzCool<=0&&S.lvl>=3){autoT-=dt;if(autoT<=0){autoT=(S.cfg.auto==1?240:100)*(.7+Math.random()*.6);const ks=Object.keys(DZ);startDz(ks[Math.random()*ks.length|0],1)}}
+ if(!dz){if(S.hp<100&&S.wat>.15)S.hp=Math.min(100,S.hp+.6*dt);return}
+ dz.t-=dt;const k=dz.k,c=DZ[k];
+ if(k=='storm'){S.hp-=c.d*m*dt;for(let i=0;i<4;i++)parts.push({k:'r',x:Math.random()*W,y:-2,vx:-40,vy:300,l:(GY+2)/300,c:'rgba(160,208,255,.7)'});if(Math.random()<dt*c.strike*dz.I.d)strike()}
+ else if(k=='supercell'){S.hp-=c.d*m*dt;for(let i=0;i<5;i++)parts.push({k:'r',x:Math.random()*W,y:GY*.3,vx:-50,vy:320,l:(GY*.7+2)/320,c:'rgba(150,200,240,.7)'});
+  if(Math.random()<c.hail*dz.I.d*dt)parts.push({k:'h',x:Math.random()*W,y:GY*.3,vx:-30,vy:330,l:3});
+  if(Math.random()<dt*c.strike*(.5+dz.I.d))strike();
+  if(!dz.tr&&dz.t<dz.T*.55){dz.tr=1;if(!tn&&Math.random()<c.tornado*(dz.I.d>1?1.4:.8)){spawnTn(DZ.tornado,dz.I);toast('Tornádó csap le a szupercellából!')}}}
+ else if(k=='tornado'){if(!tn){dz.t=0;dz.win=dz.hit?0:1}}
+ else if(k=='flood'){const p=1-dz.t/dz.T,e=p<.3?p/.3:p<.7?1:(1-p)/.3;fd.h=fd.max*Math.max(0,e);S.hp-=c.d*m*dt*Math.max(0,e);S.wat=Math.min(3,S.wat+.3*dt)}
+ else if(k=='drought'){S.wat=Math.max(0,S.wat-.12*dt);if(S.wat<.08)S.hp-=c.d*m*dt}
+ else if(k=='frost'){S.hp-=c.d*m*dt;if(Math.random()<dt*12)parts.push({k:'z',x:Math.random()*W,y:-2,vx:-6,vy:20,l:12,c:'#e8f4ff'})}
+ else if(k=='fire'){const ts=allTrees();for(const f of fires){const n=ts.reduce((a,t)=>Math.abs(cxOf(t)-f.x)<Math.abs(cxOf(a)-f.x)?t:a,ts[0]),d=cxOf(n)-f.x;f.x+=Math.sign(d)*f.v*dt;if(Math.abs(d)<24){rt(n).burn=10;S.hp-=c.d*m;f.hp=0;dz.hit=1;toast('Tűz érte a fát!')}}
+  if(scorch.length<300&&Math.random()<dt*5)fires.forEach(f=>scorch.push({x:f.x,t:70}));
+  fires=fires.filter(f=>f.hp>0);if(!fires.length){dz.t=0;dz.win=dz.hit?0:1}if(Math.random()<dt*10)fires.forEach(f=>parts.push({k:'z',x:f.x,y:GY-8,vx:0,vy:-22,l:.9,c:'#ff9a2a'}))}
+ else if(k=='locust'){const cy=GY-(3+84*U)*.6;for(const l of lo){l.vx+=((CX-l.x)*.8+(Math.random()-.5)*160)*dt;l.vy+=((cy-l.y)*.8+(Math.random()-.5)*160)*dt;l.vx*=.97;l.vy*=.97;l.x+=l.vx*dt;l.y+=l.vy*dt;if(Math.abs(l.x-CX)<70&&Math.abs(l.y-cy)<60)S.hp-=c.d*m*dt}
+  if(!lo.length){dz.t=0;dz.win=1}}
+ S.hp=Math.max(8,S.hp);if(dz.t<=0)endDz()}
+// a szupercella felhője az égen (a talaj mögött)
+function drawDzSky(){if(!dz||dz.k!='supercell')return;const a=Math.min(1,(dz.T-dz.t)/4,dz.t/4),hc=GY*.36;ctx.globalAlpha=a*.92;
+ for(let y=0;y<hc;y+=2){ctx.fillStyle=rgb(lA([22,28,42],[70,92,88],y/hc));ctx.fillRect(0,y,W,2)}
+ for(let x=0;x<W;x+=3){const b=6+hs(x*.13+Math.floor(time*1.5))*8+Math.max(0,1-Math.abs(x-W*.5)/(W*.2))*18;ctx.fillStyle=rgb(lA([40,52,60],[84,108,100],hs(x*.7)));ctx.fillRect(x,hc,3,b)}
+ for(let i=0;i<48;i++){const t=i/48,an=time*.6+i*.5;px(W*.5+Math.cos(an)*W*.45*t,hc*.55+Math.sin(an)*hc*.3*t,'#9db0a8')}
+ ctx.globalAlpha=1}
+function drawDz(){
+ for(const q of scorch){ctx.globalAlpha=Math.min(.7,q.t/40);rc(q.x-3,GY-1,7,2,'#15100c');ctx.globalAlpha=1}
+ for(const f of fires)for(let k=-3;k<=3;k++){const h=(3+(Math.sin(time*14+k*2+f.x)+1)*3.5)*(1-Math.abs(k)/5);rc(f.x+k,GY-h,1,h,'#d6401a');rc(f.x+k,GY-h*.65,1,h*.65,'#ff9a2a');rc(f.x+k,GY-h*.3,1,h*.3,'#ffe27a')}
+ for(const l of lo){px(l.x,l.y,'#7a8a2a');px(l.x+(Math.sin(time*30+l.ph)>0?1:-1),l.y-1,'#c8d86a')}
+ if(tn){const top=GY*.3;for(let y=top;y<GY;y+=2){const t=(y-top)/(GY-top),w=2+tn.r*Math.pow(1-t,1.4)+2*Math.sin(time*5+y*.1),x=tn.x+Math.sin(time*2.5+y*.04)*8*(1-t);
+   rc(x-w,y,2*w,2,(y>>1)%2?'#4a4f58':'#5d636f');px(x+Math.sin(time*9+y*.35)*w*.8,y,'#9aa0ac');px(x-Math.sin(time*9+y*.35+2)*w*.8,y+1,'#2c3038')}
+  ctx.fillStyle='rgba(40,44,54,.9)';ctx.fillRect(tn.x-tn.r*1.2,top-8,tn.r*2.4,10);ctx.fillRect(tn.x-tn.r*.8,top-14,tn.r*1.6,7);ctx.fillStyle='rgba(120,90,60,.5)';ctx.fillRect(tn.x-tn.r*.8,GY-4,tn.r*1.6,4)}
+ if(fd&&fd.h>.5){const y0=GY-fd.h;ctx.fillStyle='rgba(60,140,210,.55)';ctx.fillRect(0,y0,W,fd.h);ctx.fillStyle='rgba(40,100,170,.4)';ctx.fillRect(0,y0+fd.h*.5,W,fd.h*.5);ctx.fillStyle='rgba(170,220,255,.65)';
+  for(let x=0;x<W;x+=6)ctx.fillRect(x+(time*20|0)%6,y0+(x%12?0:1),3,1);
+  for(let i=0;i<6;i++){const x=((time*14+i*70)%(W+40))-20,y=y0+2+Math.sin(time*2+i)*1.5;rc(x,y,6,2,'#6b4426');px(x+7,y,'#4caf3d')}}
+ if(dz&&dz.k=='supercell'){ctx.fillStyle='rgba(30,60,50,'+Math.min(1,(dz.T-dz.t)/4,dz.t/4)*.3+')';ctx.fillRect(0,0,W,H)}
+ if(bolt){let x=bolt.x+(hs(bolt.s)-.5)*30,y=0;const ty=GY-(3+84*U)*.8;while(y<ty){const nx=bolt.x+(hs(bolt.s+y*.1)-.5)*24*(1-y/ty),ny=y+10;seg(x,y,nx,ny,'#fff7c8',2);x=nx;y=ny}}}
+function renderDz(){const au=['Ki','Ritka','Gyakori'],st=(k,t)=>'<div class="st"><button class="sb" data-k="'+k+'" data-d="-1">◀</button><span>'+t+'</span><button class="sb" data-k="'+k+'" data-d="1">▶</button></div>';
+ $('zl').innerHTML='<div class="zr"><span style="flex:1">Automatikus csapások</span>'+st('auto',au[S.cfg.auto])+'</div>'+Object.keys(DZ).map(k=>'<div class="zr"><button class="b" data-k="'+k+'">'+DZ[k].e+' '+DZ[k].nm+(S.inv.p[k]>0?' ·🛡'+S.inv.p[k]:'')+'</button>'+st(k,INT[S.cfg[k]].n)+'</div>').join('')}
 const SEAS=['Tavasz','Nyár','Ősz','Tél'],SI=['❀','☀','🍂','❄'],SL=DAY*3,GRS=['#9be15d','#4caf3d','#2f7d32','#b6f26a','#3f9a35'],
  PAL=[[['#2a7a34','#4fb64a','#8bdc5a','#c6f58a'],GRS,.85],[['#1f5a2a','#2f7d32','#4caf3d','#8bd84e'],GRS,1],
  [['#8a3b14','#c2571a','#e8902a','#f6cf4a'],['#d9b84a','#a8842c','#6e5a1e','#e6c35a','#8c6c24'],.8],
@@ -180,7 +305,7 @@ function drawEnt(e){const x=e.x|0,f=e.v>0?1:-1,w=Math.sin(time*10+e.ph)>0;
  else if(e.k=='ff'){const a=(Math.sin(time*2+e.ph*3)+1)/2;rc(e.x,e.y+Math.sin(time+e.ph)*4,1,1,'rgba(255,240,120,'+a+')')}
  else drawFauna(e,x,f,w)}
 function draw(){const L=S.lvl,g=S.pl?cl((L-1+S.xp/need(L))/TL,0,1):0,p=(S.t%DAY)/DAY,dayf=cl(.5+Math.sin(p*6.2832)*.9,0,1);
- season();const warm=cl(1-Math.abs(dayf-.4)*3,0,1);for(let y=0;y<GY;y+=3){const f=y/GY;ctx.fillStyle=rgb(lA(lA(lA([8,14,36],[28,40,82],f),lA([96,176,230],[190,232,250],f),dayf),[255,150,90],warm*f*f*.75));ctx.fillRect(0,y,W,3)}
+ season();if(dz&&dz.k=='drought')GR=['#d9b84a','#a8842c','#6e5a1e','#e6c35a','#8c6c24'];else if(dz&&dz.k=='frost')GR=PAL[3][1];const warm=cl(1-Math.abs(dayf-.4)*3,0,1);for(let y=0;y<GY;y+=3){const f=y/GY;ctx.fillStyle=rgb(lA(lA(lA([8,14,36],[28,40,82],f),lA([96,176,230],[190,232,250],f),dayf),[255,150,90],warm*f*f*.75));ctx.fillRect(0,y,W,3)}
  if(dayf<.6){ctx.globalAlpha=1-dayf/.6;for(let i=0;i<(W/8|0);i++)if(Math.sin(time*2+i*5)>-.6)px(hs(i)*W,hs(i+9)*GY*.7,'#fff');ctx.globalAlpha=1}
  if(p<.5){const sx=W*p*2|0,sy=GY-6-Math.sin(p*6.2832)*GY*.6|0;ctx.globalAlpha=.18;disc(sx,sy,12,'#fff2b0');ctx.globalAlpha=.25;disc(sx,sy,8,'#ffe27a');ctx.globalAlpha=1;disc(sx,sy,5,'#ffe27a');disc(sx-1,sy-1,3,'#fff7c8')}
  else{const q=p-.5,mx=W*q*2|0,my=GY-6-Math.sin(q*6.2832)*GY*.6|0;ctx.globalAlpha=.15;disc(mx,my,9,'#cfe0ff');ctx.globalAlpha=1;disc(mx,my,5,'#e8ecff');px(mx-2,my-1,'#b9c2e0');px(mx+1,my+2,'#b9c2e0');px(mx+1,my-2,'#cdd5ee')}
@@ -190,6 +315,7 @@ function draw(){const L=S.lvl,g=S.pl?cl((L-1+S.xp/need(L))/TL,0,1):0,p=(S.t%DAY)
   h=4+Math.sin(x*.05+3)*3;rc(x,GY-h,1,h,rgb(lA([20,50,38],[70,150,80],dayf)));px(x,GY-h,rgb(lA([40,80,50],[120,190,100],dayf)))}
  if(L>=12)[18,W-20].forEach((x,i)=>{rc(x,GY-14,2,14,'#4a2f1a');blob(x,GY-17,7,i+20)});
  if(rb>0&&dayf>.3){ctx.globalAlpha=Math.min(.55,rb/6);const cx0=W*.62,R0=Math.min(W*.42,GY*.7);['#ff5a5a','#ffa85a','#ffe45a','#6ee06e','#5ab4ff','#7a5aff','#c05aff'].forEach((c,k)=>{const r=R0-k*3;for(let a=0;a<=r*2;a++){const t=Math.PI*a/(r*2);rc(cx0+Math.cos(t)*r,GY-Math.sin(t)*r*.9,3,2,c)}});ctx.globalAlpha=1}
+ drawDzSky();
  ctx.drawImage(soil,0,GY);
  if(S.wat>0){ctx.fillStyle='rgba(30,70,140,'+S.wat/3*.2+')';ctx.fillRect(0,GY,W,H-GY)}
  pw=L>=9?(Math.min(46,24+(L-9)*5)*U|0):0;
@@ -203,15 +329,17 @@ function draw(){const L=S.lvl,g=S.pl?cl((L-1+S.xp/need(L))/TL,0,1):0,p=(S.t%DAY)
   if(hs(x*3.1+S.seed)>dens*(1-d/cover*.6))continue;
   const h=1+(hs(x*1.3+S.seed)*(2+Math.min(L,9)*.7)*U|0),sw=Math.sin(time*1.8+x*.25)*(h>2?1:0);
   for(let i=0;i<h;i++)px(x+(i==h-1?Math.round(sw):0),GY-1-i,i>h*.6?GR[0]:i>h*.3?GR[1]:GR[2])}
- S.fl.forEach(drawFl);{const u0=U;U*=1+Math.min(.35,Math.max(0,L-13)*.012);drawTree(g);U=u0}
+ S.fl.forEach(drawFl);S.trees.slice().sort((a,b)=>Math.abs(b.fx)-Math.abs(a.fx)).forEach(t=>drawTreeC(t,t.g));drawTreeC(T0,g);
  if(S.pl){const c2=Math.min(W/2,W/2*(.12+.08*L));for(let x=CX-c2;x<CX+c2;x+=2){if(pw&&x>=10&&x<10+pw)continue;const r=hs(x*2.3+S.seed*3);if(r>.55)continue;const h=(2+((r*9|0)%4)+(L>4?1:0))*U|0,sw=Math.round(Math.sin(time*2+x*.3)*(h>2?1:0));for(let i=0;i<h;i++)px(x+(i==h-1?sw:0),GY-1-i,i>h*.6?GR[3]:GR[4])}}
- ents.forEach(e=>{if(e.k!='ant'&&e.k!='worm'&&e.k!='bug'&&e.k!='ff'&&(e.k!='bee'||dayf>.4)&&(e.k!='owl'||dayf<.5))drawEnt(e)});ctx.fillStyle='rgba(10,20,70,'+(1-dayf)*.38+')';ctx.fillRect(0,0,W,H);if(ev){ctx.fillStyle='rgba(30,45,70,.22)';ctx.fillRect(0,0,W,H)}if(dayf<.6)ents.forEach(e=>{if(e.k=='ff'){const a=(Math.sin(time*2+e.ph*3)+1)/2,y=e.y+Math.sin(time+e.ph)*4;ctx.fillStyle='rgba(255,240,120,'+a*.25+')';ctx.fillRect(e.x-2|0,y-2|0,5,5);rc(e.x,y,1,1,'rgba(255,250,200,'+a+')')}})
+ ents.forEach(e=>{if(e.k!='ant'&&e.k!='worm'&&e.k!='bug'&&e.k!='ff'&&(e.k!='bee'||dayf>.4)&&(e.k!='owl'||dayf<.5))drawEnt(e)});ctx.fillStyle='rgba(10,20,70,'+(1-dayf)*.38+')';ctx.fillRect(0,0,W,H);if(ev||dz&&dz.k=='storm'||dz&&dz.k=='supercell'){ctx.fillStyle='rgba(30,45,70,.22)';ctx.fillRect(0,0,W,H)}if(dayf<.6)ents.forEach(e=>{if(e.k=='ff'){const a=(Math.sin(time*2+e.ph*3)+1)/2,y=e.y+Math.sin(time+e.ph)*4;ctx.fillStyle='rgba(255,240,120,'+a*.25+')';ctx.fillRect(e.x-2|0,y-2|0,5,5);rc(e.x,y,1,1,'rgba(255,250,200,'+a+')')}})
  if(!S.pl){const sy=GY-60+Math.sin(time*2)*3;ctx.globalAlpha=.2+.1*Math.sin(time*3);disc(CX,sy+1|0,7,'#ffe27a');ctx.globalAlpha=1;rc(CX-1,sy,3,4,'#c8923c');px(CX,sy,'#f0c060')}
- for(const q of parts){if(q.k=='seed'){rc(q.x-1,q.y,3,4,'#c8923c');px(q.x,q.y,'#f0c060')}else if(q.k=='d'){rc(q.x,q.y,1,3,'#4aa8f0');px(q.x,q.y,'#cfeeff')}else if(q.k=='r')rc(q.x,q.y,1,4,q.c);else if(q.k=='star'){for(let j=0;j<9;j++)rc(q.x-j*1.6,q.y-j*.65,1,1,'rgba(255,247,200,'+(1-j/9)+')');rc(q.x,q.y,2,2,'#fff')}else rc(q.x,q.y,1,1,q.c)}
+ drawDz();for(const q of parts){if(q.k=='seed'){rc(q.x-1,q.y,3,4,'#c8923c');px(q.x,q.y,'#f0c060')}else if(q.k=='d'){rc(q.x,q.y,1,3,'#4aa8f0');px(q.x,q.y,'#cfeeff')}else if(q.k=='h'){rc(q.x,q.y,2,2,'#e8f4ff');px(q.x,q.y,'#fff')}else if(q.k=='r')rc(q.x,q.y,1,4,q.c);else if(q.k=='star'){for(let j=0;j<9;j++)rc(q.x-j*1.6,q.y-j*.65,1,1,'rgba(255,247,200,'+(1-j/9)+')');rc(q.x,q.y,2,2,'#fff')}else rc(q.x,q.y,1,1,q.c)}
+ if(flash>0){ctx.fillStyle='rgba(255,255,255,'+Math.min(.6,flash*.6)+')';ctx.fillRect(0,0,W,H)}
+ {const ct='🪙 '+(S.c|0);if($('cn')._t!==ct){$('cn').textContent=ct;$('cn')._t=ct}}
  $('fill').style.width=(S.xp/need(S.lvl)*100)+'%';
- $('lv').textContent=L<=TL?stg(g)+' · '+L+'. szint '+(SI[SID]||''):'Biom · '+(L-TL)+'. szint '+(SI[SID]||'')}
+ $('lv').textContent=L<=TL?stg(g)+' · '+L+'. szint '+(SI[SID]||'')+(S.hp<99?' ♥'+(S.hp|0):''):'Biom · '+(L-TL)+'. szint '+(SI[SID]||'')+(S.hp<99?' ♥'+(S.hp|0):'')}
 function update(dt){
- if(S.pl){S.wat=Math.max(0,S.wat-.02*dt);if(S.wat>.1)gain(.04*dt);if(SID==3){if(Math.random()<dt*14)parts.push({k:'z',x:Math.random()*W,y:-2,vx:(Math.random()-.5)*8,vy:14+Math.random()*10,l:14,c:'#fff'})}
+ if(S.pl){updateDz(dt);S.wat=Math.max(0,S.wat-.02*dt);if(S.wat>.1)gain(.04*dt);if(SID==3){if(Math.random()<dt*14)parts.push({k:'z',x:Math.random()*W,y:-2,vx:(Math.random()-.5)*8,vy:14+Math.random()*10,l:14,c:'#fff'})}
   else if(S.lvl>=5&&Math.random()<dt*(SID==2?4:.7))parts.push({k:'z',x:CX+(Math.random()-.5)*Math.min(S.lvl,14)*9*U,y:GY-50*U,vx:7,vy:9,l:6,c:SID==2?['#e8902a','#c2571a','#f6cf4a'][Math.random()*3|0]:'#8bd84e'});
   evT-=dt;if(evT<=0&&!ev){evT=90+Math.random()*120;if(SID!=3){ev={t:22};toast('Eső érkezett – a fa issza a vizet')}}
   if(ev){ev.t-=dt;S.wat=Math.min(3,S.wat+.25*dt);gain(.15*dt);for(let i=0;i<3;i++)parts.push({k:'r',x:Math.random()*W,y:-2,vx:-12,vy:260,l:(GY+2)/260,c:'rgba(160,208,255,.7)'});if(ev.t<=0){ev=null;rb=18}}
@@ -219,8 +347,8 @@ function update(dt){
   stT-=dt;if(stT<=0){stT=35+Math.random()*50;const pp=(S.t%DAY)/DAY;if(pp>.55&&pp<.95)parts.push({k:'star',x:Math.random()*W*.6,y:8+Math.random()*GY*.25,vx:55,vy:22,l:3.5,c:'#fff7c8'})}}
  for(const e of ents){e.x+=e.v*dt;if(/^(bird|bfly|ff|owl|bee)$/.test(e.k)){if(e.x>W+6)e.x=-6;if(e.x<-6)e.x=W+6}else if(e.x<3||e.x>W-3){e.v=-e.v;e.x=cl(e.x,3,W-3)}}
  for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt;
-  if(p.k=='d'||p.k=='seed')p.vy+=140*dt;else if(p.k=='s')p.vy+=60*dt;
-  if(p.k=='d'&&p.y>=GY){gain(.4);S.wat=Math.min(3,S.wat+.25);for(let j=0;j<4;j++)parts.push({k:'s',x:p.x,y:GY-1,vx:(Math.random()-.5)*30,vy:-20-Math.random()*20,l:.4,c:'#7fd1ff'});p.l=0}
+  if(p.k=='d'||p.k=='seed')p.vy+=140*dt;else if(p.k=='s')p.vy+=60*dt;if(p.k=='h'&&p.y>=GY)hailHit(p);
+  if(p.k=='d'&&p.y>=GY){gain(.4);coin(.06);if(fires.length){fires.forEach(f=>{if(Math.abs(f.x-p.x)<16)f.hp--});fires=fires.filter(f=>f.hp>0)}S.wat=Math.min(3,S.wat+.25);for(let j=0;j<4;j++)parts.push({k:'s',x:p.x,y:GY-1,vx:(Math.random()-.5)*30,vy:-20-Math.random()*20,l:.4,c:'#7fd1ff'});p.l=0}
   if(p.k=='seed'&&p.y>=GY){S.pl=1;mkRoots();for(let j=0;j<8;j++)parts.push({k:'s',x:CX,y:GY-1,vx:(Math.random()-.5)*40,vy:-30-Math.random()*20,l:.5,c:'#6b4426'});p.l=0;toast('A mag a földbe került…');save()}
   if(p.l<=0)parts.splice(i,1)}
  if((acc+=dt)>5){acc=0;save()}}
@@ -236,6 +364,8 @@ function frame(n){try{const dt=Math.min(.05,(n-lt)/1000);lt=n;if(!paused){time+=
  requestAnimationFrame(frame)}
 cv.addEventListener('pointerdown',e=>{if(paused)return;const x=e.clientX/innerWidth*W,y=e.clientY/innerHeight*H;
  if(!S.pl){if(!parts.some(p=>p.k=='seed'))parts.push({k:'seed',x:CX,y:GY-60,vx:0,vy:10,l:9});$('hint').classList.add('hide');return}
+ const li=lo.findIndex(l=>Math.hypot(l.x-x,l.y-y)<20);if(li>=0){lo.splice(li,1);coin(.5);sparkle(x,y,6,'#c8d86a');return}
+ if(sel>=0){plant(x);return}
  const st=parts.find(p=>p.k=='star'&&Math.hypot(p.x-x,p.y-y)<18);if(st){st.l=0;gain(2+S.lvl*.3);toast('Hulló csillag – bónusz növekedés!');sparkle(x,y,12,'#fff7c8');return}
  for(let i=0;i<5;i++)parts.push({k:'d',x:x+(Math.random()-.5)*10,y:Math.max(2,Math.min(y,GY-25)-Math.random()*8),vx:0,vy:20+Math.random()*30,l:5,c:'#6ec6ff'})});
 document.addEventListener('contextmenu',e=>e.preventDefault());
@@ -258,14 +388,20 @@ var lp;
 document.addEventListener('pointerdown',startAudio);
 // ---- menü ----
 const lab=()=>$('snd').textContent='Zene: '+(muted?'ki':'be');
-function showMenu(){paused=true;$('menu').classList.remove('hide');$('hud').classList.add('hide');$('hint').classList.add('hide');$('go').textContent=S.pl?'Folytatás':'Játék indítása';$('nw').textContent='Új játék';save()}
-function play(){paused=false;$('menu').classList.add('hide');$('hud').classList.remove('hide');if(!S.pl)$('hint').classList.remove('hide');startAudio()}
+function showMenu(){paused=true;$('menu').classList.remove('hide');$('hud').classList.add('hide');$('side').classList.add('hide');$('cn').classList.add('hide');$('hint').classList.add('hide');$('go').textContent=S.pl?'Folytatás':'Játék indítása';$('nw').textContent='Új játék';save()}
+function play(){paused=false;$('menu').classList.add('hide');$('hud').classList.remove('hide');$('side').classList.remove('hide');$('cn').classList.remove('hide');renderInv();if(!S.pl)$('hint').classList.remove('hide');startAudio()}
 $('go').onclick=play;$('pb').onclick=showMenu;
-$('nw').onclick=()=>{if($('nw').textContent!='Biztos? Koppints újra'&&S.pl){$('nw').textContent='Biztos? Koppints újra';return}S=fresh();parts=[];mkRoots();mkBranches();mkEnts();save();play()};
+$('nw').onclick=()=>{if($('nw').textContent!='Biztos? Koppints újra'&&S.pl){$('nw').textContent='Biztos? Koppints újra';return}S=fresh();parts=[];dz=null;fires=[];lo=[];tn=null;fd=null;scorch=[];sel=-1;mkRoots();mkBranches();mkEnts();save();play()};
 $('snd').onclick=()=>{muted=!muted;localStorage.setItem('fs_mute',muted?'1':'0');if(mg)mg.gain.value=muted?0:.8;lab()};
 document.addEventListener('visibilitychange',()=>{if(document.hidden){save();if(AC)AC.suspend()}else if(AC&&!muted)AC.resume()});
-addEventListener('pagehide',save);let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(size,120)});
-$('jb').onclick=showJr;$('jx').onclick=()=>$('jr').classList.add('hide');
+addEventListener('pagehide',save);let rzt;addEventListener('resize',()=>{clearTimeout(rzt);rzt=setTimeout(size,120)});
+$('jb').onclick=showJr;$('mb').onclick=showMk;$('mx').onclick=()=>{$('mk').classList.add('hide');paused=false};
+$('ml').onclick=e=>{const b=e.target.closest('button[data-i]');if(b)buy(+b.dataset.i)};
+$('db').onclick=()=>{paused=true;renderDz();$('dz').classList.remove('hide')};
+$('zx').onclick=()=>{$('dz').classList.add('hide');paused=false};
+$('zl').onclick=e=>{const sb=e.target.closest('button.sb');if(sb){const k=sb.dataset.k,d=+sb.dataset.d;if(k=='auto')S.cfg.auto=(S.cfg.auto+d+3)%3;else S.cfg[k]=cl(S.cfg[k]+d,0,2);save();renderDz();return}const b=e.target.closest('button.b');if(b){$('dz').classList.add('hide');paused=false;startDz(b.dataset.k)}};
+$('inv').onclick=e=>{const b=e.target.closest('button[data-i]');if(!b)return;const i=+b.dataset.i;sel=sel==i?-1:i;if(sel>=0)toast('Koppints a talajra az ültetéshez');renderInv()};
+$('jx').onclick=()=>$('jr').classList.add('hide');
 let tc=0;document.querySelector('#menu h1').onclick=()=>{if(++tc>=5){tc=0;$('dbg').classList.toggle('hide')}};
 size();lab();
 if(S.pl){const el=(Date.now()-(S.last||Date.now()))/1000;if(el>0)gain(Math.min(el,7200)*.004);play();$('menu').classList.add('hide')}else showMenu();

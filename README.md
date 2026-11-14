@@ -25,6 +25,19 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Események:** eső (a fa gyorsabban nő), eső utáni szivárvány, éjszaka hulló csillag, amire ha rákoppintasz, bónusz növekedést kapsz.
 - **Ősfa:** a 13. szint fölött a fa tovább vastagodik és magasodik (kb. 30. szintig).
 
+## Fák, piac és csapások
+
+- **Élethű ágrendszer:** a fa rekurzívan ágazik (főág, mellékág, ág, vessző), az alsó ágak a legrégebbiek, és fajonként más a koronaforma. A kamera közelebb van a fához.
+- **Több fa:** a piacon magot vásárolhatsz (tölgy, nyír, fenyő, szakura, akác). Válaszd ki a magot alul, és koppints a talajra az ültetéshez. A kifejlett fák érmét termelnek.
+- **Érmék:** szintlépésből, vízcseppekből, kifejlett fákból és a csapások túléléséből jönnek.
+- **Természeti csapások (⚡ gomb):** vihar (villám, letört ágak), aszály, erdőtűz (koppintással oltható), fagy és sáskajárás (koppintással elkergethető). Károsítják az erdő egészségét (♥), ami lassítja a növekedést, de túlélésükért érme jár. A piacon védelmet is vehetsz.
+
+## Csapások testreszabása
+
+- **Játékban:** a ⚡ gomb panelében minden csapásnál a ◀ ▶ gombokkal állíthatod az erősséget (Gyenge, Közepes, Erős), felül pedig az automatikus csapások gyakoriságát (Ki, Ritka, Gyakori). A beállítás mentődik.
+- **Csapások:** vihar, szupercella (jég, villám, esetleg tornádó), tornádó, erdőtűz, árvíz, aszály, fagy, sáskajárás.
+- **Kódban:** az `index.html`-ben a `DZ` táblázat soronként írja le a csapásokat (név, ikon, időtartam, sebzés/mp és egyedi értékek, pl. tornádó sebessége és sugara, jégszem/mp, tűzfrontok száma, árvízszint). Az `INT` táblázat az erősségi fokozatok szorzói (sebzés, jutalom, időtartam). Átírás után csak a `sw.js` gyorsítótár-verzióját kell növelni.
+
 ## Képernyők
 
 A játék telefonon és tableten is fut, álló és fekvő tájolásban. A kép mindig négyzetes pixelekből áll (nincs torzítás), a felbontás a kijelző méretéhez igazodik, a fa, a talaj és az élőlények mérete arányosan változik, a biom pedig fekvő módban is kitölti a teljes szélességet. A kijelzőbevágás (notch) mellett a kezelőfelület a biztonságos területen marad. Forgatáskor a játékállás megmarad.
