@@ -21,7 +21,7 @@ jobs:
           cp index.html manifest.json sw.js icon-192.png icon-512.png www/
           npx cap add android
           pip install pillow
-          python tools/android_icons.py
+          if [ -f tools/android_icons.py ]; then python tools/android_icons.py; else python android_icons.py; fi
           sed -i 's|<style name="AppTheme.NoActionBar"[^>]*>|&\n        <item name="android:windowFullscreen">true</item>\n        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>|' android/app/src/main/res/values/styles.xml
           npx cap sync android
       - name: APK build
