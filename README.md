@@ -32,6 +32,17 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Érmék:** szintlépésből, vízcseppekből, kifejlett fákból és a csapások túléléséből jönnek.
 - **Természeti csapások (⚡ gomb):** vihar (villám, letört ágak), aszály, erdőtűz (koppintással oltható), fagy és sáskajárás (koppintással elkergethető). Károsítják az erdő egészségét (♥), ami lassítja a növekedést, de túlélésükért érme jár. A piacon védelmet is vehetsz.
 
+## Végtelen erdő, érintés, teljesítmény
+
+- **Végtelen világ:** az erdő vízszintesen végtelen. Húzd el az ujjad a kamera mozgatásához (lendülettel), vagy tartsd az ujjad a képernyő szélén a görgetéshez. A 🏠 gomb visszavisz a főfához. A zöld terület a szinttel és az ültetett fák körül nő.
+- **Eső:** koppintás egy vízcsepp-csokrot ad, a nyomvatartás folyamatos esőt, ami követi az ujjadat (a felhő is).
+- **Fák és bokrok:** 8 fafaj (tölgy, nyír, fenyő, szakura, akác, fűz, juhar, baobab) és 4 bokor (rózsa, levendula, áfonya, hortenzia). A bokrok gyorsan nőnek és virágoznak.
+- **Piac gyerekbarát felülettel:** nagy képes kártyák fülekkel (Fák, Bokrok, Díszek, Védelem): méhkas (méz = érme), madáretető, lámpás, szökőkút, esővíz-hordó, trágya és védelmek.
+- **Évszakok és hőmérséklet:** a hőmérséklet (🌡) a napszaktól és az évszaktól függ, télen hó borítja a talajt és az ágakat, a tó befagy, a növekedés télen lassabb.
+- **Teljesítmény:** a háttér (ég, hegyek, talaj) és a fák képként gyorsítótárazva rajzolódnak, a felbontás a készülékhez igazodik (lassú telefonon automatikusan csökken), a menüben a **Grafika: Takarékos** mód 30 fps-re korlátoz és kíméli az akkumulátort.
+- **Offline:** a játék a telepítés után internet nélkül is megy (gyorsítótár-első service worker), betöltéskor betöltőképernyő látszik.
+- **Ikon:** a `tools/make_icon.py` generálja az ikont, a `tools/android_icons.py` pedig az Android indítóikonokat az APK építésekor.
+
 ## Csapások testreszabása
 
 - **Játékban:** a ⚡ gomb panelében minden csapásnál a ◀ ▶ gombokkal állíthatod az erősséget (Gyenge, Közepes, Erős), felül pedig az automatikus csapások gyakoriságát (Ki, Ritka, Gyakori). A beállítás mentődik.
@@ -57,6 +68,7 @@ A játék telefonon és tableten is fut, álló és fekvő tájolásban. A kép 
 | `manifest.json` | PWA-adatok (teljes képernyő, álló tájolás) |
 | `sw.js` | Offline gyorsítótár |
 | `icon-192.png`, `icon-512.png` | Ikonok |
+| `tools/` | Ikon-generátor és Android ikon-csere (az APK-építéshez) |
 
 ## Közzététel GitHub Pages-en
 

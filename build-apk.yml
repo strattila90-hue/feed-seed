@@ -20,6 +20,8 @@ jobs:
           mkdir -p www
           cp index.html manifest.json sw.js icon-192.png icon-512.png www/
           npx cap add android
+          pip install pillow
+          python tools/android_icons.py
           sed -i 's|<style name="AppTheme.NoActionBar"[^>]*>|&\n        <item name="android:windowFullscreen">true</item>\n        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>|' android/app/src/main/res/values/styles.xml
           npx cap sync android
       - name: APK build
