@@ -32,6 +32,16 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Érmék:** szintlépésből, vízcseppekből, kifejlett fákból és a csapások túléléséből jönnek.
 - **Természeti csapások (⚡ gomb):** vihar (villám, letört ágak), aszály, erdőtűz (koppintással oltható), fagy és sáskajárás (koppintással elkergethető). Károsítják az erdő egészségét (♥), ami lassítja a növekedést, de túlélésükért érme jár. A piacon védelmet is vehetsz.
 
+## Felhők, időjárás, napszak, óriásfák, zene
+
+- **Felhők:** 11 valódi felhőtípus (cirrus, cirrostratus, cirrocumulus, altocumulus, altostratus, stratocumulus, stratus, cumulus, cumulus congestus, nimbostratus, cumulonimbus) önálló életciklussal: keletkeznek, sodródnak, „gomolyognak”, átalakulnak (a cumulus tornyosuló gomolyfelhővé, majd zivatarfelhővé nőhet), és elenyésznek. Egy felhőre koppintva kiírja a nevét és a szerepét.
+- **Időjárás:** az időjárási helyzet (derült, labilis, csapadékos) az évszaktól és a napszaktól függ. A nimbostratus tartós esőt vagy havat, a cumulonimbus zivatart hoz (villám, jég). Az eső után szivárvány jelenhet meg, és naplementekor a felhők pirosas árnyalatot kapnak.
+- **Csapások:** a vihar és a szupercella ugyanezt a felhőrendszert használja (üllős cumulonimbus, forgó fal, jég), a tornádó a felhő aljából ereszkedik le.
+- **Napszak:** a menüben vagy a ⚡ panelen állítható: Auto, Reggel, Dél, Alkony, Éjjel.
+- **Óriásfák:** a piac Óriások fülén a világ legmagasabb fái: Douglas-fenyő (100 m), eukaliptusz (100 m), óriás mamutfenyő (84 m, a legnagyobb térfogatú), Hyperion (115 m, a legmagasabb ismert fa). Szinthez kötött, a zárolt tételek előre láthatók.
+- **Zene:** a menüben hat stílus közül választhatsz: Nyugodt, Lo-fi, Gitár, Természet, Zongora, Ki. A hang mind a készüléken generálódik.
+- **Megjelenés:** lekerekített gombok, nagyobb, képes áruházkártyák.
+
 ## Végtelen erdő, érintés, teljesítmény
 
 - **Végtelen világ:** az erdő vízszintesen végtelen. Húzd el az ujjad a kamera mozgatásához (lendülettel), vagy tartsd az ujjad a képernyő szélén a görgetéshez. A 🏠 gomb visszavisz a főfához. A zöld terület a szinttel és az ültetett fák körül nő.
