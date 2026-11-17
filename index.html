@@ -183,13 +183,47 @@ function genSk(seed,sp){let n=0;const R=()=>hs(seed*7.13+(n++)*1.91),P2=Math.PI/
   prof=sp.sh==1?1.05-t*.85:sp.sh==2?.45+.55*Math.pow(t,.7):.55+.45*Math.sin(Math.PI*Math.min(1,t*1.05)),ph=sp.a0*(1.3-t*.8)+.2*R();
   out.push({fr,s:side,n:mk(P2-side*ph,sp.L*prof*(.85+.3*R()),0)})}
  return out}
+// élethű lombfolt: szabálytalan körvonal, gömbárnyékolás a fény felől, levélcsomós textúra, áttört szélek, kilógó levelek
+function clump(cx,cy,r,o,pal,sh,fq){cx|=0;cy|=0;if(r<1.2){px(cx,cy,pal[2]);px(cx-1,cy+1,pal[1]);return}
+ const ry=r*(fq||1),p1=hs(o*1.7)*6.28,p2=hs(o*2.9)*6.28,X=Math.ceil(r*1.3+1),Y=Math.ceil(ry*1.3+1),cs=r>4?2:1;
+ for(let y=-Y;y<=Y;y++)for(let x=-X;x<=X;x++){const nx=x/r,ny=y/ry,d=Math.sqrt(nx*nx+ny*ny),an=Math.atan2(ny,nx),
+   lc=hs(Math.floor((cx+x)/cs)*7.3+Math.floor((cy+y)/cs)*13.1+o*.37),e=1+.15*Math.sin(an*3+p1)+.09*Math.sin(an*5+p2)+(lc-.5)*(r>3?.32:.18);
+  if(d>e)continue;if(d>e-.2&&hs((cx+x)*3.1+(cy+y)*5.7+o)>.5)continue;
+  const nz=Math.sqrt(Math.max(0,1-d*d)),li=(-nx*.42-ny*.72+nz*.55)*.72+.3,v=cl(li+(lc-.5)*.42-sh,0,.999);
+  let c=pal[cl((v*4+(((x+y)&1)?.18:-.18))|0,0,3)];if(lc<.1&&d<e-.3)c=pal[0];
+  if(snow>.3&&ny<-.35&&li>.55&&lc>.3)c='#f2f8ff';px(cx+x,cy+y,c)}
+ if(r>2.5)for(let k=0;k<r*1.4;k++){const a=hs(o*5.1+k*1.37)*6.283,rr=1.08+hs(o+k*2.3)*.25,lx=cx+Math.cos(a)*r*rr|0,ly=cy+Math.sin(a)*ry*rr|0;
+  px(lx,ly,pal[Math.sin(a)<0?2:1]);if(k%3==0)px(lx+(Math.cos(a)>0?1:-1),ly,pal[1])}}
+// fajonként jellemző gyökérrendszer: karógyökér (tölgy, fenyő, akác), szívgyökér (nyír, juhar, szakura), tányérgyökér (fűz, baobab, mamutfenyő), bojtos (bokrok)
+const RTY=['tap','heart','tap','heart','tap','flat','heart','flat','fib','fib','fib','fib','flat','flat','heart','heart'];
+function genRoots(tr,sp,Ls,T){let n=0;const R=()=>hs(tr.seed*3.71+(n++)*.917),out=[],ty=RTY[tr.sp]||'heart',P2=Math.PI/2,asy=(R()-.5)*.5;
+ const grow=(x,y,a,len,th,ord,t0,pref,gv)=>{const st=1.2,m=Math.max(3,len/st|0),span=(1-t0)*(ord?.55:.8);let nl=(2+R()*3)*(ord?1.4:1)|0;
+  for(let i=1;i<=m;i++){a+=(R()-.5)*(ord?.55:.38);a+=(pref-a)*gv;if(y<2&&Math.sin(a)<.15)a+=.25;const nx=x+Math.cos(a)*st,ny=y+Math.sin(a)*st,f=i/m,tb=t0+f*span;
+   out.push({x0:x,y0:y,x1:nx,y1:ny,th:Math.max(1,th*(1-f*.75)),o:ord,tb});x=nx;y=ny;
+   if(ord<3&&i>m*.12&&i<m*.92&&R()<nl/m*1.15){nl--;const sd=R()<.5?-1:1,ca=a+sd*(.6+R()*.7);grow(x,y,ca,len*(.32+R()*.3),th*.55,ord+1,tb+.04,ty=='flat'&&!ord&&R()<.4?P2:ca*.7+P2*.3,.03)}}
+  if(ord>=2)for(let k=0;k<2;k++){const ha=a+(R()-.5)*2.4;out.push({x0:x,y0:y,x1:x+Math.cos(ha)*(2+R()*3),y1:y+Math.sin(ha)*(2+R()*3),th:1,o:4,tb:t0+span+.05})}};
+ if(ty=='tap'){grow(0,1,P2+(R()-.5)*.1,Ls*1.25,T,0,0,P2,.14);const k=4+(R()*3|0);for(let i=0;i<k;i++){const sd=i%2?1:-1,a=P2-sd*(.75+R()*.55)+asy;grow(sd,1,a,Ls*(.5+R()*.35)*(1+sd*asy),T*.7,0,.08+i*.05,a*.6+P2*.4,.025)}}
+ else if(ty=='heart'){const k=5+(R()*4|0);for(let i=0;i<k;i++){const a=Math.PI*(.18+.64*(i+R()*.5)/k)+asy*.3;grow((i/k-.5)*3,1,a,Ls*(.6+R()*.35),T*.85,0,i*.03,a,.035)}}
+ else if(ty=='flat'){const k=6+(R()*4|0);for(let i=0;i<k;i++){const sd=i%2?1:-1,a=P2-sd*(1.2+R()*.32);grow(sd*2,1,a,Ls*(.75+R()*.5)*(1+sd*asy),T*.85,0,i*.03,P2-sd*1.25,.05)}}
+ else{const k=10+(R()*6|0);for(let i=0;i<k;i++){const a=Math.PI*(.1+.8*i/k)+(R()-.5)*.2;grow(0,1,a,Ls*(.35+R()*.3),1.5,1,i*.02,a*.5+P2*.5,.04)}}
+ return out}
+const RCOL=[['#4a301c','#b88c5c','#d8b07a'],['#5a3c24','#c89c68','#e0bc86'],['#6a4a2e','#d6ae7a','#d6ae7a'],['#7a5a3a','#e2c28e','#e2c28e'],['#e8d4a8','#e8d4a8','#e8d4a8']];
+function drawRoots(tr,g){const R=rt(tr),sp=SP[tr.sp],uu=U*(tr.main?1+Math.min(.35,Math.max(0,S.lvl-13)*.012):.78*sp.sz),HF=3+84*uu,Ls=HF*(sp.bush?.9:.62),
+  RW=(Ls*2.2+12)|0,sh=H-GY,cx=cxOf(tr);if(cx+RW<0||cx-RW>W)return;
+ const rg=cl(.06+g*1.15,0,1),key=(rg*60|0)+','+Ls.toFixed(1)+','+sh+','+(R.burn>0?1:0);
+ if(R.rk!==key){R.rk=key;if(!R.rs||R.rL!==Ls){R.rs=genRoots(tr,sp,Ls,Math.max(2,Math.min(7,(2+5*uu)*(sp.tw||1)*.6)));R.rL=Ls}const c=R.rc||(R.rc=document.createElement('canvas'));c.width=2*RW;c.height=sh;
+  onCv(c,()=>{const vis=R.rs.filter(s=>s.tb<=rg&&s.y1<sh-2&&s.x1>-RW&&s.x1<RW);
+   for(const s of vis){if(s.o==4)continue;const t=Math.round(s.th),h=t>>1;ctx.globalAlpha=.7;rc(RW+s.x1-h-1,s.y1-h-(t>1?1:0),t+2,t+(t>1?2:1),RCOL[s.o][0])}ctx.globalAlpha=1;
+   for(const s of vis){const cc=RCOL[s.o],t=Math.round(s.th),h=t>>1,x=RW+s.x1-h,y=s.y1-h,tip=rg-s.tb<.04&&s.o<4;
+    if(s.o==4){ctx.globalAlpha=.4;px(RW+s.x1,s.y1,cc[0]);ctx.globalAlpha=1;continue}
+    rc(x,y,t,t,tip?'#f8ecc8':cc[1]);if(t>2)rc(x,y,Math.max(1,t>>1),1,cc[2])}})}
+ ctx.drawImage(R.rc,cx-RW,GY)}
 function drawTree(tr,g,ns){if(!S.pl)return;
  const R=rt(tr),sp=SP[tr.sp],uu=U*(tr.main?1+Math.min(.35,Math.max(0,S.lvl-13)*.012):.78*sp.sz),cx=cxOf(tr),HF=3+84*uu,hT=3+g*84*uu,burn=R.burn>0,
   pal=burn?ASH:sp.ev||(sp.sp0&&SID==0?sp.sp0:sp.au&&SID==2?sp.au:sp.sm&&SID<2?sp.sm:LEAF),L=S.lvl,lfE=burn?.15:sp.ev?1:LF*(.4+.6*S.hp/100),sw=ns?0:Math.sin(time*1.1+tr.seed)*(.5+g*2.4)*uu*wind,
   tw=g<.12?1:sp.bush?1+(g*2|0):((2+(g*5*uu|0))*(sp.tw||1)|0),top=GY-hT,tx=cx+sw*Math.pow(hT/HF,2),fl=tr.main?cl(S.xp/need(L),0,1):.6,cf=smooth(cl((g-.4)/.55,0,1))*lfE,ts=HF/87,
   yt=g<.12?hT:Math.max(3,hT*.07),bk=burn?['#14100d','#241b15','#352a21']:sp.bark,dm=tr.main?sp.dd:Math.max(1,sp.dd-1);
  if(g>.08){const sr=(5+g*34)*uu;ctx.fillStyle='rgba(0,0,0,.2)';ctx.fillRect(cx-sr|0,GY,2*sr|0,2);ctx.fillRect(cx-sr*.7|0,GY+2,1.4*sr|0,1)}
- if(!tr.main&&g>.15)for(let j=0;j<5;j++){const a=Math.PI*(.2+.6*j/4);seg(cx,GY+1,cx+Math.cos(a)*30*g*uu,GY+1+Math.sin(a)*30*g*uu,'#d8b27c')}
  for(let i=0;i<hT;i++){const ox=sw*(i/HF)*(i/HF),w2=Math.max(1,Math.round(tw*(1-(sp.tp||.45)*i/hT)+(i<tw?(tw-i)>>1:0)));
   for(let k=0;k<w2;k++){const m=k/(w2-1||1),n=hs(i*3+k*7+tr.seed);let c;
    if(i>hT-yt)c=k%2?'#9cc55c':'#7fae4a';
@@ -208,8 +242,10 @@ function drawTree(tr,g,ns){if(!S.pl)return;
  sk.forEach((p,idx)=>{const nh=HF*p.fr;if(nh>hT-4)return;const b=R.bk[idx]>0?1-.75*R.bk[idx]/100:1,a=cl((hT-nh)/(HF*.45),0,1)*b;if(a<.05)return;
   node(p.n,cx+p.s*(tw>>1),GY-nh,HF*a,b<.6?0:a,0)});
  if(cf>.04){const cy=GY-hT*(sp.cb+(1-sp.cb)*.55);
-  if(cf>.25&&sp.sh!=1){const r=HF*.2*cf*(sp.sh==3?.75:1),sx=sw*Math.pow(hT*.7/HF,2);blob(cx+sx,cy,r,3,pal);blob(cx+sx-r*.8,cy+r*.3,r*.7,4,pal);blob(cx+sx+r*.8,cy+r*.3,r*.7,5,pal)}
-  tips.forEach((t,i)=>blob(t.x,t.y,t.c?(1+2*cf)*ts:(1.2+(t.o?4.6:2.4)*cf)*ts,9+i,pal))}
+  const fq=sp.sh==2?.62:sp.sh==1?.7:.88;let y0=1e9,y1=-1e9;tips.forEach(t=>{if(t.y<y0)y0=t.y;if(t.y>y1)y1=t.y});const chh=Math.max(1,y1-y0);
+  if(cf>.25&&sp.sh!=1){const r=HF*.2*cf*(sp.sh==3?.75:1),sx=sw*Math.pow(hT*.7/HF,2);clump(cx+sx-r*.8,cy+r*.3,r*.7,4,pal,.3,fq);clump(cx+sx+r*.8,cy+r*.3,r*.7,5,pal,.3,fq);clump(cx+sx,cy,r,3,pal,.22,fq)}
+  tips.map((t,i)=>[t,i]).sort((a,b)=>b[0].y-a[0].y).forEach(([t,i])=>clump(t.x,t.y,t.c?(1+2*cf)*ts:(1.2+(t.o?4.6:2.4)*cf)*ts,9+i,pal,cl((t.y-y0)/chh,0,1)*.28,fq));
+  if(sp.sh==3&&cf>.3){const wl=sp.n=='Fűz'?1:.45;tips.forEach((t,i)=>{if(!t.o)return;const L=(5+hs(i*3.3)*12)*ts*cf*wl*3;for(let j=0;j<L;j++)px(t.x+Math.sin(j*.25+i)*1.2+(hs(i)-.5)*4,t.y+2+j,pal[(j+i)%4==0?3:j%3?1:2])})}}
  // rügyfakadás és hajtásnövekedés az ágvégeken
  tips.forEach(t=>{if(!t.o)return;
   if(fl<.25||lfE<.3){rc(t.x,t.y-1,1,2,burn?bk[1]:'#6b3a22');px(t.x,t.y-2,fl>.12?'#b6e86a':'#c4563a')}
@@ -569,8 +605,8 @@ function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r
  tile(soilC,cam,GY);
  if(S.wat>0){ctx.fillStyle='rgba(30,70,140,'+S.wat/3*.2+')';ctx.fillRect(0,GY,W,H-GY)}
  const pw=L>=9?(Math.min(46,24+(L-9)*5)*U|0):0,pd=Math.max(5,(7*U)|0),pxo=PXo(),psx=pxo-cam+CX,sh=cam-CX,w0=(cam-CX)|0;drawWet(w0,dayf,psx,pw);
+ if(S.pl){drawRoots(T0,g);for(const t of S.trees)drawRoots(t,t.g)}
  if(pw&&psx<W&&psx+pw>0){const ice=TEMP<-1,c1=ice?'#e6f6ff':'#5fb4f0',c2=ice?'#cfeeff':'#3a8fd6',c3=ice?'#b0d8f0':'#2a6aa0';rc(psx,GY,pw,pd,c2);rc(psx,GY,pw,2,c1);rc(psx,GY+pd-1,pw,1,c3);if(!ice)for(let i=0;i<pw;i+=5)rc(psx+(i+(time*6|0))%pw,GY+(i%10?1:0),3,1,'#cfeeff');rc(psx-1,GY,1,pd,'#6b5a3a');rc(psx+pw,GY,1,pd,'#6b5a3a');for(let i=0;i<3;i++){const rx=psx+2+i*pw/3.5;rc(rx,GY-6,1,6,'#3f8f3a');rc(rx,GY-8,1,3,'#7a4a1a')}}
- if(S.pl){const rg=cl(.08+g*1.1,0,1),rx=CX-cam;if(rx>-200&&rx<W+200)for(const o of roots){const f=o.s?cl((rg-.4)/.6,0,1):rg,n=o.p.length*f|0;for(let j=0;j<n;j++){const x=o.p[j][0]+rx,y=o.p[j][1];px(x,y,j==n-1?'#f3e0b8':'#d8b27c');if(!o.s&&j<10)px(x+1,y,'#b88f58')}}}
  for(const e of ents){if((e.k=='ant'||e.k=='worm'||e.k=='bug')&&Math.abs(e.x-cam)<W/2+20){e.x-=sh;drawEnt(e);e.x+=sh}}
  const gs=[];if(S.pl){gs.push({x:0,R:(90+L*26)*U*.7});for(const t of S.trees)gs.push({x:t.wx,R:(40+Math.min(1,t.g)*50)*U*.7});for(const d of S.dec)gs.push({x:d.wx,R:50*U*.7})}
  const gv=gs.filter(q=>Math.abs(q.x-cam)<W/2+q.R+10),G=wx=>{let m=0;for(const q of gv){const v=1.3-Math.abs(wx-q.x)/q.R;if(v>m)m=v}return m>1?1:m},dens=cl(.25+L*.07,0,1);
