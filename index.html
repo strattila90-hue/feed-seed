@@ -481,24 +481,34 @@ function drawStormSky(){if(!tn&&(!dz||(dz.k!='storm'&&dz.k!='supercell')))return
 // --- tornádó: a képernyő tetejétől a talajig érő, forgó, kötélszerűen hajló tölcsér, falfelhő, porfelhő, keringő törmelék ---
 const TNC=[[52,56,64],[150,154,162]];
 function tnGeo(){const cx0=tn.x-cam+CX,Rt=Math.max(W*.17,tn.r*2.2),Rb=Math.max(3,tn.r*.22),top=GY*.1,lag=-tn.dir*W*.07;
- return{cx0,Rt,Rb,top,X:y=>{const t=cl((y-top)/(GY-top),0,1);return cx0+lag*(1-t)*(1-t)+Math.sin(time*1.1+y*.022)*Rt*.1*(1-t)*t*2.5},R:y=>{const t=cl((y-top)/(GY-top),0,1);return Rb+(Rt-Rb)*Math.pow(1-t,2.2)}}}
-function drawTornado(){if(!tn)return;const G=tnGeo(),a=Math.min(1,tn.age||1);tn.age=(tn.age||0)+1/60;
- // hátsó törmelék
+ return{cx0,Rt,Rb,top,X:y=>{const t=cl((y-top)/(GY-top),0,1);return cx0+lag*(1-t)*(1-t)+Math.sin(t*3.6+time*.8)*Rt*.16*t*(1-t)*3},R:y=>{const t=cl((y-top)/(GY-top),0,1);return Rb+(Rt-Rb)*Math.pow(1-t,2.2)}}}
+// gomolygó felhőpamacs-sprite-ok (pixeles, dithered szél): szürke felhő és barnás por, 5 árnyalat
+let PUF=null;const PUFC=[[34,30,38],[58,52,60],[92,84,88],[136,124,116],[184,168,148]],PUFB=[[58,42,30],[92,70,50],[130,100,72],[168,136,100],[202,174,134]];
+function pufSpr(){if(PUF)return PUF;PUF=[];[PUFC,PUFB].forEach(P=>{for(let s=0;s<5;s++)for(let v=0;v<2;v++){const c=document.createElement('canvas');c.width=24;c.height=14;const g=c.getContext('2d');
+ for(let y=0;y<14;y++)for(let x=0;x<24;x++){const nx=(x-11.5)/11.5,ny=(y-6.5)/6.5,n=hs(x*3.1+y*7.7+v*13+s*1.7);if(nx*nx+ny*ny>1-n*.38)continue;
+  const k=ny>.25&&n>.35?Math.max(0,s-1):ny<-.35&&n>.65?Math.min(4,s+1):s;g.fillStyle=rgb(P[k]);g.fillRect(x,y,1,1)}PUF.push(c)}});return PUF}
+const puf=(b,s,v)=>pufSpr()[(b*5+cl(s|0,0,4))*2+v];
+// tornádó: forgó felhőpamacsokból álló, S alakban kígyózó tölcsér, ami a forgó felhőalapból ereszkedik le és földet ér; porfelhő a talajon
+function drawTornado(){if(!tn)return;const G=tnGeo();tn.age=(tn.age||0)+1/60;const reach=smooth(Math.min(1,tn.age/3)),bot=G.top+(GY-G.top)*reach;
+ // sötét felhőplafon és forgó mezociklon (falfelhő)
+ ctx.fillStyle='rgba(22,20,28,.75)';ctx.fillRect(0,0,W,G.top*.55|0);
+ for(let pass=0;pass<2;pass++)for(let i=0;i<30;i++){const th=i/30*6.283+time*.55,s=Math.sin(th);if((s>0)!=!!pass)continue;const rr=G.Rt*(1.5+.7*hs(i)),x=G.X(G.top)+Math.cos(th)*rr,y=G.top*.45+s*G.top*.28,w=(70+hs(i*3)*60)*Math.max(1,U*.8),h=w*.36;
+  ctx.drawImage(puf(0,pass?1+hs(i)*1.5:hs(i)*1.2,i&1),x-w/2|0,y-h/2|0,w|0,h|0)}
  drawDebris(G,0);
- // tölcsér: soronként, hengeres árnyalás + forgó csíkok + szakadozott szél
- for(let y=G.top|0;y<GY;y+=2){const t=(y-G.top)/(GY-G.top),r=G.R(y)*(1+.08*Math.sin(time*7+y*.09))+hs(y+(time*12|0))*2,cx=G.X(y),n=Math.max(3,Math.min(16,r/2.5|0)),dust=cl((t-.72)/.28,0,1);
-  for(let k=0;k<n;k++){const u0=-1+2*k/n,u1=-1+2*(k+1)/n,u=(u0+u1)/2,th=Math.asin(cl(u,-1,1)),st=Math.sin(th*3.2-time*9+y*.07),sh=.42+.4*Math.sqrt(1-u*u)-u*.12+st*.1,
-    c=lA(lA(TNC[0],TNC[1],cl(sh,0,1)),[124,98,72],dust*.75);ctx.globalAlpha=a*(Math.abs(u)>.8?.55:.92)*(1-dust*.25);ctx.fillStyle=rgb(c);ctx.fillRect(Math.round(cx+u0*r),y,Math.ceil((u1-u0)*r)+1,2)}}
- ctx.globalAlpha=1;
- // falfelhő a tetején: forgó, sötét gomolyok
- for(let i=0;i<22;i++){const an=time*.9+i*.29,rr=G.Rt*(1.1+.9*hs(i)),x=G.X(G.top)+Math.cos(an)*rr,y=G.top-6+Math.sin(an)*G.top*.3+hs(i*3)*6;oval(x,y,10+hs(i*5)*14,4+hs(i*7)*5,i%3?'#262b34':'#323844')}
- // porfelhő a talajon
- for(let i=0;i<16;i++){const an=time*3+i*.39,rr=tn.r*(.5+.7*hs(i)),x=G.cx0+Math.cos(an)*rr,h=(6+hs(i*2)*14)*U,y=GY-h*.5+Math.sin(an)*2;ctx.globalAlpha=.55;oval(x,y,(5+hs(i*9)*7)*U,h*.45,i%2?'#7a5e40':'#8e7050')}
- ctx.globalAlpha=1;drawDebris(G,1)}
+ // tölcsérmag (hézagmentes), majd hátsó és elülső forgó pamacsok
+ for(let y=G.top|0;y<bot;y+=2){const t=(y-G.top)/(GY-G.top),r=G.R(y)*.55;ctx.fillStyle=t>.78?'#3e3028':'#2a262c';ctx.fillRect(G.X(y)-r|0,y,(2*r|0)+1,2)}
+ for(let pass=0;pass<2;pass++)for(let y=G.top;y<=bot;y+=3){const t=(y-G.top)/(GY-G.top),R=G.R(y),n=R>40?6:R>14?5:4,om=2.2+6*t,cx=G.X(y),dust=t>.8?1:0;
+  for(let i=0;i<n;i++){const th=i/n*6.283+time*om*(tn.dir>0?1:-1)+y*.045,s=Math.sin(th);if((s>0)!=!!pass)continue;const c=Math.cos(th),lit=.5+.5*Math.cos(th+2.3),
+    x=cx+c*R*.6,w=R*.95+6,h=Math.max(5,Math.min(R*.42,18)),sh=pass?1.2+lit*2.6:lit*1.6;ctx.drawImage(puf(dust,sh,(i+(y|0))&1),x-w/2|0,y-h/2|0,w|0,h|0)}}
+ // földet érés: kavargó por- és törmelékfelhő
+ if(reach>.95){const k=Math.min(1,(tn.age-2.8)/1.5);for(let pass=0;pass<2;pass++)for(let i=0;i<20;i++){const th=i/20*6.283+time*2.4*(tn.dir>0?1:-1),s=Math.sin(th);if((s>0)!=!!pass)continue;
+   const rr=tn.r*(.7+.8*hs(i)),x=G.cx0+Math.cos(th)*rr,hh=(5+hs(i*2)*22)*U,y=GY-hh*(.45+.25*s),w=(16+hs(i*5)*22)*U,h=w*.5;ctx.globalAlpha=k*(pass?.9:.7);
+   ctx.drawImage(puf(1,pass?1+hs(i*7)*2.5:hs(i*7)*1.5,i&1),x-w/2|0,y-h/2|0,w|0,h|0)}ctx.globalAlpha=1}
+ drawDebris(G,1)}
 function drawDebris(G,front){for(const d of tn.deb||[]){const s=Math.sin(d.an);if((s>0)!=!!front)continue;const y=d.y,r=G.R(y)*d.k+2,x=G.X(y)+Math.cos(d.an)*r;ctx.globalAlpha=front?1:.6;
  if(d.t==0)rc(x,y,2,2,'#6e5034');else if(d.t==1){px(x,y,'#4caf3d');px(x+1,y,'#2f7d32')}else if(d.t==2){const c=Math.cos(d.an*2);seg(x-2*c,y-1,x+2*c,y+1,'#6b4426',1)}else rc(x-2,y,4,1,'#c8a878')}ctx.globalAlpha=1}
 function updTornado(dt){if(!tn)return;if(!tn.deb)tn.deb=[];const G=tnGeo();
- const near=allTrees().some(t=>Math.abs(wxOf(t)-tn.x)<tn.r*1.2),n=near?6:3;
+ if((tn.age||0)<2.8)return;const near=allTrees().some(t=>Math.abs(wxOf(t)-tn.x)<tn.r*1.2),n=near?6:3;
  for(let i=0;i<n*dt*10&&tn.deb.length<90;i++)tn.deb.push({an:Math.random()*6.28,y:GY-2-Math.random()*6,k:.6+Math.random()*.9,w:5+Math.random()*4,vy:-(12+Math.random()*30),t:near&&Math.random()<.6?(Math.random()<.6?1:2):Math.random()<.85?0:3});
  for(let i=tn.deb.length-1;i>=0;i--){const d=tn.deb[i];d.an+=d.w*dt*(tn.dir>0?1:-1);d.y+=d.vy*dt;d.k+=dt*.05;
   if(d.y<GY*.35||Math.random()<dt*.15){const r=G.R(d.y)*d.k,x=G.X(d.y)+Math.cos(d.an)*r;parts.push({k:'z',x,y:d.y,vx:-Math.sin(d.an)*d.w*r*.6,vy:20,l:1.5,c:d.t==1?'#4caf3d':d.t==2?'#6b4426':'#6e5034'});tn.deb.splice(i,1)}}}
