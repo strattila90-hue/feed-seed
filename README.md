@@ -80,7 +80,7 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 ## Újradolgozott csapások
 
 - **Tornádó:** a sötét, forgó felhőalapból (mezociklon) ereszkedik le egy gomolygó, felhőpamacsokból álló, S alakban kígyózó tölcsér, amely látványosan forog (lent gyorsabban), földet ér, és ott kavargó por- és törmelékfelhőt ver fel. A törmelék (föld, levelek, ágak, deszkák) a tölcsér körül kering, a tölcsér mögött és előtt is, majd kirepül. A fák a tornádó felé dőlnek (beáramló szél), lökésesen.
-- **Vihar / szupercella:** felülről sötétedő ég, gomolygó felhőalap, mozgó esőfüggönyök, alacsonyan száguldó foszlányfelhők, a szél leveleket sodor, a villám bevilágítja a felhőket.
+- **Vihar / szupercella:** sötét ég, háromszintű, gomolygó, pixeles polcfelhő (shelf cloud) világos peremmel, a felhőalapból lógó esőfüggönyök, alacsonyan száguldó foszlányfelhők, a szél leveleket sodor, a villám a felhőalapból csap le és bevilágítja a felhőket. Szupercellánál zöldes fény és forgó falfelhő.
 - **Erdőtűz:** rétegzett, lobogó lángnyelvek, parázs, felszálló, a széllel sodródó füst; az égő fák is füstölnek.
 - **Aszály:** hőremegés a talaj felett, repedezett föld, poros, vakító fény.
 - **Árvíz:** zavaros, tükröződő, hullámzó víz, úszó uszadék (rönkök, ágak, deszkák).
