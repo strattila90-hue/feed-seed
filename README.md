@@ -97,9 +97,7 @@ A játék telefonon és tableten is fut, álló és fekvő tájolásban. A kép 
 
 ## Közzététel GitHub Pages-en
 
-1. Töltsd fel a fájlokat a repó gyökerébe.
-2. **Settings → Pages → Deploy from a branch → `main` / `(root)`**
-3. Pár perc múlva elérhető a fenti címen.
+A `.github/workflows/pages.yml` minden `main`-re küldött módosításnál átmásolja a játékot a `gh-pages` ágra, amiről a GitHub Pages kiszolgálja. Ha az oldal mégsem jelenik meg: **Settings → Pages → Deploy from a branch → `gh-pages` / `(root)`**.
 
 ## APK készítése (automatikusan, GitHub Actions)
 
