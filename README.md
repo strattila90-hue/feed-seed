@@ -54,6 +54,7 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Grafika:** távoli hegyvonulat légköri perspektívával, fenyves erdősáv, sima égi színátmenet, fényudvar a nap és a fények körül, napsugarak, tükröződő tó, elágazó villám, aranyórás színezés, esőben és ködben fakóbb színek.
 - **Élethű lomb:** a korona szabálytalan körvonalú levélcsomókból áll, a fény felől világosabb, alul és belül árnyékosabb, a széle áttört, kilógó levelekkel. A fenyő lombja lapítottabb, az akác és a baobab ernyős, a fűz és a nyír ágai lecsüngenek, télen hó ül a lombon.
 - **Egyedi gyökérzet:** minden fának saját, a magjából generált gyökérrendszere van, fajra jellemző formával: karógyökér (tölgy, fenyő, akác), szívgyökér (nyír, szakura, juhar, eukaliptusz, Douglas-fenyő), tányérgyökér (fűz, baobab, mamutfenyő, Hyperion), bojtos gyökér (bokrok). A gyökerek a fával együtt nőnek: előbb a fő gyökerek, aztán az oldalgyökerek és a hajszálgyökerek; a vastag gyökerek a törzs közelében a legerősebbek.
+- **Atmoszférikus pixel art:** az ég korlátozott színsávokból áll Bayer-raszterezéssel (dithering), éjjel Tejút és színes csillagok ragyognak; nappal porszemcsék és pollen lebegnek a fényben, a világos részek (nap, lámpák, villám, szentjánosbogarak) lágyan ragyognak (bloom).
 - **Grafika: Éles** mód a menüben (Auto → Éles → Takarékos): kb. kétszer annyi képpont, finomabb részletek.
 
 ## Végtelen erdő, érintés, teljesítmény
