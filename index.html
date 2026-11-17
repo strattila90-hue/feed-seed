@@ -59,6 +59,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;f
 .b,.tb,.ch,.cd,.sb,.bb,#lv,#cn,#mc,#toast,#hint,.ji,.zr .st{border-radius:16px}
 .b{border-radius:20px}.ib,#pb{border-radius:16px}#bar{border-radius:10px}#fill{border-radius:6px}.cd img{width:96px;height:96px;border-radius:14px}.cd u{border-radius:14px}
 .cd.lk img{filter:brightness(0) opacity(.55)}.cd.lk{opacity:.8}
+#wx{position:fixed;left:max(12px,env(safe-area-inset-left));top:calc(env(safe-area-inset-top,0px) + 92px);display:flex;flex-direction:column;align-items:flex-start;gap:5px;z-index:2}
+.wc{display:flex;align-items:center;gap:5px;padding:3px 10px 3px 5px;font:bold 12px "Courier New",monospace;color:#fff;text-shadow:1px 1px #000;background:#0a1a2abb;border:2px solid #9fc3e8;border-radius:16px;box-shadow:0 2px 0 #0008;animation:pop .35s}
+.wc i{font-style:normal;font-size:20px;line-height:22px}.wc:active{transform:translateY(2px)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@media (min-width:700px) and (min-height:700px){.wc{font-size:14px}.wc i{font-size:24px;line-height:26px}}
 .hide{display:none!important}
 @keyframes bob{50%{transform:translateY(-6px)}}
 @keyframes drift{to{background-position:0 460px,23px 600px}}
@@ -68,7 +73,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;f
 <div id="ld"><h1>Feed&amp;Seed</h1><div class="lb"><i></i></div><small>betöltés…</small></div><script>setTimeout(function(){var l=document.getElementById("ld");if(l)l.classList.add("off")},9000)</script>
 <canvas id="c"></canvas><div id="vig"></div>
 <div id="hud" class="hide"><span id="lv"></span><div id="bar"><div id="fill"></div></div><button id="pb" aria-label="Szünet"></button></div>
-<div id="cn" class="hide"></div><div id="side" class="hide"><button class="ib" id="hb" aria-label="Középre">🏠</button><button class="ib" id="mb" aria-label="Piac">🛒</button><button class="ib" id="db" aria-label="Csapások">⚡</button></div><div id="inv"></div>
+<div id="cn" class="hide"></div><div id="wx" class="hide"></div><div id="side" class="hide"><button class="ib" id="hb" aria-label="Középre">🏠</button><button class="ib" id="mb" aria-label="Piac">🛒</button><button class="ib" id="db" aria-label="Csapások">⚡</button></div><div id="inv"></div>
 <div id="hint" class="hide">Koppints a mag elültetéséhez</div><div id="toast"></div><pre id="dbg" class="hide"></pre>
 <div id="menu"><h1>Feed&amp;Seed</h1><small>a növekedés nyugodt játéka</small><button class="b" id="go">Játék indítása</button><button class="b" id="nw">Új játék</button><button class="b s" id="td">Napszak: Auto</button><button class="b s" id="gx">Grafika: Auto</button><button class="b s" id="jb">Napló</button><button class="b s" id="snd">Zene: be</button></div>
 <div id="mk" class="hide"><h2>Piac</h2><div id="mc"></div><div id="mt"></div><div id="ml"></div><button class="b" id="mx">Vissza</button></div>
@@ -416,7 +421,7 @@ function startDz(k,auto){if(dz)return auto?0:toast('Már zajlik egy csapás');if
  dz={k,T:c.t*I.t,t:c.t*I.t,win:0,hit:0,I,tr:0};toast(c.e+' '+c.nm+' kezdődik! ('+I.n+')');
  if(k=='fire'){fires=[];const n=Math.round(c.cnt*I.d),ts=allTrees(),b=wxOf(ts[Math.random()*ts.length|0]||T0);camT=b;for(let i=0;i<n;i++)fires.push({x:b+(i%2?1:-1)*(W*.42+(i>>1)*W*.1),hp:c.hp,v:c.speed*(.8+.3*I.d)})}
  if(k=='locust'){lo=[];const n=Math.round(c.cnt*I.d);for(let i=0;i<n;i++)lo.push({x:Math.random()*W,y:-10-Math.random()*60,vx:0,vy:0,ph:Math.random()*9})}
- if(k=='tornado')spawnTn(c,I);if(k=='storm'||k=='supercell'||k=='tornado')clouds.forEach(q=>{q.life=Math.min(q.life,q.age+8)});
+ if(k=='tornado')spawnTn(c,I);if(k=='storm'||k=='supercell'||k=='tornado'||k=='drought')rb=0;if(k=='storm'||k=='supercell'||k=='tornado')clouds.forEach(q=>{q.life=Math.min(q.life,q.age+8)});
  if(k=='flood')fd={h:0,max:c.h*U*I.d*.9}}
 function strike(){const ts0=allTrees(),ts=ts0.filter(t=>Math.abs(cxOf(t)-CX)<W*.7),t=(ts.length?ts:ts0)[Math.random()*(ts.length||ts0.length)|0],R=rt(t);R.burn=8;R.bk[Math.random()*SP[t.sp].np|0]=100;S.hp-=8*dmg();flash=.8;thunder(.05);bolt={x:cxOf(t),t:.3,s:Math.random()*99,top:stBase()*1.05};sparkle(cxOf(t),GY-60,10,'#ffe27a')}
 function hailHit(p){p.l=0;for(let j=0;j<2;j++)parts.push({k:'z',x:p.x,y:GY-1,vx:(Math.random()-.5)*40,vy:-30-Math.random()*30,l:.4,c:'#e8f4ff'});if(dz&&dz.I&&allTrees().some(t=>Math.abs(cxOf(t)-p.x)<60))S.hp-=.3*dmg()*dz.I.d}
@@ -424,7 +429,7 @@ function endDz(){const L=S.lvl,c=Math.round((12+L*3+(dz.win?10+L*2:0))*dz.I.r);c
  if(dz.k=='flood'){S.wat=3;gain(2+L*.5);toast('Az árvíz tápanyagot hagyott a talajban. +'+c+' 🪙')}else toast((dz.win?'Sikeres védekezés! ':'Túlélted a csapást. ')+'+'+c+' 🪙');
  dz=null;dzCool=20;fires=[];lo=[];fd=null;save()}
 function updateDz(dt){const m=dmg()*(dz?dz.I.d:1);if(dzCool>0)dzCool-=dt;
- wind+=((dz&&(dz.k=='storm'||dz.k=='supercell')?3.2:tn?4:WX.wf)-wind)*Math.min(1,dt*1.5);if(flash>0)flash-=dt*1.8;if(bolt&&(bolt.t-=dt)<=0)bolt=null;
+ wind+=((dz&&(dz.k=='storm'||dz.k=='supercell')?3.2:tn?6:WX.wf)-wind)*Math.min(1,dt*1.5);if(flash>0)flash-=dt*1.8;if(bolt&&(bolt.t-=dt)<=0)bolt=null;
  if(scorch.length){scorch.forEach(q=>q.t-=dt);scorch=scorch.filter(q=>q.t>0)}
  for(const tr of allTrees()){const R=rt(tr);if(R.burn>0){R.burn-=dt;if(Math.random()<dt*3)smoke(cxOf(tr)+(Math.random()-.5)*30,GY-40*U-Math.random()*40,14*U,1);if(Math.random()<dt*25)parts.push({k:'z',x:cxOf(tr)+(Math.random()-.5)*60,y:GY-20-Math.random()*90,vx:0,vy:-25,l:.8,g:1,c:['#ff9a2a','#ffd23f','#d6401a'][Math.random()*3|0]})}for(const i in R.bk){R.bk[i]-=dt*.8;if(R.bk[i]<=0)delete R.bk[i]}}
  S.trees.forEach(t=>{const sp=SP[t.sp];if(t.g<1)t.g=Math.min(1,t.g+dt*.0006*(sp.gr||1)*gmul()*(S.wat>.1?1:.3)*S.hp/100);else if(!sp.bush)coin(.04*dt)});
@@ -514,16 +519,20 @@ function drawTornado(){if(!tn)return;const G=tnGeo();tn.age=(tn.age||0)+1/60;con
  if(reach>.95){const k=Math.min(1,(tn.age-2.8)/1.5);for(let pass=0;pass<2;pass++)for(let i=0;i<20;i++){const th=i/20*6.283+time*2.4*(tn.dir>0?1:-1),s=Math.sin(th);if((s>0)!=!!pass)continue;
    const rr=tn.r*(.7+.8*hs(i)),x=G.cx0+Math.cos(th)*rr,hh=(5+hs(i*2)*22)*U,y=GY-hh*(.45+.25*s),w=(16+hs(i*5)*22)*U,h=w*.5;ctx.globalAlpha=k*(pass?.9:.7);
    ctx.drawImage(puf(1,pass?1+hs(i*7)*2.5:hs(i*7)*1.5,i&1),x-w/2|0,y-h/2|0,w|0,h|0)}ctx.globalAlpha=1}
- drawDebris(G,1)}
+ drawDebris(G,1);
+ // szélcsíkok: a levegő a tölcsér felé áramlik
+ if(reach>.95){ctx.fillStyle='rgba(225,228,235,.35)';for(let i=0;i<34;i++){const u=(hs(i*1.7)+time*(.55+hs(i)*.4))%1,sd=i%2?-1:1,x=G.cx0+sd*(1-u)*W*.75,y=GY-4-hs(i*3.3)*GY*.6*(1-u*.4)-u*u*40,l=(8+hs(i*5)*22)*(1-u*.5);ctx.fillRect(Math.round(sd>0?x:x-l),y|0,l|0,1)}}}
 function drawDebris(G,front){for(const d of tn.deb||[]){const s=Math.sin(d.an);if((s>0)!=!!front)continue;const y=d.y,r=G.R(y)*d.k+2,x=G.X(y)+Math.cos(d.an)*r;ctx.globalAlpha=front?1:.6;
  if(d.t==0)rc(x,y,2,2,'#6e5034');else if(d.t==1){px(x,y,'#4caf3d');px(x+1,y,'#2f7d32')}else if(d.t==2){const c=Math.cos(d.an*2);seg(x-2*c,y-1,x+2*c,y+1,'#6b4426',1)}else rc(x-2,y,4,1,'#c8a878')}ctx.globalAlpha=1}
 function updTornado(dt){if(!tn)return;if(!tn.deb)tn.deb=[];const G=tnGeo();
+ if((tn.age||0)>2.5&&parts.length<760)for(let i=0;i<dt*30;i++){const sd=Math.random()<.5?-1:1,x=sd<0?-4:W+4,v=-sd*(150+Math.random()*120);parts.push({k:'z',x,y:GY-2-Math.random()*GY*.55,vx:v,vy:-10-Math.random()*25,l:Math.abs((G.cx0-x)/v),c:['#4caf3d','#2f7d32','#8a6a3a','#c2a070','#6b4426'][Math.random()*5|0],w:Math.random()<.3?2:1})}
  if((tn.age||0)<2.8)return;const near=allTrees().some(t=>Math.abs(wxOf(t)-tn.x)<tn.r*1.2),n=near?6:3;
  for(let i=0;i<n*dt*10&&tn.deb.length<90;i++)tn.deb.push({an:Math.random()*6.28,y:GY-2-Math.random()*6,k:.6+Math.random()*.9,w:5+Math.random()*4,vy:-(12+Math.random()*30),t:near&&Math.random()<.6?(Math.random()<.6?1:2):Math.random()<.85?0:3});
  for(let i=tn.deb.length-1;i>=0;i--){const d=tn.deb[i];d.an+=d.w*dt*(tn.dir>0?1:-1);d.y+=d.vy*dt;d.k+=dt*.05;
   if(d.y<GY*.35||Math.random()<dt*.15){const r=G.R(d.y)*d.k,x=G.X(d.y)+Math.cos(d.an)*r;parts.push({k:'z',x,y:d.y,vx:-Math.sin(d.an)*d.w*r*.6,vy:20,l:1.5,c:d.t==1?'#4caf3d':d.t==2?'#6b4426':'#6e5034'});tn.deb.splice(i,1)}}}
 // a tornádó felé húzó beáramlás: a fák a tölcsér felé dőlnek, lökésesen
-function tnLean(tr){if(!tn)return 0;const d=cxOf(tr)-(tn.x-cam+CX),sg=W*.32,f=Math.exp(-(d*d)/(2*sg*sg));return -Math.sign(d)*f*(.28+.14*Math.sin(time*6+tr.seed*3))}
+const gLean=sx=>{if(!tn)return 0;const d=sx-(tn.x-cam+CX),f=Math.exp(-(d*d)/(2*(W*.35)**2));return Math.round(-Math.sign(d)*f*(2.2+Math.sin(time*7+sx*.1)))};
+function tnLean(tr){if(!tn)return 0;const d=cxOf(tr)-(tn.x-cam+CX),sg=W*.32,f=Math.exp(-(d*d)/(2*sg*sg));return -Math.sign(d)*f*(.42+.2*Math.sin(time*6+tr.seed*3))}
 // --- tűz: rétegzett, lobogó lángnyelvek, parázs, felszálló füstoszlop ---
 function drawFlames(sx,base,sz){for(let k=-6;k<=6;k++){const f=1-Math.abs(k)/7,fl=Math.sin(time*13+k*2.1+sx)+Math.sin(time*7.3+k*1.3),h=Math.max(1,(5+fl*2.2)*f*sz);
   rc(sx+k,base-h,1,h,'#b02c14');rc(sx+k,base-h*.78,1,h*.78,'#f0601a');rc(sx+k,base-h*.5,1,h*.5,'#ffb02a');rc(sx+k,base-h*.22,1,h*.22,'#fff2a0');
@@ -675,7 +684,7 @@ function wxUpdate(dt){const day=Math.sin(curP()*6.2832),sun=cl(day,0,1),dr=dz&&d
  // köd: ha a levegő hőmérséklete megközelíti a harmatpontot, gyenge szélben, főleg éjjel és hajnalban; a nap feloszlatja
  const fT=cl((3-(TEMP-WX.td))/3,0,1)*cl(1-(WX.ws-1.5)/5,0,1)*(1-sun*.85)*(dz?0:1);WX.fog+=(fT-WX.fog)*Math.min(1,dt*(fT>WX.fog?.02:.05));
  // szél (m/s): alacsony nyomás és gyors nyomásváltozás erősíti, zivatarnál kifutószél, folyamatos széllökések
- const base=(dz&&(dz.k=='storm'||dz.k=='supercell')?8:tn?6:0)+1.2+Math.max(0,1013-WX.p)*.32+Math.abs(WX.tend)*1.6+(reg=='unstable'&&rainI>.4?5:0)+(reg=='wet'?1.5:0),
+ const base=(dz&&(dz.k=='storm'||dz.k=='supercell')?8:tn?16:0)+1.2+Math.max(0,1013-WX.p)*.32+Math.abs(WX.tend)*1.6+(reg=='unstable'&&rainI>.4?5:0)+(reg=='wet'?1.5:0),
   gu=nse(time*.55+7)*.6+nse(time*1.9)*.3;WX.gs=Math.max(0,gu);WX.ws+=(base*(1+WX.gs*.9)-WX.ws)*Math.min(1,dt*1.2);WX.wf=cl(.45+WX.ws/4.5,.4,3);
  // széliránykirordulás frontátvonuláskor
  WX.dirT-=dt;if(WX.dirT<=0&&Math.abs(WX.tend)>1.6){WX.dirT=90;WX.dir=WX.tend>0?-1:1}
@@ -767,6 +776,51 @@ function drawBolt(){if(!bolt)return;if(!bolt.pts)bolt.pts=boltPath(bolt);if(Math
 let BL;function bloom(st){if(eco)return;const w=Math.max(1,W>>3),h=Math.max(1,H>>3);if(!BL||BL.width!=w||BL.height!=h){BL=document.createElement('canvas');BL.width=w;BL.height=h}
  const b=BL.getContext('2d');b.imageSmoothingEnabled=true;b.globalCompositeOperation='copy';b.drawImage(cv,0,0,w,h);b.globalCompositeOperation='multiply';b.drawImage(BL,0,0);b.drawImage(BL,0,0);
  ctx.save();ctx.imageSmoothingEnabled=true;ctx.globalCompositeOperation='screen';ctx.globalAlpha=st;ctx.drawImage(BL,0,0,W,H);ctx.restore();ctx.imageSmoothingEnabled=false}
+// ---- időjárás-jelenségek a főképernyőn, gyerekeknek: kis ikonok, koppintásra egyszerű magyarázat ----
+const WXK={
+ sun:['☀️','Napos','A nap melegít és világít. A fák a napfényből készítenek maguknak táplálékot!'],
+ cloud:['⛅','Felhős','A felhők apró vízcseppekből állnak, amik a levegőben lebegnek.'],
+ over:['☁️','Borult','Sok felhő takarja el a napot. Lehet, hogy hamarosan esni fog!'],
+ drizzle:['🌦️','Szitálás','Apró, finom esőcseppek hullanak, olyan kicsik, hogy szinte lebegnek.'],
+ rain:['🌧️','Eső','A felhőben a cseppek összeállnak, és ha elég nehezek, lehullanak. Esőben gyorsabban nő a fa!'],
+ pour:['🌊','Felhőszakadás','Nagyon sok eső esik egyszerre. Ilyenkor tócsák keletkeznek.'],
+ snow:['🌨️','Havazás','Ha nagyon hideg van, a felhőben a víz jégkristállyá fagy: ez a hópehely. Mindegyik más alakú!'],
+ sleet:['🌨️','Havas eső','Félig eső, félig hó: épp fagypont körül van a hőmérséklet.'],
+ storm:['⛈️','Zivatar','Magas, sötét felhőben villám és mennydörgés keletkezik. Ilyenkor maradj fedett helyen!'],
+ bolt:['⚡','Villám','Hatalmas elektromos szikra a felhő és a föld között. Először látjuk, aztán halljuk a dörgést!'],
+ hail:['🧊','Jégeső','Erős zivatarban a cseppek megfagynak, és jégdarabként hullanak le.'],
+ tornado:['🌪️','Tornádó','Egy forgó szélörvény, ami a felhőből ér le a földig. Nagyon erős, mindent felkap!'],
+ wind:['💨','Erős szél','A levegő gyorsan mozog: hajlanak a fák és repülnek a levelek.'],
+ breeze:['🍃','Szellő','Gyenge szél, ami lágyan mozgatja a leveleket.'],
+ fog:['🌫️','Köd','A köd egy felhő, ami leszállt a földre. Ezért nem látunk messzire!'],
+ rainbow:['🌈','Szivárvány','A napfény az esőcseppekben szivárványszínekre bomlik: piros, narancs, sárga, zöld, kék, lila.'],
+ frost:['❄️','Fagy','0 fok alatt a víz jéggé fagy. A tó is befagyhat!'],
+ hot:['🥵','Hőség','Nagyon meleg van. A fák is szomjasak: adj nekik vizet!'],
+ dew:['💧','Harmat','Éjjel lehűl a levegő, és reggelre apró vízcseppek ülnek a fűszálakon.'],
+ star:['🌠','Hullócsillag','Egy apró kődarab ég el az égen. Koppints rá gyorsan!'],
+ night:['🌙','Éjszaka','A nap lement, a hold és a csillagok világítanak. A szentjánosbogarak is előbújnak!'],
+ rise:['🌅','Napkelte','Felkel a nap, kezdődik a nap. Az ég narancssárga és rózsaszín lesz.'],
+ set:['🌇','Naplemente','Lemegy a nap. A felhők pirosas színt kapnak.'],
+ drought:['🏜️','Aszály','Sokáig nem esik eső, kiszárad a föld. Locsold a fákat!'],
+ flood:['🌊','Árvíz','Annyi víz gyűlik össze, hogy elönti a földet.'],
+ fire:['🔥','Erdőtűz','Ég az erdő! Koppints a lángokra a vízzel, hogy eloltsd!'],
+ locust:['🦗','Sáskák','Hatalmas sáskaraj eszi a leveleket. Koppints rájuk, hogy elkergesd őket!']};
+let wxT='';
+function wxNow(){const p=curP(),day=Math.sin(p*6.2832),k=[];
+ if(p<.05)k.push('rise');else if(p>.44&&p<.5)k.push('set');else if(p>=.5)k.push('night');
+ if(tn)k.push('tornado');
+ if(dz&&(dz.k=='storm'||dz.k=='supercell')||reg=='unstable'&&rainI>.4)k.push('storm');
+ if(dz&&dz.k=='supercell')k.push('hail');if(bolt)k.push('bolt');
+ if(rainI>.25)k.push(WX.pt=='s'?'snow':WX.pt=='m'?'sleet':rainI>.75?'pour':rainI>.45?'rain':'drizzle');
+ else if(day>0&&!k.includes('storm')&&!tn){const n=clouds.filter(c=>!c.sup&&c.b>.2).length;k.push(reg=='wet'||n>8?'over':n>3?'cloud':'sun')}
+ if(WX.fog>.3)k.push('fog');if(rb>0)k.push('rainbow');
+ if(WX.ws>8||tn)k.push('wind');else if(WX.ws>3.5)k.push('breeze');
+ if(TEMP<0)k.push('frost');else if(TEMP>28)k.push('hot');
+ if(WX.rh>.88&&rainI<.1&&p>.02&&p<.15)k.push('dew');
+ if(parts.some(q=>q.k=='star'))k.push('star');
+ if(dz&&WXK[dz.k])k.push(dz.k);
+ return[...new Set(k)].slice(0,6)}
+function renderWxKids(){const k=wxNow(),s=k.join();if(s===wxT)return;wxT=s;$('wx').innerHTML=k.map(q=>'<button class="wc" data-w="'+q+'"><i>'+WXK[q][0]+'</i>'+WXK[q][1]+'</button>').join('')}
 function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r.key=''}});const L=S.lvl,g=S.pl?cl((L-1+S.xp/need(L))/TL,0,1):0,p=curP(),dayf=cl(.5+Math.sin(p*6.2832)*.9,0,1);
  season();if(dz&&dz.k=='drought')GR=['#d9b84a','#a8842c','#6e5a1e','#e6c35a','#8c6c24'];else if(dz&&dz.k=='frost')GR=PAL[3][1];
  const warm=cl(1-Math.abs(dayf-.4)*3,0,1),skk=(dayf*40|0)+':'+(warm*10|0)+':'+(snow*5|0);if(skk!==skyKey){skyKey=skk;renderSky(dayf,warm);renderHills(dayf);renderFar(dayf,warm)}
@@ -785,14 +839,14 @@ function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r
  const gs=[];if(S.pl){gs.push({x:0,R:(90+L*26)*U*.7});for(const t of S.trees)gs.push({x:t.wx,R:(40+Math.min(1,t.g)*50)*U*.7});for(const d of S.dec)gs.push({x:d.wx,R:50*U*.7})}
  const gv=gs.filter(q=>Math.abs(q.x-cam)<W/2+q.R+10),G=wx=>{let m=0;for(const q of gv){const v=1.3-Math.abs(wx-q.x)/q.R;if(v>m)m=v}return m>1?1:m},dens=cl(.25+L*.07,0,1);
  for(let sx=0;sx<W;sx++){const wx=w0+sx,gg=G(wx);if(gg<=0||(pw&&wx>=pxo&&wx<pxo+pw))continue;const r=hs(wx*3.1+S.seed);if(r>dens*gg)continue;
-  const h=1+((hs(wx*1.3+S.seed)*(2+Math.min(L,9)*.7)*U)|0),sw=h>2?Math.round(Math.sin(time*1.8+wx*.25)):0,tH=Math.max(1,(h*.4)|0),mH=Math.max(1,(h*.3)|0),bH=Math.max(0,h-tH-mH);
+  const h=1+((hs(wx*1.3+S.seed)*(2+Math.min(L,9)*.7)*U)|0),sw=(h>2?Math.round(Math.sin(time*1.8+wx*.25)):0)+gLean(sx),tH=Math.max(1,(h*.4)|0),mH=Math.max(1,(h*.3)|0),bH=Math.max(0,h-tH-mH);
   rc(sx,GY-bH,1,bH,GR[2]);rc(sx,GY-bH-mH,1,mH,GR[1]);rc(sx+sw,GY-h,1,tH,GR[0])}
  if(S.pl&&L>=2){const av=[0];if(L>=3)av.push(1,2);if(L>=4)av.push(3);if(L>=6)av.push(4);const fd0=.1+Math.min(L,20)*.012;
   for(let i=Math.floor(w0/7)-2,i1=Math.floor((w0+W)/7)+2;i<=i1;i++){const x=i*7+((hs(i*1.9+S.seed)*6)|0),gg=G(x);if(gg<=0||hs(i*3.7+S.seed)>fd0*gg||(pw&&x>=pxo&&x<pxo+pw))continue;drawFl({x:x-w0,t:av[(hs(i*5.3+S.seed)*av.length)|0],c:hs(i*2.1),s:hs(i*4.7)})}}
  S.dec.forEach(d=>{if(Math.abs(cxOf(d)-CX)<W/2+40)drawDeco(d)});
  const vt=S.trees.filter(t=>Math.abs(cxOf(t)-CX)<W/2+220*U);vt.sort((a,b)=>(SP[a.sp].bush?1:0)-(SP[b.sp].bush?1:0)||Math.abs(cxOf(b)-CX)-Math.abs(cxOf(a)-CX));
  let mi=vt.findIndex(t=>SP[t.sp].bush);if(mi<0)mi=vt.length;for(let i=0;i<mi;i++)drawTreeC(vt[i],vt[i].g);if(Math.abs(cxOf(T0)-CX)<W/2+260*U)drawTreeC(T0,g);for(let i=mi;i<vt.length;i++)drawTreeC(vt[i],vt[i].g);
- if(S.pl)for(let sx=0;sx<W;sx+=2){const wx=w0+sx,gg=G(wx);if(gg<=0||(pw&&wx>=pxo&&wx<pxo+pw))continue;const r=hs(wx*2.3+S.seed*3);if(r>.55*gg)continue;const h=((2+((r*9|0)%4)+(L>4?1:0))*U)|0,sw=Math.round(Math.sin(time*2+wx*.3)*(h>2?1:0));rc(sx,GY-h*.6,1,h*.6,GR[4]);rc(sx+sw,GY-h,1,h*.4+1,GR[3])}
+ if(S.pl)for(let sx=0;sx<W;sx+=2){const wx=w0+sx,gg=G(wx);if(gg<=0||(pw&&wx>=pxo&&wx<pxo+pw))continue;const r=hs(wx*2.3+S.seed*3);if(r>.55*gg)continue;const h=((2+((r*9|0)%4)+(L>4?1:0))*U)|0,sw=Math.round(Math.sin(time*2+wx*.3)*(h>2?1:0))+gLean(sx);rc(sx,GY-h*.6,1,h*.6,GR[4]);rc(sx+sw,GY-h,1,h*.4+1,GR[3])}
  if(snow>.02){const s2=Math.max(1,(snow*3)|0);ctx.fillStyle='#f4faff';ctx.fillRect(0,GY-s2,W,s2);ctx.fillStyle='#dbe8f5';for(let x=0;x<W;x+=3)ctx.fillRect(x,GY-s2-((hs(x+w0*.3)*snow*3)|0),3,1);ctx.fillStyle='#fff';for(let x=0;x<W;x+=11)ctx.fillRect(x+(time*3|0)%11,GY-s2,1,1)}
  drawReflections(w0,dayf,psx,pw,pd);drawFog(1.25,WX.fog,1);
  for(const e of ents){if(e.k=='ant'||e.k=='worm'||e.k=='bug'||e.k=='grub'||e.k=='mole'||e.k=='ff'||(e.k=='bee'&&dayf<=.4)||(e.k=='owl'&&dayf>=.5)||Math.abs(e.x-cam)>W/2+20)continue;e.x-=sh;drawEnt(e);e.x+=sh}
@@ -807,7 +861,7 @@ function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r
  if(!S.pl){const sy=GY-60+Math.sin(time*2)*3,sx=CX-cam;ctx.globalAlpha=.2+.1*Math.sin(time*3);disc(sx,sy+1|0,7,'#ffe27a');ctx.globalAlpha=1;rc(sx-1,sy,3,4,'#c8923c');px(sx,sy,'#f0c060')}
  for(const q of parts){if(q.k=='seed'){rc(q.x-1,q.y,3,4,'#c8923c');px(q.x,q.y,'#f0c060')}else if(q.k=='d'){rc(q.x,q.y,1,3,'#4aa8f0');px(q.x,q.y,'#cfeeff')}else if(q.k=='h'){rc(q.x,q.y,2,2,'#e8f4ff');px(q.x,q.y,'#fff')}else if(q.k=='r'){const n=q.d?2:(2+q.z*5)|0,dx=q.vx/q.vy;ctx.fillStyle='rgba(190,215,240,'+(q.d?.45:.25+q.z*.45)+')';for(let j=0;j<n;j++)ctx.fillRect(Math.round(q.x-dx*j),Math.round(q.y-j),1,1)}else if(q.k=='sm'){const f=q.l/q.L,s2=q.s*(1+(1-f)*2.2);ctx.globalAlpha=Math.min(1,f*1.6)*(q.d?.55:.35);ctx.drawImage(smkSpr(),q.x-s2/2,q.y-s2/2,s2,s2);ctx.globalAlpha=1}else if(q.k=='m'){const a=Math.min(1,q.l/2,(12-q.l)/2)*(.45+.35*Math.sin(time*3+q.ph)),ny=SUN&&Math.abs(q.x-SUN.x)<W*.4?1.6:1;ctx.globalAlpha=Math.max(0,a*ny*.8);ctx.fillStyle=q.ph>6?'#fff2b0':'#ffffff';ctx.fillRect(q.x|0,q.y|0,1,1);ctx.globalAlpha=1}else if(q.k=='f'){ctx.fillStyle=q.z>.8?'#fff':'rgba(240,246,255,'+(.5+q.z*.4)+')';ctx.fillRect(q.x|0,q.y|0,q.w,q.w);if(q.w>1&&q.z>.8){ctx.fillRect((q.x|0)-1,(q.y|0)+.5|0,1,1);ctx.fillRect((q.x|0)+2,q.y|0,1,1)}}else if(q.k=='star'){for(let j=0;j<9;j++)rc(q.x-j*1.6,q.y-j*.65,1,1,'rgba(255,247,200,'+(1-j/9)+')');rc(q.x,q.y,2,2,'#fff')}else{if(q.g)glow(q.x,q.y,2,'255,150,40',.12);rc(q.x,q.y,q.w||1,q.h||1,q.c)}}
  bloom(.32+(1-dayf)*.25+warm*.15);if(flash>0){ctx.fillStyle='rgba(255,255,255,'+Math.min(.6,flash*.6)+')';ctx.fillRect(0,0,W,H)}
- const ct='🪙 '+(S.c|0)+'  🌡 '+Math.round(TEMP)+'°  '+wxIcon()+' 💧'+Math.round(WX.rh*100)+'%  💨'+Math.round(WX.ws)+' m/s';if(ct!==cnT){cnT=ct;$('cn').textContent=ct}
+ const ct='🪙 '+(S.c|0)+'  🌡 '+Math.round(TEMP)+'°  '+wxIcon()+' 💧'+Math.round(WX.rh*100)+'%  💨'+Math.round(WX.ws)+' m/s';if(ct!==cnT){cnT=ct;$('cn').textContent=ct}if(fno%15==0)renderWxKids();
  const fw=((S.xp/need(S.lvl)*100)|0)+'%';if(fw!==fwT){fwT=fw;$('fill').style.width=fw}
  const lv=(L<=TL?stg(g)+' · '+L+'. szint ':'Biom · '+(L-TL)+'. szint ')+(SI[SID]||'')+(S.hp<99?' ♥'+(S.hp|0):'');if(lv!==lvT){lvT=lv;$('lv').textContent=lv}}
 function update(dt){
@@ -897,8 +951,8 @@ function startAudio(){if(AC){if(AC.state=='suspended'&&!muted)AC.resume();return
 document.addEventListener('pointerdown',startAudio);
 // ---- menü ----
 const lab=()=>{$('snd').textContent='Zene: '+MUSN[mus];$('td').textContent='Napszak: '+TODN[S.tod];$('gx').textContent='Grafika: '+(eco?'Takarékos':hd?'Éles':'Auto')};
-function showMenu(){paused=true;ptr=null;$('menu').classList.remove('hide');$('hud').classList.add('hide');$('side').classList.add('hide');$('cn').classList.add('hide');$('hint').classList.add('hide');$('go').textContent=S.pl?'Folytatás':'Játék indítása';$('nw').textContent='Új játék';save()}
-function play(){paused=false;$('menu').classList.add('hide');$('hud').classList.remove('hide');$('side').classList.remove('hide');$('cn').classList.remove('hide');renderInv();if(!S.pl)$('hint').classList.remove('hide')}
+function showMenu(){paused=true;ptr=null;$('menu').classList.remove('hide');$('hud').classList.add('hide');$('side').classList.add('hide');$('cn').classList.add('hide');$('wx').classList.add('hide');$('hint').classList.add('hide');$('go').textContent=S.pl?'Folytatás':'Játék indítása';$('nw').textContent='Új játék';save()}
+function play(){paused=false;$('menu').classList.add('hide');$('hud').classList.remove('hide');$('side').classList.remove('hide');$('cn').classList.remove('hide');$('wx').classList.remove('hide');renderInv();if(!S.pl)$('hint').classList.remove('hide')}
 $('go').onclick=play;$('pb').onclick=showMenu;
 $('nw').onclick=()=>{if($('nw').textContent!='Biztos? Koppints újra'&&S.pl){$('nw').textContent='Biztos? Koppints újra';return}S=fresh();parts=[];dz=null;fires=[];lo=[];tn=null;fd=null;scorch=[];sel=null;seedClouds();mkRoots();mkBranches();mkEnts();save();play()};
 $('snd').onclick=()=>{mus=(mus+1)%7;muted=mus==6;localStorage.setItem('fs_mus2',mus);nt=0;bi=0;if(mg)mg.gain.value=muted?0:.8;startAudio();lab()};
@@ -912,7 +966,7 @@ $('zl').onclick=e=>{const sb=e.target.closest('button.sb');if(sb){const k=sb.dat
 $('inv').onclick=e=>{const b=e.target.closest('button[data-i]');if(!b)return;const t=b.dataset.t,i=t=='s'?+b.dataset.i:b.dataset.i;sel=(sel&&sel.t==t&&sel.i==i)?null:{t,i};if(sel)toast('Koppints a talajra az ültetéshez');renderInv()};
 $('mt').onclick=e=>{const b=e.target.closest('button[data-tab]');if(b){tab=b.dataset.tab;renderMk()}};$('hb').onclick=()=>{camT=0};$('td').onclick=()=>{S.tod=(S.tod+1)%5;lab();save()};
 $('gx').onclick=()=>{if(eco){eco=false}else if(hd){hd=false;eco=true}else hd=true;localStorage.setItem('fs_eco',eco?'1':'0');localStorage.setItem('fs_hd',hd?'1':'0');qual=1;lab();size()};
-$('cn').onclick=()=>toast(wxInfo());$('jx').onclick=()=>$('jr').classList.add('hide');
+$('cn').onclick=()=>toast(wxInfo());$('wx').onclick=e=>{const b=e.target.closest('.wc');if(b){const w=WXK[b.dataset.w];toast(w[0]+' '+w[1]+': '+w[2])}};$('jx').onclick=()=>$('jr').classList.add('hide');
 let tc=0;document.querySelector('#menu h1').onclick=()=>{if(++tc>=5){tc=0;$('dbg').classList.toggle('hide')}};
 eco=localStorage.getItem('fs_eco')=='1';hd=!eco&&localStorage.getItem('fs_hd')=='1';if(navigator.hardwareConcurrency<=4||navigator.deviceMemory<=3)qual=1.12;
 size();lab();seedClouds();
