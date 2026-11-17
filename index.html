@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="hu"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#0d1b2a"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><title>Feed&amp;Seed</title>
+<meta name="theme-color" content="#0d1b2a"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Feed&amp;Seed"><title>Feed&amp;Seed</title>
 <style>
 :root{--g:#9be15d;--d:#0d1b2a;--px:#e8f5d0}
 *{box-sizing:border-box}
@@ -64,6 +64,17 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;f
 .wc i{font-style:normal;font-size:20px;line-height:22px}.wc:active{transform:translateY(2px)}
 @keyframes pop{from{transform:scale(.6);opacity:0}}
 @media (min-width:700px) and (min-height:700px){.wc{font-size:14px}.wc i{font-size:24px;line-height:26px}}
+#ins{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;gap:10px;padding:max(16px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom));background:linear-gradient(#0d1b2afa,#10261ffa);overflow:auto;touch-action:pan-y}
+#ins h2{margin:6px 0 0;color:#b8f56d;letter-spacing:1px;text-align:center}.isub{margin:0;max-width:480px;text-align:center;font-size:13px;opacity:.85}
+#il{width:min(520px,100%);display:flex;flex-direction:column;align-items:center;gap:10px}
+.itab{display:flex;gap:8px}.itab button{padding:8px 14px;font:bold 14px "Courier New",monospace;color:#e8f5d0;background:#1d3047;border:2px solid #9fc3e8;border-radius:14px}.itab button.on{background:#4a9a3c;border-color:#ffe27a}
+.isteps{list-style:none;margin:0;padding:0;width:100%;display:grid;gap:8px}.isteps li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:#0a1a2acc;border:2px solid #2d5a27;border-radius:14px;font-size:14px;line-height:1.5}
+.isteps li b{flex:none;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:#4a9a3c;color:#fff;font-size:15px}.isteps em{font-style:normal;color:#ffe27a;font-weight:bold}
+.si{width:22px;height:22px;vertical-align:-6px;margin:0 2px;background:#1d3047;border-radius:6px;padding:2px}
+.inote{margin:0;font-size:12px;text-align:center;opacity:.85}.inote a{color:#9be15d}
+.ishare{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:4px}.ishare small{font-size:11px;opacity:.75;text-align:center;max-width:420px}.ishare small.lnk{word-break:break-all;color:#9be15d;opacity:1}
+.wc img{width:24px;height:24px;image-rendering:pixelated}
+@media (min-width:700px) and (min-height:700px){.wc img{width:28px;height:28px}}
 .hide{display:none!important}
 @keyframes bob{50%{transform:translateY(-6px)}}
 @keyframes drift{to{background-position:0 460px,23px 600px}}
@@ -75,9 +86,10 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;f
 <div id="hud" class="hide"><span id="lv"></span><div id="bar"><div id="fill"></div></div><button id="pb" aria-label="Szünet"></button></div>
 <div id="cn" class="hide"></div><div id="wx" class="hide"></div><div id="side" class="hide"><button class="ib" id="hb" aria-label="Középre">🏠</button><button class="ib" id="mb" aria-label="Piac">🛒</button><button class="ib" id="db" aria-label="Csapások">⚡</button></div><div id="inv"></div>
 <div id="hint" class="hide">Koppints a mag elültetéséhez</div><div id="toast"></div><pre id="dbg" class="hide"></pre>
-<div id="menu"><h1>Feed&amp;Seed</h1><small>a növekedés nyugodt játéka</small><button class="b" id="go">Játék indítása</button><button class="b" id="nw">Új játék</button><button class="b s" id="td">Napszak: Auto</button><button class="b s" id="gx">Grafika: Auto</button><button class="b s" id="jb">Napló</button><button class="b s" id="snd">Zene: be</button></div>
+<div id="menu"><h1>Feed&amp;Seed</h1><small>a növekedés nyugodt játéka</small><button class="b" id="go">Játék indítása</button><button class="b" id="nw">Új játék</button><button class="b s" id="td">Napszak: Auto</button><button class="b s" id="gx">Grafika: Auto</button><button class="b s" id="jb">Napló</button><button class="b s" id="snd">Zene: be</button><button class="b" id="insb">Telepítés és megosztás</button></div>
 <div id="mk" class="hide"><h2>Piac</h2><div id="mc"></div><div id="mt"></div><div id="ml"></div><button class="b" id="mx">Vissza</button></div>
 <div id="dz" class="hide"><h2>Természeti csapások</h2><p style="max-width:460px;text-align:center;font-size:13px;margin:0 12px">A csapások károsítják az erdő egészségét (♥), de túlélésükért érmét kapsz. Vihar: villám csap a fákba. Aszály: tartsd nedvesen a talajt. Erdőtűz: koppintással oltsd el. Fagy: kitartás. Sáskák: koppints rájuk. Tornádó és szupercella: jég, villám, letört ágak, az Erős fokozat kitéphet kisebb fákat. Árvíz: a víz tápanyagot hagy maga után. A ◀ ▶ gombokkal állítsd be az erősséget (Gyenge, Közepes, Erős), vagy kapcsold be az automatikus csapásokat. A piacon védelmet vehetsz.</p><div id="zl"></div><button class="b s" id="zx">Vissza</button></div>
+<div id="ins" class="hide"><h2>Tedd fel a telefonodra!</h2><p class="isub">Ingyenes, nem kell hozzá áruház. Pár koppintás, és a Feed&amp;Seed ikonként ott lesz a kezdőképernyőn.</p><div id="il"></div><button class="b s" id="ix">Bezárás</button></div>
 <div id="jr" class="hide"><h2>Természetnapló</h2><div id="jl"></div><button class="b" id="jx">Vissza</button></div>
 <script>
 const $=id=>document.getElementById(id),cv=$('c');let ctx=cv.getContext('2d',{alpha:false,desynchronized:true});
@@ -820,7 +832,82 @@ function wxNow(){const p=curP(),day=Math.sin(p*6.2832),k=[];
  if(parts.some(q=>q.k=='star'))k.push('star');
  if(dz&&WXK[dz.k])k.push(dz.k);
  return[...new Set(k)].slice(0,6)}
-function renderWxKids(){const k=wxNow(),s=k.join();if(s===wxT)return;wxT=s;$('wx').innerHTML=k.map(q=>'<button class="wc" data-w="'+q+'"><i>'+WXK[q][0]+'</i>'+WXK[q][1]+'</button>').join('')}
+function renderWxKids(){const k=wxNow(),s=k.join();if(s===wxT)return;wxT=s;$('wx').innerHTML=k.map(q=>'<button class="wc" data-w="'+q+'"><img src="'+wxIcon16(q)+'" alt="">'+WXK[q][1]+'</button>').join('')}
+// ---- saját rajzolású, 16×16-os pixel art időjárás-ikonok ----
+const WXI={};
+function wxIcon16(k){if(WXI[k])return WXI[k];const c=document.createElement('canvas');c.width=c.height=16;const g=c.getContext('2d'),
+ P=(x,y,col)=>{g.fillStyle=col;g.fillRect(x,y,1,1)},R=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(x,y,w,h)},
+ D=(cx,cy,r,col)=>{for(let y=-r;y<=r;y++)for(let x=-r;x<=r;x++)if(x*x+y*y<=r*r+r*.6)P(cx+x,cy+y,col)},
+ sun=(x,y,r)=>{const o='#f08a1a';[[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[1,1],[-1,1],[1,-1]].forEach(([a,b],i)=>{const l=i<4?r+2:r+1;P(x+a*l,y+b*l,o);if(i<4)P(x+a*(l+1),y+b*(l+1),o)});D(x,y,r,'#f0b020');D(x,y,r-1,'#ffd84a');P(x-1,y-1,'#fff4b0')},
+ cloud=(x,y,dk)=>{const a=dk?['#3e4656','#5a6478','#7a8498']:['#9aa8bc','#d6e0ec','#ffffff'];D(x+3,y+1,2,a[0]);D(x+7,y,3,a[0]);D(x+11,y+1,2,a[0]);R(x+1,y+2,12,2,a[0]);
+  D(x+3,y,2,a[1]);D(x+7,y-1,3,a[1]);D(x+11,y,2,a[1]);R(x+1,y+1,12,2,a[1]);D(x+7,y-2,2,a[2]);P(x+3,y-1,a[2]);P(x+5,y-2,a[2])},
+ drop=(x,y,col)=>{P(x,y,col);R(x-1,y+1,2,2,col);P(x,y+1,'#cfeeff')},flake=(x,y,col)=>{P(x,y,col);P(x-1,y,col);P(x+1,y,col);P(x,y-1,col);P(x,y+1,col)},
+ bolt=(x,y,s)=>{const b=[[3,0],[2,1],[1,2],[0,3],[1,3],[2,3],[3,3],[2,4],[1,5],[0,6]];b.forEach(([a,c])=>{R(x+a*s,y+c*s,s,s,'#ffd23f')});P(x+3*s,y,'#fff4b0');P(x,y+6*s,'#f08a1a')};
+ switch(k){
+  case'sun':sun(8,8,4);break;
+  case'cloud':sun(10,5,3);cloud(1,8);break;
+  case'over':cloud(3,5,1);cloud(1,9);break;
+  case'drizzle':sun(11,4,3);cloud(0,6);P(4,12,'#6ec6ff');P(8,13,'#6ec6ff');P(6,15,'#6ec6ff');P(11,14,'#6ec6ff');break;
+  case'rain':cloud(1,4,1);drop(4,10,'#4aa8f0');drop(8,12,'#4aa8f0');drop(12,10,'#4aa8f0');break;
+  case'pour':cloud(1,3,1);for(let i=0;i<5;i++){P(2+i*3,9,'#4aa8f0');P(1+i*3,11,'#4aa8f0');P(2+i*3,13,'#6ec6ff');P(1+i*3,15,'#4aa8f0')}break;
+  case'snow':cloud(1,4);flake(4,11,'#ffffff');flake(9,13,'#e8f4ff');flake(13,10,'#ffffff');break;
+  case'sleet':cloud(1,4);drop(4,10,'#4aa8f0');flake(9,12,'#ffffff');drop(13,11,'#4aa8f0');break;
+  case'storm':cloud(1,4,1);bolt(6,8,1);drop(3,11,'#4aa8f0');drop(13,11,'#4aa8f0');break;
+  case'bolt':bolt(4,1,2);break;
+  case'hail':cloud(1,4,1);[[3,10],[7,12],[11,10],[5,14],[12,14]].forEach(([x,y])=>{R(x,y,2,2,'#cfe8ff');P(x,y,'#ffffff')});break;
+  case'tornado':for(let y=1;y<15;y++){const w=Math.round(7-y*.42),x=8+Math.round(Math.sin(y*.5)*1.5)-w;R(x,y,2*w,1,y%3?'#7a7484':'#9a94a2');P(x,y,'#4e4856')}R(4,14,8,2,'#8a6a40');P(3,13,'#6b4426');P(12,13,'#6b4426');break;
+  case'wind':['#d6e8f8','#ffffff','#d6e8f8'].forEach((col,i)=>{const y=4+i*4,l=[10,13,8][i];R(1,y,l,1,col);P(1+l,y-1,col);P(l,y-2,col);P(l-1,y-2,col)});break;
+  case'breeze':R(1,6,8,1,'#d6e8f8');R(3,10,6,1,'#d6e8f8');D(12,8,2,'#4caf3d');P(13,6,'#8bd84e');P(10,10,'#2f7d32');P(14,10,'#6b4426');break;
+  case'fog':for(let i=0;i<5;i++)R(1+(i%2)*2,3+i*3,12,2,i%2?'#b8c4d0':'#dfe6ee');break;
+  case'rainbow':['#e04040','#f09030','#f0d040','#50c050','#4090e0','#8050d0'].forEach((col,i)=>{const r=7-i;for(let a=0;a<=20;a++){const t=Math.PI*a/20;P(Math.round(8+Math.cos(t)*r),Math.round(13-Math.sin(t)*r),col)}});R(0,13,4,2,'#ffffff');R(12,13,4,2,'#ffffff');break;
+  case'frost':for(let i=0;i<4;i++){const a=i*Math.PI/4;for(let r=0;r<=6;r++){P(Math.round(8+Math.cos(a)*r),Math.round(8+Math.sin(a)*r),'#bfe4ff');P(Math.round(8-Math.cos(a)*r),Math.round(8-Math.sin(a)*r),'#bfe4ff')}}D(8,8,1,'#ffffff');break;
+  case'hot':R(7,1,3,10,'#ffffff');R(8,2,1,8,'#e04030');D(8,12,2,'#e04030');P(7,11,'#ff8070');R(11,3,2,1,'#c0c8d0');R(11,6,2,1,'#c0c8d0');sun(13,13,1);break;
+  case'dew':R(4,9,1,6,'#4caf3d');R(5,7,1,3,'#4caf3d');R(6,5,1,3,'#8bd84e');R(11,10,1,5,'#2f7d32');D(9,5,2,'#6ec6ff');P(8,4,'#ffffff');P(9,2,'#6ec6ff');break;
+  case'star':for(let i=0;i<7;i++)P(2+i,12-i,i<3?'#8a7a40':'#ffe9a0');flake(11,4,'#ffffff');P(11,4,'#fff4b0');P(4,3,'#fff');P(13,11,'#fff');break;
+  case'night':D(7,8,5,'#e8ecff');g.globalCompositeOperation='destination-out';D(10,6,4,'#000');g.globalCompositeOperation='source-over';P(4,9,'#b9c2e0');P(6,12,'#b9c2e0');P(13,11,'#fff');P(12,2,'#fff');P(14,7,'#ffe9a0');break;
+  case'rise':for(let i=0;i<4;i++)R(0,9+i*2,16,2,['#ffb070','#f08a50','#c06040','#6a3a4a'][i]);D(8,10,4,'#ffd84a');R(0,11,16,5,'#4a7a3a');R(0,11,16,1,'#6aa04a');P(8,3,'#f08a1a');P(3,6,'#f08a1a');P(13,6,'#f08a1a');break;
+  case'set':R(0,0,16,11,'#6a3a6a');R(0,5,16,6,'#c05050');D(8,10,4,'#ff8a3a');D(8,10,2,'#ffc060');R(0,11,16,5,'#2a3a2a');R(0,11,16,1,'#4a5a3a');break;
+  case'drought':sun(11,4,3);R(0,11,16,5,'#c8963c');R(0,11,16,1,'#e0b050');[[2,12],[3,13],[3,14],[8,12],[7,13],[8,14],[13,12],[12,13]].forEach(([x,y])=>P(x,y,'#6e4a1a'));break;
+  case'flood':R(0,10,16,6,'#3a7ab8');for(let x=0;x<16;x++){P(x,8+Math.round(Math.sin(x*.9)),'#8ac8ff');P(x,12+Math.round(Math.sin(x*.9+2)),'#6aa8e0')}R(3,4,2,5,'#6b4426');D(4,3,2,'#4caf3d');break;
+  case'fire':D(8,10,5,'#c0301a');D(8,10,3,'#f0701a');D(8,11,2,'#ffc040');P(8,3,'#c0301a');R(7,4,3,3,'#c0301a');P(5,5,'#f0701a');P(11,6,'#f0701a');P(8,7,'#f0701a');P(8,12,'#fff4b0');break;
+  case'locust':R(3,8,9,3,'#6a8a2a');R(11,7,3,3,'#7aa03a');P(13,7,'#1a1a10');R(4,6,7,2,'#a8c070');P(4,11,'#4a6018');P(2,12,'#4a6018');P(8,11,'#4a6018');P(9,12,'#4a6018');P(12,11,'#4a6018');P(14,6,'#4a6018');P(15,5,'#4a6018');break}
+ return WXI[k]=c.toDataURL()}
+// ---- megosztás és telepítési útmutató (iPhone/iPad: Safari „Főképernyőhöz adás”, Android: telepítés vagy APK) ----
+const UA=navigator.userAgent,IOS=/iPad|iPhone|iPod/.test(UA)||(navigator.platform=='MacIntel'&&navigator.maxTouchPoints>1),AND=/Android/i.test(UA),
+ INAPP=/FBAN|FBAV|Instagram|Messenger|Line\/|TikTok|Snapchat|GSA\//i.test(UA),IOSOTHER=IOS&&/CriOS|FxiOS|EdgiOS|OPiOS/.test(UA),
+ STANDALONE=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true,
+ SHARE_URL=location.origin+location.pathname.replace(/index\.html$/,'')+'?telepit',APK_URL='https://github.com/strattila90-hue/feed-seed/releases/download/latest/app-debug.apk';
+let bip=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();bip=e;if(!$('ins').classList.contains('hide'))insRender()});
+addEventListener('appinstalled',()=>{toast('A Feed&Seed telepítve! Indítsd a kezdőképernyőről.');$('ins').classList.add('hide')});
+const SVG={share:'<svg viewBox="0 0 24 24" class="si"><path d="M12 3v12M7 8l5-5 5 5" fill="none" stroke="#4aa8ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11H5v10h14V11h-1" fill="none" stroke="#4aa8ff" stroke-width="2.2" stroke-linejoin="round"/></svg>',
+ plus:'<svg viewBox="0 0 24 24" class="si"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="#e8f5d0" stroke-width="2.2"/><path d="M12 8v8M8 12h8" stroke="#e8f5d0" stroke-width="2.2" stroke-linecap="round"/></svg>',
+ dots:'<svg viewBox="0 0 24 24" class="si"><circle cx="5" cy="12" r="2" fill="#e8f5d0"/><circle cx="12" cy="12" r="2" fill="#e8f5d0"/><circle cx="19" cy="12" r="2" fill="#e8f5d0"/></svg>',
+ vdots:'<svg viewBox="0 0 24 24" class="si"><circle cx="12" cy="5" r="2" fill="#e8f5d0"/><circle cx="12" cy="12" r="2" fill="#e8f5d0"/><circle cx="12" cy="19" r="2" fill="#e8f5d0"/></svg>',
+ home:'<svg viewBox="0 0 24 24" class="si"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" fill="none" stroke="#9be15d" stroke-width="2.2" stroke-linejoin="round"/></svg>'};
+let insTab=IOS?'ios':'and';
+function insRender(){const st=(n,h)=>'<li><b>'+n+'</b><span>'+h+'</span></li>';let h='<div class="itab"><button data-t="ios" class="'+(insTab=='ios'?'on':'')+'">iPhone / iPad</button><button data-t="and" class="'+(insTab=='and'?'on':'')+'">Android</button></div><ol class="isteps">';
+ if(insTab=='ios'){
+  if(IOS&&(INAPP||IOSOTHER))h+=st(1,'Ez az oldal most '+(INAPP?'egy másik alkalmazásban':'nem a Safariban')+' nyílt meg. Koppints a '+SVG.dots+' vagy '+SVG.share+' gombra, és válaszd: <em>Megnyitás Safariban</em> / <em>Megnyitás böngészőben</em>.'+(IOSOTHER?' (Chrome-ban is működik: '+SVG.share+' a címsorban → <em>Főképernyőhöz adás</em>.)':''));
+  else h+=st(1,'Nyisd meg ezt az oldalt a <em>Safari</em> böngészőben.');
+  h+=st(2,'Koppints a <em>Megosztás</em> gombra '+SVG.share+' a képernyő alján. Ha nem látod, előbb a '+SVG.dots+' gombra a címsor mellett, és ott válaszd a <em>Megosztás</em>t.');
+  h+=st(3,'Görgess lejjebb, és válaszd: <em>Főképernyőhöz adás</em> '+SVG.plus);
+  h+=st(4,'Ha megjelenik, hagyd bekapcsolva a <em>Megnyitás webappként</em> kapcsolót, majd koppints jobb fent a <em>Hozzáadás</em> gombra.');
+  h+=st(5,'Kész! A Feed&Seed ikonja '+SVG.home+' a főképernyőn van. Onnan indítsd: teljes képernyőn fut, és internet nélkül is működik.')}
+ else{
+  if(bip)h+='<button class="b" id="ibtn">Telepítés most</button>';
+  h+=st(1,'Nyisd meg ezt az oldalt a <em>Chrome</em> böngészőben.'+(AND&&INAPP?' (Most egy másik alkalmazásban nyílt meg: '+SVG.vdots+' → <em>Megnyitás Chrome-ban</em>.)':''));
+  h+=st(2,bip?'Koppints a fenti <em>Telepítés most</em> gombra, vagy a jobb felső '+SVG.vdots+' menüre.':'Koppints a jobb felső sarokban a '+SVG.vdots+' menüre.');
+  h+=st(3,'Válaszd: <em>Alkalmazás telepítése</em> vagy <em>Hozzáadás a kezdőképernyőhöz</em>. (Samsung böngészőben: ≡ → <em>Oldal hozzáadása</em> → <em>Kezdőképernyő</em>.)');
+  h+=st(4,'Koppints a <em>Telepítés</em> gombra.');
+  h+=st(5,'Kész! A Feed&Seed ikonja '+SVG.home+' a kezdőképernyőn van, internet nélkül is megy.');
+  h+='</ol><p class="inote">Vagy töltsd le az Android alkalmazást (APK): <a href="'+APK_URL+'">Feed&Seed APK letöltése</a>. Telepítéskor engedélyezd az „ismeretlen forrásból” telepítést.</p><ol class="isteps" style="display:none">'}
+ h+='</ol><div class="ishare"><button class="b" id="ish">Megosztás barátokkal</button><small class="lnk">'+SHARE_URL.replace(/^https?:\/\//,'')+'</small><small>Aki megnyitja a linket, annak a játék lépésről lépésre megmutatja a telepítést.</small></div>';
+ $('il').innerHTML=h;const ib=$('ibtn');if(ib)ib.onclick=async()=>{if(!bip)return;bip.prompt();const r=await bip.userChoice.catch(()=>null);bip=null;if(r&&r.outcome=='accepted')$('ins').classList.add('hide');else insRender()};
+ $('ish').onclick=shareGame}
+async function shareGame(){const d={title:'Feed&Seed',text:'Nevelj velem fát a Feed&Seedben! 🌱 Nyisd meg, és a játék megmutatja, hogyan teheted fel a telefonodra.',url:SHARE_URL};
+ try{if(navigator.share){await navigator.share(d);return}}catch(e){if(e&&e.name=='AbortError')return}
+ try{await navigator.clipboard.writeText(SHARE_URL);toast('A link a vágólapra került – küldd el a barátaidnak!')}catch(e){prompt('Másold ki és küldd el ezt a linket:',SHARE_URL)}}
+function showIns(){paused=true;ptr=null;insRender();$('ins').classList.remove('hide')}
 function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r.key=''}});const L=S.lvl,g=S.pl?cl((L-1+S.xp/need(L))/TL,0,1):0,p=curP(),dayf=cl(.5+Math.sin(p*6.2832)*.9,0,1);
  season();if(dz&&dz.k=='drought')GR=['#d9b84a','#a8842c','#6e5a1e','#e6c35a','#8c6c24'];else if(dz&&dz.k=='frost')GR=PAL[3][1];
  const warm=cl(1-Math.abs(dayf-.4)*3,0,1),skk=(dayf*40|0)+':'+(warm*10|0)+':'+(snow*5|0);if(skk!==skyKey){skyKey=skk;renderSky(dayf,warm);renderHills(dayf);renderFar(dayf,warm)}
@@ -966,11 +1053,12 @@ $('zl').onclick=e=>{const sb=e.target.closest('button.sb');if(sb){const k=sb.dat
 $('inv').onclick=e=>{const b=e.target.closest('button[data-i]');if(!b)return;const t=b.dataset.t,i=t=='s'?+b.dataset.i:b.dataset.i;sel=(sel&&sel.t==t&&sel.i==i)?null:{t,i};if(sel)toast('Koppints a talajra az ültetéshez');renderInv()};
 $('mt').onclick=e=>{const b=e.target.closest('button[data-tab]');if(b){tab=b.dataset.tab;renderMk()}};$('hb').onclick=()=>{camT=0};$('td').onclick=()=>{S.tod=(S.tod+1)%5;lab();save()};
 $('gx').onclick=()=>{if(eco){eco=false}else if(hd){hd=false;eco=true}else hd=true;localStorage.setItem('fs_eco',eco?'1':'0');localStorage.setItem('fs_hd',hd?'1':'0');qual=1;lab();size()};
-$('cn').onclick=()=>toast(wxInfo());$('wx').onclick=e=>{const b=e.target.closest('.wc');if(b){const w=WXK[b.dataset.w];toast(w[0]+' '+w[1]+': '+w[2])}};$('jx').onclick=()=>$('jr').classList.add('hide');
+$('cn').onclick=()=>toast(wxInfo());$('wx').onclick=e=>{const b=e.target.closest('.wc');if(b){const w=WXK[b.dataset.w];toast(w[1]+': '+w[2])}};$('insb').onclick=showIns;$('ix').onclick=()=>{$('ins').classList.add('hide');paused=!$('menu').classList.contains('hide')};$('il').onclick=e=>{const b=e.target.closest('.itab button');if(b){insTab=b.dataset.t;insRender()}};$('jx').onclick=()=>$('jr').classList.add('hide');
 let tc=0;document.querySelector('#menu h1').onclick=()=>{if(++tc>=5){tc=0;$('dbg').classList.toggle('hide')}};
 eco=localStorage.getItem('fs_eco')=='1';hd=!eco&&localStorage.getItem('fs_hd')=='1';if(navigator.hardwareConcurrency<=4||navigator.deviceMemory<=3)qual=1.12;
 size();lab();seedClouds();
 if(S.pl){const el=(Date.now()-(S.last||Date.now()))/1000;if(el>0)gain(Math.min(el,7200)*.004);play();$('menu').classList.add('hide')}else showMenu();
+if((IOS||AND||/[?&]telepit/.test(location.search))&&!STANDALONE()&&(/[?&]telepit/.test(location.search)||!localStorage.getItem('fs_ins')))setTimeout(()=>{try{localStorage.setItem('fs_ins','1')}catch(e){}showIns()},1300);
 requestAnimationFrame(frame);requestAnimationFrame(()=>requestAnimationFrame(()=>{const l=$('ld');if(l){l.classList.add('off');setTimeout(()=>l.remove(),700)}}));
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
