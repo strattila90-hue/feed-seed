@@ -79,13 +79,17 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 
 ## Újradolgozott csapások
 
-- **Tornádó:** a sötét, forgó felhőalapból (mezociklon) ereszkedik le egy gomolygó, felhőpamacsokból álló, S alakban kígyózó tölcsér, amely látványosan forog (lent gyorsabban), földet ér, és ott kavargó por- és törmelékfelhőt ver fel. A törmelék (föld, levelek, ágak, deszkák) a tölcsér körül kering, a tölcsér mögött és előtt is, majd kirepül. A fák a tornádó felé dőlnek (beáramló szél), lökésesen.
+- **Tornádó:** a sötét, forgó felhőalapból (mezociklon) ereszkedik le egy gomolygó, felhőpamacsokból álló, S alakban kígyózó tölcsér, amely látványosan forog (lent gyorsabban), földet ér, és ott kavargó por- és törmelékfelhőt ver fel. A törmelék (föld, levelek, ágak, deszkák) a tölcsér körül kering, a tölcsér mögött és előtt is, majd kirepül. Erős, beáramló szél (kb. 20 m/s): a fák és a fű a tornádó felé dőlnek, szélcsíkok és beszívott levelek, por száguldanak a tölcsér felé.
 - **Vihar / szupercella:** sötét ég, háromszintű, gomolygó, pixeles polcfelhő (shelf cloud) világos peremmel, a felhőalapból lógó esőfüggönyök, alacsonyan száguldó foszlányfelhők, a szél leveleket sodor, a villám a felhőalapból csap le és bevilágítja a felhőket. Szupercellánál zöldes fény és forgó falfelhő.
 - **Erdőtűz:** rétegzett, lobogó lángnyelvek, parázs, felszálló, a széllel sodródó füst; az égő fák is füstölnek.
 - **Aszály:** hőremegés a talaj felett, repedezett föld, poros, vakító fény.
 - **Árvíz:** zavaros, tükröződő, hullámzó víz, úszó uszadék (rönkök, ágak, deszkák).
 - **Fagy:** jégvirágok a képernyő szélein, csillogó dér a talajon, kékes fény.
 - **Sáskajárás:** sűrűbb, hullámzó raj, árnyékkal a talajon.
+
+## Időjárás-ikonok gyerekeknek
+
+A főképernyő bal oldalán kis ikonos kártyák mutatják, mi történik éppen: napos, felhős, borult, szitálás, eső, felhőszakadás, havazás, havas eső, zivatar, villám, jégeső, tornádó, szellő, erős szél, köd, szivárvány, fagy, hőség, harmat, hullócsillag, napkelte, naplemente, éjszaka és a csapások. Egy kártyára koppintva egyszerű, gyerekeknek szóló magyarázat jelenik meg.
 
 ## Irányítás laptopon
 
