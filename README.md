@@ -129,7 +129,7 @@ python3 -m http.server 8000
 
 Majd nyisd meg a `http://localhost:8000` címet. A játék értékei (szintenkénti szükséges tapasztalat, passzív növekedés, vízcseppek értéke) az `index.html` elején és a `gain()` / `update()` függvényekben állíthatók.
 
-Frissítéskor növeld a `sw.js`-ben a `feedseed-v2` gyorsítótár-verziót, hogy a telepített változat is frissüljön.
+A service worker hálózat-első: internet mellett mindig a legfrissebb változat töltődik be, offline a gyorsítótárból fut. Frissítéskor érdemes a `sw.js` gyorsítótár-verzióját is növelni.
 
 ## Hibakeresés
 
