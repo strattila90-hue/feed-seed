@@ -39,7 +39,7 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Csapások:** a vihar és a szupercella ugyanezt a felhőrendszert használja (üllős cumulonimbus, forgó fal, jég), a tornádó a felhő aljából ereszkedik le.
 - **Napszak:** a menüben vagy a ⚡ panelen állítható: Auto, Reggel, Dél, Alkony, Éjjel.
 - **Óriásfák:** a piac Óriások fülén a világ legmagasabb fái: Douglas-fenyő (100 m), eukaliptusz (100 m), óriás mamutfenyő (84 m, a legnagyobb térfogatú), Hyperion (115 m, a legmagasabb ismert fa). Szinthez kötött, a zárolt tételek előre láthatók.
-- **Zene:** a menüben hat stílus közül választhatsz: Nyugodt, Lo-fi, Gitár, Természet, Zongora, Ki. A hang mind a készüléken generálódik.
+- **Zene:** a menüben hét stílus közül választhatsz: Nyugodt, Lo-fi, Gitár, Természet, Zongora, Chill (alapértelmezett: ritkás, lágy zongora hosszú zengetéssel, csendes szünetekkel), Ki. A hang mind a készüléken generálódik.
 - **Megjelenés:** lekerekített gombok, nagyobb, képes áruházkártyák.
 
 ## Élethű időjárás és grafika
