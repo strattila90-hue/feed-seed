@@ -84,11 +84,11 @@ let W=320,CX=160,U=1,cam=0,qual=1,eco=false,hd=false;const TL=8,MAXL=1e9,DAY=260
 let H=320,GY=240,S,paused=true,time=0,parts=[],ents=[],roots=[],pw=18,acc=0;
 const soil=document.createElement('canvas');
 const need=l=>6+l*5+Math.max(0,l-13)*4;
-const fresh=()=>({v:4,tod:0,c:30,hp:100,trees:[],dec:[],cam:0,inv:{s:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],d:{hive:0,feeder:0,lamp:0,fountain:0,barrel:0},p:{storm:0,drought:0,frost:0,tornado:0,flood:0,supercell:0}},cfg:{auto:0,storm:1,supercell:1,tornado:1,fire:1,flood:1,drought:1,frost:1,locust:1},pl:0,lvl:1,xp:0,wat:0,t:26,seed:1+Math.random()*900|0,fl:[],last:Date.now()});
+const fresh=()=>({v:4,tod:0,c:30,hp:100,trees:[],dec:[],cam:0,inv:{s:Array(32).fill(0),d:{hive:0,feeder:0,lamp:0,fountain:0,barrel:0},p:{storm:0,drought:0,frost:0,tornado:0,flood:0,supercell:0}},cfg:{auto:0,storm:1,supercell:1,tornado:1,fire:1,flood:1,drought:1,frost:1,locust:1},pl:0,lvl:1,xp:0,wat:0,t:26,seed:1+Math.random()*900|0,fl:[],last:Date.now()});
 function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
 function save(){S.last=Date.now();S.cam=cam;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 {const L0=load();S=L0?Object.assign(fresh(),L0,{v:L0.v|0}):fresh();if(!Array.isArray(S.fl))S.fl=[];
- ['xp','wat','t'].forEach(k=>{if(!isFinite(S[k]))S[k]=0});S.lvl=Math.max(1,S.lvl|0||1);if(!Array.isArray(S.trees))S.trees=[];S.hp=cl(+S.hp||100,8,100);S.c=+S.c||0;if(!Array.isArray(S.dec))S.dec=[];S.inv.s=Array.from({length:16},(_,i)=>S.inv.s[i]|0);S.inv.d=Object.assign({hive:0,feeder:0,lamp:0,fountain:0,barrel:0},S.inv.d||{});
+ ['xp','wat','t'].forEach(k=>{if(!isFinite(S[k]))S[k]=0});S.lvl=Math.max(1,S.lvl|0||1);if(!Array.isArray(S.trees))S.trees=[];S.hp=cl(+S.hp||100,8,100);S.c=+S.c||0;if(!Array.isArray(S.dec))S.dec=[];S.inv.s=Array.from({length:32},(_,i)=>S.inv.s[i]|0);S.inv.d=Object.assign({hive:0,feeder:0,lamp:0,fountain:0,barrel:0},S.inv.d||{});
  S.trees.forEach(t=>{if(t.wx==null){t.wx=Math.round((t.fx||0)*136);delete t.fx}});cam=+S.cam||0;S.tod=S.tod|0;S.cfg=Object.assign({auto:0,storm:1,supercell:1,tornado:1,fire:1,flood:1,drought:1,frost:1,locust:1},S.cfg||{});['storm','drought','frost','tornado','flood','supercell'].forEach(k=>S.inv.p[k]=S.inv.p[k]|0);
  if(S.v<3){S.fl.forEach(f=>{if(f.dx==null){f.dx=(f.x||120)-120;delete f.x}});S.v=3}}
 function size(){const iw=innerWidth,ih=innerHeight,P=ih>=iw;let ps=cl(P?iw/320:ih/420,.9,2.2)*qual*(eco?1.35:hd?.68:1);W=Math.round(iw/ps);H=Math.round(ih/ps);
@@ -115,7 +115,7 @@ function addFlora(l){const n=Math.min(5+l,26),m=Math.min(l,5);for(let i=0;i<n;i+
  S.fl.push({fx:(Math.random()<.5?-1:1)*(.06+Math.random()*(.1+.07*l)),t:m>1?(Math.random()*m)|0:0,c:Math.random(),s:Math.random()})}if(S.fl.length>300)S.fl.splice(0,S.fl.length-300)}
 function mkEnts(){ents=[];const K=Math.max(1,W/320),L=S.lvl,A=(k,n,f)=>{for(let i=0;i<n;i++)ents.push(Object.assign({k,x:cam+(Math.random()-.5)*W*1.8,y:0,v:(Math.random()<.5?-1:1)*(4+Math.random()*8),ph:Math.random()*9},f()))};
  if(L>=3)A('ant',Math.min(8,L)*K|0,()=>({y:GY+6+Math.random()*(H-GY-12)}));
- if(L>=5)A('worm',Math.min(4,L-3)*K|0,()=>({y:GY+14+Math.random()*(H-GY-22),v:(Math.random()<.5?-1:1)*(2+Math.random()*3)}));
+ if(L>=5)A('worm',Math.min(5,L-3)*K|0,()=>({y:GY+14+Math.random()*(H-GY-22),v:0}));if(L>=7)A('grub',2*K|0,()=>({y:GY+8+Math.random()*(H-GY)*.4,v:0}));if(L>=8)A('mole',1,()=>({y:GY+20,v:0}));
  if(L>=7)A('bug',(L>=10?3:2)*K|0,()=>({y:GY+10+Math.random()*(H-GY-18)}));
  if(L>=4)A('sant',2*K|0,()=>({y:GY-1}));
  if(L>=9)A('bfly',Math.min(6,L-7)*K|0,()=>({y:GY-20-Math.random()*40,v:6+Math.random()*6}));
@@ -144,7 +144,7 @@ function drawFl(f){const x=f.x|0,b=GY,sw=Math.round(Math.sin(time*1.6+x)*.7);
 const SP=[
  {n:'Tölgy',cb:.36,np:11,L:.46,a0:.8,up:1,k:.9,dd:3,sh:0,bark:['#3a2412','#6b4426','#9a6a3e'],sz:1,gr:1},
  {n:'Nyír',cb:.3,np:14,L:.3,a0:.5,up:.5,k:.7,dd:3,sh:3,mk:1,bark:['#6e6e68','#e8e6dc','#ffffff'],sz:.95,gr:1.2},
- {n:'Fenyő',cb:.2,np:18,L:.36,a0:1.1,up:.3,k:.5,dd:2,sh:1,ev:['#0f3d2a','#175a3a','#218050','#3aa86a'],bark:['#2e1c12','#5a3a24','#7a5232'],sz:1.05,gr:1.1},
+ {n:'Fenyő',cb:.2,np:18,L:.36,a0:1.1,up:.3,k:.5,dd:2,sh:1,ev:['#0f3d2a','#175a3a','#218050','#3aa86a'],bark:['#2e1c12','#5a3a24','#7a5232'],ub:['#8a4a22','#c0702e','#e09a52'],sz:1.05,gr:1.1},
  {n:'Szakura',cb:.33,np:9,L:.5,a0:1,up:.8,k:1,dd:3,sh:0,sp0:['#d4688a','#ee92ae','#ffc0d0','#fff0f4'],bark:['#3a2a2a','#5c3f3f','#80585a'],sz:.9,gr:1},
  {n:'Akác',cb:.55,np:8,L:.5,a0:.85,up:.5,k:.8,dd:3,sh:2,bark:['#2a2018','#4e3b2a','#7a6045'],sz:.95,gr:1.2},
  {n:'Fűz',cb:.4,np:12,L:.42,a0:.6,up:.4,k:.8,dd:3,sh:3,sm:['#3d7a3a','#6fb85a','#a6dc78','#d6f5a8'],bark:['#3a3020','#6b5a38','#9a8a58'],sz:1,gr:1.3},
@@ -157,7 +157,18 @@ const SP=[
  {n:'Hyperion',cb:.5,np:20,L:.16,a0:1.15,up:.35,k:.45,dd:2,sh:1,ev:['#0d3a24','#145230','#1e7242','#34a062'],bark:['#4a1c12','#7a3220','#a85238'],sz:3.1,gr:.3,tw:1.5,tp:.7},
  {n:'Óriás mamutfenyő',cb:.55,np:14,L:.24,a0:.9,up:.5,k:.6,dd:2,sh:0,ev:['#12402a','#1a5a36','#26784a','#3e9a60'],bark:['#5a2a1a','#8a4a2e','#b8704a'],sz:2.3,gr:.35,tw:3.2,tp:.5},
  {n:'Eukaliptusz',cb:.55,np:12,L:.3,a0:.7,up:.8,k:.6,dd:3,sh:3,sm:['#3e7a6a','#5a9a86','#86bca8','#bcdccc'],bark:['#7a7060','#c8c0a8','#eae4d0'],sz:2.7,gr:.35,tw:1.2,tp:.6},
- {n:'Douglas-fenyő',cb:.3,np:20,L:.3,a0:1,up:.3,k:.5,dd:2,sh:1,ev:['#16452a','#1f6038','#2c8048','#4aa862'],bark:['#3a2418','#5e3a24','#84583a'],sz:2.6,gr:.4,tw:1.3,tp:.6}];
+ {n:'Douglas-fenyő',cb:.3,np:20,L:.3,a0:1,up:.3,k:.5,dd:2,sh:1,ev:['#16452a','#1f6038','#2c8048','#4aa862'],bark:['#3a2418','#5e3a24','#84583a'],sz:2.6,gr:.4,tw:1.3,tp:.6},
+ {n:'Bükk',cb:.3,np:12,L:.44,a0:.75,up:.9,k:.85,dd:3,sh:0,au:['#6a2a10','#9a4a18','#c87a2a','#e8a848'],bark:['#6a6e70','#9a9fa0','#c4c8c6'],sz:1.05,gr:.9},
+ {n:'Gyertyán',cb:.28,np:12,L:.38,a0:.7,up:1,k:.8,dd:3,sh:0,au:['#7a6a1a','#a8901e','#d0b83a','#f0dc70'],bark:['#55595a','#868a88','#aeb2ae'],sz:.9,gr:1},
+ {n:'Kislevelű hárs',cb:.3,np:12,L:.42,a0:.7,up:1.1,k:.85,dd:3,sh:0,fl:'#f0e070',au:['#8a7a1a','#b8a02a','#dcc84a','#f4e488'],bark:['#3e3428','#6a5a48','#8e7c66'],sz:1,gr:.9},
+ {n:'Magas kőris',cb:.4,np:10,L:.42,a0:.6,up:1.2,k:.75,dd:3,sh:0,bark:['#4a4a44','#7a7a70','#a0a094'],sz:1.05,gr:1.1},
+ {n:'Fekete nyár',cb:.35,np:12,L:.5,a0:.8,up:.9,k:.9,dd:3,sh:0,au:['#7a6a1a','#b8981e','#dcc040','#f4e070'],bark:['#262018','#4a3e30','#6e604c'],sz:1.2,gr:1.3,tw:1.3},
+ {n:'Csertölgy',cb:.36,np:11,L:.44,a0:.85,up:.8,k:.95,dd:3,sh:0,au:['#5a3a1a','#7a5224','#9a6e34','#bc9050'],bark:['#1e1812','#3e3024','#5e4a36'],sz:1,gr:.9},
+ {n:'Vadcseresznye',cb:.38,np:8,L:.42,a0:.7,up:1,k:.8,dd:3,sh:0,sp0:['#d8c8cc','#eee4e6','#fbf6f7','#ffffff'],au:['#8a1c1c','#c03a24','#e0782e','#f2b04a'],bark:['#4a2224','#7a3e3a','#a86058'],sz:.9,gr:1.1},
+ {n:'Szitkai lucfenyő',cb:.14,np:24,L:.3,a0:1.15,up:.3,k:.5,dd:2,sh:1,ev:['#143a30','#1e5444','#2c705a','#4a9478'],bark:['#4a3a30','#6e5848','#927a66'],sz:2.5,gr:.35,tw:1.3,tp:.6},
+ {n:'Kauri',cb:.72,np:7,L:.42,a0:.75,up:.8,k:.8,dd:3,sh:2,sm:['#2e5a2a','#4a7a3a','#6a9a4e','#9cc070'],bark:['#6e6a5e','#9a958a','#c4beb0'],sz:1.9,gr:.4,tw:3.6,tp:.25},
+ {n:'Óriás tuja',cb:.12,np:22,L:.3,a0:1.25,up:.25,k:.55,dd:2,sh:1,ev:['#1a4a24','#26662e','#38843c','#5aa850'],bark:['#5a2a1a','#8a4a2e','#b06a46'],sz:2.2,gr:.4,tw:2.4,tp:.6},
+ {n:'Lepidodendron',lep:1,cb:.9,np:0,L:.3,a0:1,up:.5,k:.5,dd:1,sh:0,ev:['#2a4a1a','#3e6a24','#5a8c30','#86b444'],bark:['#2e3a24','#4a5a38','#6e7e52'],sz:1.9,gr:.35,tw:1,tp:.35}];
 const ASH=['#14100d','#241b15','#352a21','#52402f'],RT=new Map(),rt=t=>RT.get(t)||(RT.set(t,{bk:{},burn:0}),RT.get(t));
 let T0={wx:0,sp:0,seed:1,main:1};
 function mkBranches(){T0={wx:0,sp:0,seed:S.seed,main:1}}
@@ -179,8 +190,8 @@ function genSk(seed,sp){let n=0;const R=()=>hs(seed*7.13+(n++)*1.91),P2=Math.PI/
     kids.push({at,n:mk(t+side*sp.k*(.7+R()*.5),len*(.6-.08*j/kn)*(.8+R()*.4),dep+1)})}}
   return{pts,kids}}
  const out=[];
- for(let i=0;i<sp.np;i++){const fr=sp.cb+(1-sp.cb)*(i+.3+R()*.4)/sp.np*.97,t=(fr-sp.cb)/(1-sp.cb),side=i%2?1:-1,
-  prof=sp.sh==1?1.05-t*.85:sp.sh==2?.45+.55*Math.pow(t,.7):.55+.45*Math.sin(Math.PI*Math.min(1,t*1.05)),ph=sp.a0*(1.3-t*.8)+.2*R();
+ for(let i=0;i<sp.np;i++){const fr=sp.sh==1?sp.cb+(1-sp.cb)*((i>>1)+.35+R()*.12)/Math.ceil(sp.np/2)*.97:sp.cb+(1-sp.cb)*(i+.3+R()*.4)/sp.np*.97,t=(fr-sp.cb)/(1-sp.cb),side=i%2?1:-1,
+  prof=sp.sh==1?.92-t*.78:sp.sh==2?.45+.55*Math.pow(t,.7):.55+.45*Math.sin(Math.PI*Math.min(1,t*1.05)),ph=sp.sh==1?1.72-t*.95+.1*R():sp.a0*(1.3-t*.8)+.2*R();
   out.push({fr,s:side,n:mk(P2-side*ph,sp.L*prof*(.85+.3*R()),0)})}
  return out}
 // élethű lombfolt: szabálytalan körvonal, gömbárnyékolás a fény felől, levélcsomós textúra, áttört szélek, kilógó levelek
@@ -195,7 +206,7 @@ function clump(cx,cy,r,o,pal,sh,fq){cx|=0;cy|=0;if(r<1.2){px(cx,cy,pal[2]);px(cx
  if(r>2.5)for(let k=0;k<r*1.4;k++){const a=hs(o*5.1+k*1.37)*6.283,rr=1.08+hs(o+k*2.3)*.25,lx=cx+Math.cos(a)*r*rr|0,ly=cy+Math.sin(a)*ry*rr|0;
   px(lx,ly,pal[Math.sin(a)<0?2:1]);if(k%3==0)px(lx+(Math.cos(a)>0?1:-1),ly,pal[1])}}
 // fajonként jellemző gyökérrendszer: karógyökér (tölgy, fenyő, akác), szívgyökér (nyír, juhar, szakura), tányérgyökér (fűz, baobab, mamutfenyő), bojtos (bokrok)
-const RTY=['tap','heart','tap','heart','tap','flat','heart','flat','fib','fib','fib','fib','flat','flat','heart','heart'];
+const RTY=['tap','heart','tap','heart','tap','flat','heart','flat','fib','fib','fib','fib','flat','flat','heart','heart','heart','heart','heart','tap','flat','tap','heart','flat','flat','flat','flat'];
 function genRoots(tr,sp,Ls,T){let n=0;const R=()=>hs(tr.seed*3.71+(n++)*.917),out=[],ty=RTY[tr.sp]||'heart',P2=Math.PI/2,asy=(R()-.5)*.5;
  const grow=(x,y,a,len,th,ord,t0,pref,gv)=>{const st=1.2,m=Math.max(3,len/st|0),span=(1-t0)*(ord?.55:.8);let nl=(2+R()*3)*(ord?1.4:1)|0;
   for(let i=1;i<=m;i++){a+=(R()-.5)*(ord?.55:.38);a+=(pref-a)*gv;if(y<2&&Math.sin(a)<.15)a+=.25;const nx=x+Math.cos(a)*st,ny=y+Math.sin(a)*st,f=i/m,tb=t0+f*span;
@@ -218,6 +229,59 @@ function drawRoots(tr,g){const R=rt(tr),sp=SP[tr.sp],uu=U*(tr.main?1+Math.min(.3
     if(s.o==4){ctx.globalAlpha=.4;px(RW+s.x1,s.y1,cc[0]);ctx.globalAlpha=1;continue}
     rc(x,y,t,t,tip?'#f8ecc8':cc[1]);if(t>2)rc(x,y,Math.max(1,t>>1),1,cc[2])}})}
  ctx.drawImage(R.rc,cx-RW,GY)}
+// ---- talajélet: hangyaboly, giliszták, pajorok, vakond, üregek (nyúl, borz, róka) ----
+const SD=()=>H-GY,pathPt=(P,s)=>{let L=0;const d=[];for(let i=1;i<P.length;i++){const l=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]);d.push(l);L+=l}let r=cl(s,0,1)*L;
+ for(let i=0;i<d.length;i++){if(r<=d[i]||i==d.length-1){const f=d[i]?Math.min(1,r/d[i]):0;return[P[i][0]+(P[i+1][0]-P[i][0])*f,P[i][1]+(P[i+1][1]-P[i][1])*f,L]}r-=d[i]}return[P[0][0],P[0][1],L]};
+// hangyaboly járatrendszere (világkoordináta), kamrák a járat mentén
+const NEST=()=>{const x=Math.round(70*U),s=SD();return{x,P:[[x,GY],[x+3*U,GY+s*.12],[x-6*U,GY+s*.24],[x+2*U,GY+s*.36],[x+11*U,GY+s*.47],[x+1*U,GY+s*.58],[x-9*U,GY+s*.66]],C:[2,4,6]}};
+const MOLE=()=>{const x=Math.round(165*U),s=SD();return{x0:x-70*U,x1:x+70*U,y:wx=>GY+s*(.27+.05*Math.sin(wx*.045)+.03*Math.sin(wx*.11))}};
+const DENS=[[14,'rabbit',-245,.24,1],[17,'badger',255,.36,-1],[23,'fox',-335,.3,-1]];
+function denGeo(d){const bx=Math.round(d[2]*U),s=SD(),cx=bx+d[4]*30*U,cy=GY+s*d[3];return{bx,cx,cy,P:[[bx,GY-1],[bx+d[4]*10*U,GY+s*d[3]*.45],[bx+d[4]*20*U,GY+s*d[3]*.8],[cx,cy]]}}
+function dig(P,o,th,c){ctx.fillStyle=c;for(let i=1;i<P.length;i++){const[a,b]=[P[i-1],P[i]],n=Math.max(1,Math.hypot(b[0]-a[0],b[1]-a[1])|0);for(let j=0;j<=n;j++)ctx.fillRect(Math.round(a[0]+(b[0]-a[0])*j/n-o-th/2),Math.round(a[1]+(b[1]-a[1])*j/n-th/2),th,th)}}
+function oval(x,y,rx,ry,c){ctx.fillStyle=c;for(let j=-ry;j<=ry;j++){const w=Math.round(rx*Math.sqrt(1-(j*j)/(ry*ry+.01)));ctx.fillRect(Math.round(x-w),Math.round(y+j),2*w+1,1)}}
+function drawUnder(){const o=cam-CX,L=S.lvl,b=Math.sin(time*1.6);
+ // giliszta- és pajorjáratok
+ for(const e of ents)if(e.tr&&Math.abs(e.x-cam)<W/2+60){ctx.fillStyle='rgba(40,24,12,.45)';for(const p of e.tr)ctx.fillRect(Math.round(p[0]-o),Math.round(p[1]),2,2)}
+ if(L>=3){const N=NEST();if(Math.abs(N.x-o-CX)<W/2+60){dig(N.P,o,Math.max(2,1.6*U|0),'#2c1a0d');
+   N.C.forEach((k,i)=>{const p=N.P[k],x=p[0]-o,y=p[1];oval(x,y,7*U,3*U,'#24150a');oval(x,y+1.5*U,6*U,1.2*U,'#3a2616');for(let j=0;j<4+i;j++)px(x-4*U+hs(j*3.1+i)*8*U,y+hs(j*7.7+i)*2*U,i==1?'#f4f0e0':'#e8dcc0')});
+   const hx=N.x-o;for(let j=0;j<5*U;j++){ctx.fillStyle=j%2?'#7a5230':'#8e6438';ctx.fillRect(Math.round(hx-(5*U-j)),Math.round(GY-j*.7),Math.round((5*U-j)*2),1)}}}
+ if(L>=8){const M=MOLE();if(M.x1-o>-20&&M.x0-o<W+20){ctx.fillStyle='#2a190c';for(let wx=M.x0;wx<M.x1;wx++){const y=M.y(wx);ctx.fillRect(Math.round(wx-o),Math.round(y-1.5*U),1,Math.max(3,3*U|0))}
+   for(let k=0;k<3;k++){const wx=M.x0+(k+.5)*(M.x1-M.x0)/3,x=wx-o;for(let j=0;j<4*U;j++){ctx.fillStyle=j%2?'#5a3a20':'#6e4a2a';ctx.fillRect(Math.round(x-(4*U-j)*1.4),Math.round(GY-j*.8),Math.round((4*U-j)*2.8),1)}
+    ctx.fillStyle='#2a190c';for(let y=GY;y<M.y(wx);y++)ctx.fillRect(Math.round(x),y,2,1)}}}
+ for(const d of DENS){if(L<d[0])continue;const G=denGeo(d);if(Math.abs(G.cx-o-CX)>W/2+80&&Math.abs(G.bx-o-CX)>W/2+80)continue;
+  dig(G.P,o,Math.max(3,3.4*U|0),'#22130a');const cx=G.cx-o,cy=G.cy,rx=11*U,ry=5*U;oval(cx,cy,rx,ry,'#1e1108');oval(cx,cy+ry*.6,rx*.85,ry*.3,'#4a3a1c');
+  const hx=G.bx-o;oval(hx,GY-1,3.4*U,2*U,'#140a04');for(let j=0;j<4*U;j++){ctx.fillStyle=j%2?'#6b4a2c':'#7d5834';ctx.fillRect(Math.round(hx+d[4]*-6*U-(5*U-j)),Math.round(GY-j*.8),Math.round((5*U-j)*2),1)}
+  const s=Math.max(1,Math.round(U*.9)),R2=(ax,ay,w,h,c)=>rc(cx+ax*s,cy+ry*.5-(ay+h)*s+(ay>1?b*.4:0),w*s,h*s,c);
+  if(d[1]=='rabbit'){R2(-4,0,8,3,'#bba486');R2(-3,3,6,1,'#cdb89c');R2(3,1,3,3,'#cdb89c');R2(-1,4,4,1,'#b09878');px(cx+5*s,cy+ry*.5-3*s,'#222');R2(-5,1,1,1,'#fff')}
+  else if(d[1]=='badger'){R2(-5,0,10,3,'#5e5e5e');R2(-4,3,8,1,'#7a7a7a');R2(5,0,3,3,'#f0f0f0');R2(5,1,3,1,'#1a1a1a');px(cx+8*s,cy+ry*.5-1*s,'#222')}
+  else{R2(-5,0,10,3,'#d9772b');R2(-4,3,7,1,'#e88a3a');R2(3,0,3,3,'#e88a3a');R2(-6,0,3,2,'#c8641e');R2(-7,0,2,2,'#fff');px(cx+5*s,cy+ry*.5-2*s,'#222')}
+  if(Math.sin(time*.8+d[2])>.6){ctx.globalAlpha=.6;px(cx+rx*.3,cy-ry*.6-((time*4)%4),'#cfd8e0');ctx.globalAlpha=1}}}
+// mozgás: giliszta perisztaltikusan, kanyarogva, járatot hagyva; pajor lassan; hangyák a boly járataiban; vakond a járatában
+function moveSoil(e,dt){const top=GY+6,bot=H-5;
+ if(e.k=='worm'||e.k=='grub'){if(e.a==null){e.a=Math.random()*6.28;e.h=[];e.tr=[]}const wm=e.k=='worm',pu=Math.max(0,Math.sin(time*(wm?2.4:1)+e.ph)),sp=(wm?6:1.4)*(.15+.85*pu);
+  let sx=Math.cos(e.a),sy=Math.sin(e.a);sy+=(e.y<top+5?1:e.y>bot-5?-1:0)*dt*3;sx+=(Math.random()-.5)*dt*2.4;sy+=(Math.random()-.5)*dt*2.4+(wm&&rainI>.3&&e.y>top+10?-dt*.6:0);
+  e.a=Math.atan2(sy,sx);e.x+=Math.cos(e.a)*sp*dt;e.y=cl(e.y+Math.sin(e.a)*sp*dt,top,bot);
+  const l=e.h[0];if(!l||Math.hypot(l[0]-e.x,l[1]-e.y)>.7){e.h.unshift([e.x,e.y]);if(e.h.length>(wm?Math.round(13*U):Math.round(5*U)))e.h.pop()}
+  const t=e.tr[0];if(!t||Math.hypot(t[0]-e.x,t[1]-e.y)>1.5){e.tr.unshift([e.x,e.y]);if(e.tr.length>(wm?90:30))e.tr.pop()}return}
+ if(e.k=='ant'){const N=NEST();if(e.s==null){e.s=Math.random();e.sp=(Math.random()<.5?-1:1)*(6+Math.random()*7);e.cr=Math.random()<.35}const P=N.P,q=pathPt(P,e.s);
+  e.s+=e.sp*dt/q[2]*(.6+.4*Math.sin(time*3+e.ph));if(e.s>1||e.s<0){e.sp*=-1;e.s=cl(e.s,0,1);e.cr=Math.random()<.4}const n=pathPt(P,e.s);e.f=n[0]>=e.x?1:-1;e.x=n[0];e.y=n[1];return}
+ if(e.k=='mole'){const M=MOLE();if(e.s==null){e.s=Math.random();e.sp=.06}const pu=Math.max(0,Math.sin(time*1.3+e.ph));e.s+=e.sp*dt*pu;if(e.s>1||e.s<0){e.sp*=-1;e.s=cl(e.s,0,1)}
+  const nx=M.x0+(M.x1-M.x0)*e.s;e.f=nx>=e.x?1:-1;e.x=nx;e.y=M.y(nx)}}
+function drawSoilEnt(e){const x=e.x|0,f=e.f||1;
+ if(e.k=='worm'&&e.h){const n=e.h.length;for(let j=n-1;j>=0;j--){const p=e.h[j],sx=Math.round(p[0]-(cam-CX)),sy=Math.round(p[1]),cli=j>n*.22&&j<n*.36,
+   c=j==0?'#f7b6c0':cli?'#f2a0a8':j%2?'#d87888':'#e88a98';rc(sx,sy,cli?2:1,cli||j<n*.7?2:1,c)}return true}
+ if(e.k=='grub'&&e.h){const a=time*.8+e.ph,s=Math.max(1,Math.round(U*.8)),cx=x,cy=Math.round(e.y);for(let j=0;j<7;j++){const t=.4+j/7*4.2,r=2.4*s;rc(cx+Math.cos(t+a*.1)*r,cy+Math.sin(t+a*.1)*r,s,s,j?'#f0ead8':'#b0602a')}return true}
+ if(e.k=='ant'){const y=e.y|0;px(x,y,'#b8401e');px(x+f,y,'#c8502a');px(x+2*f,y,'#b8401e');const w=Math.sin(time*16+e.ph)>0;px(x+(w?0:f),y+1,'#2a1a1a');px(x+2*f-(w?0:f),y+1,'#2a1a1a');if(e.cr)px(x+3*f,y,'#f4f0e0');return true}
+ if(e.k=='mole'){const y=e.y|0,s=Math.max(1,Math.round(U*.8)),R2=(ax,ay,w,h,c)=>rc(x+(f>0?ax:-ax-w)*s,y+ay*s,w*s,h*s,c);R2(-4,-2,8,4,'#2e2a2c');R2(-3,-3,6,1,'#3e393c');R2(4,-1,2,2,'#e89aa6');R2(2,1,2,1,'#f0b0b8');R2(-5,0,1,1,'#e89aa6');return true}
+ return false}
+// ---- Lepidodendron (pikkelyfa): villásan (dichotóm) elágazó korona, fűszerű levelek, toboz-szerű sporangiumfüzérek ----
+function lepCrown(tr,g,tx,top,HF,pal,ts,bk,sw){const a=cl((g-.5)/.45,0,1);let n=0;const R=()=>hs(tr.seed*5.3+(n++)*1.7),tips=[];
+ const tuft=(x,y,r)=>{for(let k=0;k<9;k++){const an=-Math.PI*(.1+.8*k/8),l=r*(.7+R()*.5);seg(x,y,x+Math.cos(an)*l,y+Math.sin(an)*l*.9+l*.5,pal[(k%3)+1],1)}clump(x,y,r*.45,tr.seed+x,pal,.1,.7)};
+ if(a<=0){tuft(tx,top,(2+g*6)*ts);return}
+ const fork=(x,y,ang,len,d)=>{const ex=x+Math.sin(ang)*len,ey=y-Math.cos(ang)*len;seg(x,y,ex,ey,d<2?bk[1]:bk[2],d<1?3:d<3?2:1);
+  if(d<5&&len>1.5){const s=.5-d*.05+R()*.08;fork(ex,ey,ang-s,len*.76,d+1);fork(ex,ey,ang+s,len*.76,d+1)}else tips.push([ex,ey])};
+ fork(tx,top,(R()-.5)*.12,HF*.075*a,0);
+ tips.forEach((t,i)=>{tuft(t[0],t[1],(1.4+2.2*a)*ts);if(i%3==0&&a>.6)rc(t[0]+1,t[1]+2,1,Math.max(2,3*ts|0),'#8a7a3a')})}
 function drawTree(tr,g,ns){if(!S.pl)return;
  const R=rt(tr),sp=SP[tr.sp],uu=U*(tr.main?1+Math.min(.35,Math.max(0,S.lvl-13)*.012):.78*sp.sz),cx=cxOf(tr),HF=3+84*uu,hT=3+g*84*uu,burn=R.burn>0,
   pal=burn?ASH:sp.ev||(sp.sp0&&SID==0?sp.sp0:sp.au&&SID==2?sp.au:sp.sm&&SID<2?sp.sm:LEAF),L=S.lvl,lfE=burn?.15:sp.ev?1:LF*(.4+.6*S.hp/100),sw=ns?0:Math.sin(time*1.1+tr.seed)*(.5+g*2.4)*uu*wind,
@@ -226,10 +290,10 @@ function drawTree(tr,g,ns){if(!S.pl)return;
  if(g>.08){const sr=(5+g*34)*uu;ctx.fillStyle='rgba(0,0,0,.2)';ctx.fillRect(cx-sr|0,GY,2*sr|0,2);ctx.fillRect(cx-sr*.7|0,GY+2,1.4*sr|0,1)}
  for(let i=0;i<hT;i++){const ox=sw*(i/HF)*(i/HF),w2=Math.max(1,Math.round(tw*(1-(sp.tp||.45)*i/hT)+(i<tw?(tw-i)>>1:0)));
   for(let k=0;k<w2;k++){const m=k/(w2-1||1),n=hs(i*3+k*7+tr.seed);let c;
-   if(i>hT-yt)c=k%2?'#9cc55c':'#7fae4a';
-   else{c=m<.25?bk[0]:m>.75?bk[2]:bk[1];if(sp.mk&&hs(i*.37+k*3.1+tr.seed)>.9&&w2>2)c='#2a2a28';else if(hs(k*9.7+tr.seed)>.72&&m>.1&&w2>3)c=bk[0];else if(n>.88)c=bk[0];else if(n<.07)c=bk[2];if(i==(hT-yt|0)&&w2>1)c=bk[0]}
+   if(i>hT-yt&&!sp.lep)c=k%2?'#9cc55c':'#7fae4a';
+   else{c=m<.25?bk[0]:m>.75?bk[2]:bk[1];if(sp.mk&&hs(i*.37+k*3.1+tr.seed)>.9&&w2>2)c='#2a2a28';else if(hs(k*9.7+tr.seed)>.72&&m>.1&&w2>3)c=bk[0];else if(n>.88)c=bk[0];else if(n<.07)c=bk[2];if(sp.lep&&w2>2){const q=((i+k*3)%7+7)%7,r2=((i-k*3)%7+7)%7;c=q==0||r2==0?bk[0]:m>.7?bk[2]:bk[1]}if(sp.ub&&i>hT*.5&&m>.12&&g>.5)c=sp.ub[m<.35?0:m>.78?2:1];if(i==(hT-yt|0)&&w2>1)c=bk[0]}
    rc(cx-(w2>>1)+k+ox,GY-1-i,1,1,c)}}
- if(g<.12){seedling(g,hT,tx,top);return}
+ if(g<.12){seedling(g,hT,tx,top);return}if(sp.lep){lepCrown(tr,g,tx,top,HF,pal,ts,bk,sw);return}
  const tips=[],sk=R.sk||(R.sk=genSk(tr.seed,sp));
  const node=(n,ux,uy,sc,a,dep)=>{const P=n.pts,m=P.length-1;let x0=ux+sw*Math.pow((GY-uy)/HF,2),y0=uy;
   for(let i=1;i<=m;i++){const qx=ux+P[i][0]*sc,qy=uy-P[i][1]*sc,h=GY-qy,x1=qx+sw*h*h/(HF*HF);
@@ -242,9 +306,10 @@ function drawTree(tr,g,ns){if(!S.pl)return;
  sk.forEach((p,idx)=>{const nh=HF*p.fr;if(nh>hT-4)return;const b=R.bk[idx]>0?1-.75*R.bk[idx]/100:1,a=cl((hT-nh)/(HF*.45),0,1)*b;if(a<.05)return;
   node(p.n,cx+p.s*(tw>>1),GY-nh,HF*a,b<.6?0:a,0)});
  if(cf>.04){const cy=GY-hT*(sp.cb+(1-sp.cb)*.55);
-  const fq=sp.sh==2?.62:sp.sh==1?.7:.88;let y0=1e9,y1=-1e9;tips.forEach(t=>{if(t.y<y0)y0=t.y;if(t.y>y1)y1=t.y});const chh=Math.max(1,y1-y0);
+  const fq=sp.sh==2?.62:sp.sh==1?.5:.88;let y0=1e9,y1=-1e9;tips.forEach(t=>{if(t.y<y0)y0=t.y;if(t.y>y1)y1=t.y});const chh=Math.max(1,y1-y0);
+  if(sp.sh==1&&cf>.15){const cb0=GY-hT*sp.cb,ht=cb0-top,rw=HF*sp.L*.62*cf;for(let y=0;y<ht;y+=2){const f=y/ht,w=rw*Math.pow(f,.85)*(.8+.3*hs(y*1.7+tr.seed)),xc=tx+sw*0;for(let x=-w;x<=w;x+=2){const n=hs((x|0)*3.7+y*1.3+tr.seed);if(n<.08)continue;rc(xc+x,top+y,2,2,n>.8?pal[1]:pal[0])}}}
   if(cf>.25&&sp.sh!=1){const r=HF*.2*cf*(sp.sh==3?.75:1),sx=sw*Math.pow(hT*.7/HF,2);clump(cx+sx-r*.8,cy+r*.3,r*.7,4,pal,.3,fq);clump(cx+sx+r*.8,cy+r*.3,r*.7,5,pal,.3,fq);clump(cx+sx,cy,r,3,pal,.22,fq)}
-  tips.map((t,i)=>[t,i]).sort((a,b)=>b[0].y-a[0].y).forEach(([t,i])=>clump(t.x,t.y,t.c?(1+2*cf)*ts:(1.2+(t.o?4.6:2.4)*cf)*ts,9+i,pal,cl((t.y-y0)/chh,0,1)*.28,fq));
+  tips.map((t,i)=>[t,i]).sort((a,b)=>b[0].y-a[0].y).forEach(([t,i])=>clump(t.x,t.y,t.c?(sp.sh==1?1.4+2.6*cf:1+2*cf)*ts:(1.2+(t.o?4.6:2.4)*cf)*ts,9+i,pal,cl((t.y-y0)/chh,0,1)*.28,fq));
   if(sp.sh==3&&cf>.3){const wl=sp.n=='Fűz'?1:.45;tips.forEach((t,i)=>{if(!t.o)return;const L=(5+hs(i*3.3)*12)*ts*cf*wl*3;for(let j=0;j<L;j++)px(t.x+Math.sin(j*.25+i)*1.2+(hs(i)-.5)*4,t.y+2+j,pal[(j+i)%4==0?3:j%3?1:2])})}}
  // rügyfakadás és hajtásnövekedés az ágvégeken
  tips.forEach(t=>{if(!t.o)return;
@@ -265,7 +330,10 @@ const MK=[
  ['p','x','fert','Trágya',50,'Azonnal növeli a fákat'],
  ['p','p','storm','Villámhárító',80,'Kivédi a vihart'],['p','p','drought','Öntözés',80,'Kivédi az aszályt'],['p','p','frost','Fagytakaró',80,'Kivédi a fagyot'],['p','p','tornado','Szélfogó',110,'Kivédi a tornádót'],['p','p','supercell','Jégháló',110,'Kivédi a szupercellát'],['p','p','flood','Gát',100,'Kivédi az árvizet']];
 MK.push(['g','s',15,'Douglas-fenyő',600,'100 m – a Föld egyik legmagasabb fája'],['g','s',14,'Eukaliptusz',900,'100 m – a legmagasabb virágzó fa'],['g','s',13,'Óriás mamutfenyő',1400,'84 m – a legnagyobb térfogatú fa'],['g','s',12,'Hyperion',2000,'115 m – a világ legmagasabb fája']);
-const LV={15:12,14:16,13:22,12:30};
+MK.push(['h','s',16,'Bükk',90,'Sima szürke kéreg, ősszel rézvörös'],['h','s',17,'Gyertyán',80,'Hazánk gyakori erdei fája'],['h','s',18,'Kislevelű hárs',110,'Illatos, méhcsalogató virágok'],['h','s',19,'Magas kőris',100,'Ligeterdők sudár fája'],['h','s',20,'Fekete nyár',120,'Ártéri óriás, gyorsan nő'],['h','s',21,'Csertölgy',110,'Rücskös, mélyen barázdált kéreg'],['h','s',22,'Vadcseresznye',130,'Tavasszal fehér virágfelhő'],
+ ['g','s',23,'Szitkai lucfenyő',1100,'96 m – a legmagasabb lucfenyő'],['g','s',25,'Óriás tuja',1300,'70 m – vörös, rostos kérgű cédrus'],['g','s',24,'Kauri',1700,'51 m – hatalmas, ágtalan törzs'],
+ ['o','s',26,'Lepidodendron',3500,'Pikkelyfa: 40 m magas, 300 millió éves, a karbon kori kőszénerdők óriása, a dinoszauruszok előtt élt']);
+const LV={15:12,14:16,13:22,12:30,23:20,25:24,24:28,26:35};
 const INT=[{n:'Gyenge',d:.6,r:.7,t:.8},{n:'Közepes',d:1,r:1,t:1},{n:'Erős',d:1.6,r:1.8,t:1.25}];
 // ===== CSAPÁS-BEÁLLÍTÁSOK: itt egyszerűen testreszabhatod őket =====
 // nm: név · e: ikon · t: időtartam (mp) · d: sebzés/mp az erdő egészségére · a többi csapás-specifikus
@@ -282,7 +350,7 @@ const DZ={
  dmg=()=>1/(1+S.lvl*.06),coin=n=>{S.c=(S.c||0)+n};
 let fno=0,sel=null,dz=null,dzCool=0,wind=1,flash=0,bolt=null,fires=[],lo=[],tn=null,fd=null,scorch=[],autoT=150,snow=0,TEMP=15,skyKey='',ptr=null,camV=0,camT=null,rainAcc=0,skyC,hillA,hillB,soilC,cbC,tab='t',cnT='',lvT='',fwT='';
 const TS=512,TB=[12,25,10,-4],DN={hive:'Méhkas',feeder:'Madáretető',lamp:'Lámpás',fountain:'Szökőkút',barrel:'Esővíz-hordó'},EM={storm:'⚡',drought:'💧',frost:'🔥',tornado:'🌪',supercell:'🌩',flood:'🌊',fert:'🌱'},
- TABS=[['t','🌳','Fák'],['g','🌲','Óriások'],['b','🌿','Bokrok'],['d','✨','Díszek'],['p','🛡','Védelem']],CBP=['#262c38','#454e60','#7a8499','#c3cbd8'],TH={},
+ TABS=[['t','🌳','Fák'],['h','🍂','Hazai'],['g','🌲','Óriások'],['o','🦕','Ősidők'],['b','🌿','Bokrok'],['d','✨','Díszek'],['p','🛡','Védelem']],CBP=['#262c38','#454e60','#7a8499','#c3cbd8'],TH={},
  PXo=()=>-Math.round(150*U),gmul=()=>.4+.6*cl(1-Math.abs(TEMP-18)/32,0,1);
 const onCv=(c,fn)=>{const c0=ctx;ctx=c.getContext('2d');ctx.imageSmoothingEnabled=false;try{fn()}finally{ctx=c0}},
  tile=(c,off,y)=>{let x=-(((off%TS)+TS)%TS)|0;for(;x<W;x+=TS)ctx.drawImage(c,x,y)};
@@ -422,7 +490,8 @@ function drawFauna(e,x,f,w){const k=e.k;
  else if(k=='deer'){const y=GY-1,c='#a8742a',l=w?1:0;rc(x,y-7,8,3,c);rc(x+(f>0?7:-2),y-10,3,3,c);px(x+(f>0?9:-2),y-9,'#222');rc(x+(f>0?8:-1),y-12,1,2,'#6b4426');rc(x+1,y-4,1,4-l,'#7d5528');rc(x+3,y-4,1,3+l,'#7d5528');rc(x+5,y-4,1,4-l,'#7d5528');rc(x+7,y-4,1,3+l,'#7d5528');px(x+(f>0?-1:8),y-7,'#fff')}
  else if(k=='owl'){const y=e.y+Math.sin(time*.7+e.ph)*4,d=w?-1:0,c='#6b5848';rc(x-1,y,3,3,c);rc(x-4,y+d,3,1,c);rc(x+2,y+d,3,1,c);px(x-1,y,'#ffd23f');px(x+1,y,'#ffd23f')}
  else if(k=='fox'){const y=GY-1,c='#d9772b';rc(x,y-4,6,2,c);rc(x+(f>0?5:-2),y-5,3,2,c);px(x+(f>0?7:-2),y-5,'#222');rc(x+(f>0?-3:6),y-4,3,2,'#fff');rc(x+1,y-2,1,2,'#7a3b10');rc(x+4,y-2,1,2,'#7a3b10')}}
-const JR=[[1,'Mag és csíra','Minden egy magból indul.'],[2,'Virágok','Beporzásra váró vadvirágok.'],[3,'Gombák és páfrányok','A gombák bontják az avart.'],[3,'Hangyák','A talaj szorgos lakói.'],[4,'Bokrok','Menedék a kisebb állatoknak.'],[5,'Giliszták','Fellazítják és trágyázzák a talajt.'],[6,'Magas virágok','Napraforgószerű, magas szárú virágok.'],[7,'Futóbogarak','Ragadozó bogarak a gyökerek közt.'],[9,'Tó és nádas','Víz a biom közepén.'],[9,'Pillangók','Beporzók a réten.'],[10,'Madarak','A lombkorona vendégei.'],[11,'Szentjánosbogarak','Éjszakai fényjátékosok.'],[12,'Erdőszél','Fiatal fák a láthatáron.'],[14,'Nyúl','Ugrál a fűben.'],[15,'Béka','A tó partján él.'],[16,'Méhek','Nappal gyűjtik a nektárt.'],[18,'Szarvas','A tisztás legnagyobb lakója.'],[20,'Bagoly','Éjszakai vadász.'],[23,'Róka','Settenkedik a bokrok közt.'],[30,'Ősfa','A fa vastagabb és magasabb lesz.']];
+const JR=[[3,'Hangyaboly','Kamrák és járatok: a dolgozók petéket és bábokat hordanak.'],[5,'Gilisztajáratok','A giliszták perisztaltikus mozgással fúrják a talajt, eső előtt feljebb jönnek.'],[7,'Pajor','A cserebogár lárvája évekig él a földben, gyökerekkel táplálkozik.'],[8,'Vakond','Járatrendszert ás, a kitúrt földből vakondtúrás lesz.'],[14,'Nyúlüreg','A föld alatti kamrában pihen a nyúl.'],[17,'Borzkotorék','A borz mély kotorékban alszik napközben.'],[23,'Rókakotorék','A róka összegömbölyödve pihen az üregében.'],[35,'Lepidodendron','A karbon kor (kb. 300 millió éve) pikkelyfája, a kőszéntelepek alapja.'],[1,'Mag és csíra','Minden egy magból indul.'],[2,'Virágok','Beporzásra váró vadvirágok.'],[3,'Gombák és páfrányok','A gombák bontják az avart.'],[3,'Hangyák','A talaj szorgos lakói.'],[4,'Bokrok','Menedék a kisebb állatoknak.'],[5,'Giliszták','Fellazítják és trágyázzák a talajt.'],[6,'Magas virágok','Napraforgószerű, magas szárú virágok.'],[7,'Futóbogarak','Ragadozó bogarak a gyökerek közt.'],[9,'Tó és nádas','Víz a biom közepén.'],[9,'Pillangók','Beporzók a réten.'],[10,'Madarak','A lombkorona vendégei.'],[11,'Szentjánosbogarak','Éjszakai fényjátékosok.'],[12,'Erdőszél','Fiatal fák a láthatáron.'],[14,'Nyúl','Ugrál a fűben.'],[15,'Béka','A tó partján él.'],[16,'Méhek','Nappal gyűjtik a nektárt.'],[18,'Szarvas','A tisztás legnagyobb lakója.'],[20,'Bagoly','Éjszakai vadász.'],[23,'Róka','Settenkedik a bokrok közt.'],[30,'Ősfa','A fa vastagabb és magasabb lesz.']];
+JR.sort((a,b)=>a[0]-b[0]);
 function showJr(){$('jl').innerHTML=JR.map(([l,n,d])=>S.lvl>=l?'<div class="ji"><b>'+l+'.</b><span><strong>'+n+'</strong><br>'+d+'</span></div>':'<div class="ji lk"><b>'+l+'.</b><span>???<br>Ismeretlen – '+l+'. szinttől</span></div>').join('')+'<div class="ji"><span>A játék végtelen: minden szint gazdagabbá teszi az erdőt, az évszakok körbejárnak, és eső, szivárvány, hulló csillag színesíti a napokat.</span></div>';$('jr').classList.remove('hide')}
 // ===== felhők: tudományos típusok, önálló életciklus, időjárás-rendszer =====
 const curP=()=>S.tod?[0,.01,.25,.495,.75][S.tod]:(S.t%DAY)/DAY;
@@ -486,7 +555,7 @@ function drawClouds(dayf,warm){const sunk=warm>.12,c0=ctx;if(sunk){if(!cL||cL.wi
   ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   if(sunk){ctx.globalCompositeOperation='source-atop';ctx.fillStyle='rgba(255,150,90,'+warm*.3+')';ctx.fillRect(0,0,W,GY);ctx.globalCompositeOperation='source-over'}
  }finally{if(sunk){ctx=c0;ctx.drawImage(cL,0,0)}}}
-function drawEnt(e){const x=e.x|0,f=e.v>0?1:-1,w=Math.sin(time*10+e.ph)>0;
+function drawEnt(e){if(drawSoilEnt(e))return;const x=e.x|0,f=e.v>0?1:-1,w=Math.sin(time*10+e.ph)>0;
  if(e.k=='ant'||e.k=='sant'){const y=(e.k=='ant'?e.y:GY-1)|0,c=e.k=='ant'?'#d6572a':'#1a1010';
   px(x,y,c);px(x+f,y,c);px(x+2*f,y,c);px(x+(w?0:f),y+1,'#2a1a1a');px(x+2*f-(w?0:f),y+1,'#2a1a1a')}
  else if(e.k=='worm'){for(let i=0;i<6;i++)px(x-f*i,Math.round(e.y+Math.sin(time*4+i*.9+e.ph)*1.2),i?'#f07a8c':'#ffb0bc')}
@@ -620,7 +689,7 @@ function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r
  const pw=L>=9?(Math.min(46,24+(L-9)*5)*U|0):0,pd=Math.max(5,(7*U)|0),pxo=PXo(),psx=pxo-cam+CX,sh=cam-CX,w0=(cam-CX)|0;drawWet(w0,dayf,psx,pw);
  if(S.pl){drawRoots(T0,g);for(const t of S.trees)drawRoots(t,t.g)}
  if(pw&&psx<W&&psx+pw>0){const ice=TEMP<-1,c1=ice?'#e6f6ff':'#5fb4f0',c2=ice?'#cfeeff':'#3a8fd6',c3=ice?'#b0d8f0':'#2a6aa0';rc(psx,GY,pw,pd,c2);rc(psx,GY,pw,2,c1);rc(psx,GY+pd-1,pw,1,c3);if(!ice)for(let i=0;i<pw;i+=5)rc(psx+(i+(time*6|0))%pw,GY+(i%10?1:0),3,1,'#cfeeff');rc(psx-1,GY,1,pd,'#6b5a3a');rc(psx+pw,GY,1,pd,'#6b5a3a');for(let i=0;i<3;i++){const rx=psx+2+i*pw/3.5;rc(rx,GY-6,1,6,'#3f8f3a');rc(rx,GY-8,1,3,'#7a4a1a')}}
- for(const e of ents){if((e.k=='ant'||e.k=='worm'||e.k=='bug')&&Math.abs(e.x-cam)<W/2+20){e.x-=sh;drawEnt(e);e.x+=sh}}
+ drawUnder();for(const e of ents){if((e.k=='ant'||e.k=='worm'||e.k=='bug'||e.k=='grub'||e.k=='mole')&&Math.abs(e.x-cam)<W/2+40){e.x-=sh;drawEnt(e);e.x+=sh}}
  const gs=[];if(S.pl){gs.push({x:0,R:(90+L*26)*U*.7});for(const t of S.trees)gs.push({x:t.wx,R:(40+Math.min(1,t.g)*50)*U*.7});for(const d of S.dec)gs.push({x:d.wx,R:50*U*.7})}
  const gv=gs.filter(q=>Math.abs(q.x-cam)<W/2+q.R+10),G=wx=>{let m=0;for(const q of gv){const v=1.3-Math.abs(wx-q.x)/q.R;if(v>m)m=v}return m>1?1:m},dens=cl(.25+L*.07,0,1);
  for(let sx=0;sx<W;sx++){const wx=w0+sx,gg=G(wx);if(gg<=0||(pw&&wx>=pxo&&wx<pxo+pw))continue;const r=hs(wx*3.1+S.seed);if(r>dens*gg)continue;
@@ -634,7 +703,7 @@ function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r
  if(S.pl)for(let sx=0;sx<W;sx+=2){const wx=w0+sx,gg=G(wx);if(gg<=0||(pw&&wx>=pxo&&wx<pxo+pw))continue;const r=hs(wx*2.3+S.seed*3);if(r>.55*gg)continue;const h=((2+((r*9|0)%4)+(L>4?1:0))*U)|0,sw=Math.round(Math.sin(time*2+wx*.3)*(h>2?1:0));rc(sx,GY-h*.6,1,h*.6,GR[4]);rc(sx+sw,GY-h,1,h*.4+1,GR[3])}
  if(snow>.02){const s2=Math.max(1,(snow*3)|0);ctx.fillStyle='#f4faff';ctx.fillRect(0,GY-s2,W,s2);ctx.fillStyle='#dbe8f5';for(let x=0;x<W;x+=3)ctx.fillRect(x,GY-s2-((hs(x+w0*.3)*snow*3)|0),3,1);ctx.fillStyle='#fff';for(let x=0;x<W;x+=11)ctx.fillRect(x+(time*3|0)%11,GY-s2,1,1)}
  drawReflections(w0,dayf,psx,pw,pd);drawFog(1.25,WX.fog,1);
- for(const e of ents){if(e.k=='ant'||e.k=='worm'||e.k=='bug'||e.k=='ff'||(e.k=='bee'&&dayf<=.4)||(e.k=='owl'&&dayf>=.5)||Math.abs(e.x-cam)>W/2+20)continue;e.x-=sh;drawEnt(e);e.x+=sh}
+ for(const e of ents){if(e.k=='ant'||e.k=='worm'||e.k=='bug'||e.k=='grub'||e.k=='mole'||e.k=='ff'||(e.k=='bee'&&dayf<=.4)||(e.k=='owl'&&dayf>=.5)||Math.abs(e.x-cam)>W/2+20)continue;e.x-=sh;drawEnt(e);e.x+=sh}
  ctx.fillStyle='rgba(10,20,70,'+(1-dayf)*.38+')';ctx.fillRect(0,0,W,H);
  {const ds=Math.min(.6,rainI*.45+WX.fog*.35);if(ds>.03){ctx.globalCompositeOperation='saturation';ctx.globalAlpha=ds;ctx.fillStyle='#808080';ctx.fillRect(0,0,W,H)}if(warm>.05&&dayf>.15){ctx.globalCompositeOperation='soft-light';ctx.globalAlpha=warm*.55*(1-rainI*.6);ctx.fillStyle='#ffb070';ctx.fillRect(0,0,W,H)}ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'}
  {const sg=dz&&(dz.k=='storm'||dz.k=='supercell')?.22:0,gl=Math.max(rainI*.3,sg);if(gl>.02){ctx.fillStyle='rgba(30,45,70,'+gl+')';ctx.fillRect(0,0,W,H)}}
@@ -659,7 +728,7 @@ function update(dt){
   else if(S.lvl>=5&&Math.random()<dt*(SID==2?4:.7))parts.push({k:'z',x:CX+(Math.random()-.5)*Math.min(S.lvl,14)*9*U,y:GY-50*U,vx:7,vy:9,l:6,c:SID==2?['#e8902a','#c2571a','#f6cf4a'][Math.random()*3|0]:'#8bd84e'});
   updateClouds(dt);{const df=cl(.5+Math.sin(curP()*6.2832)*.9,0,1);if(df>.35&&rainI<.2&&parts.length<700&&Math.random()<dt*(eco?1.5:4))parts.push({k:'m',x:Math.random()*W,y:GY*(.25+Math.random()*.72),vx:WX.dir*wind*(2+Math.random()*4),vy:(Math.random()-.5)*3,l:6+Math.random()*6,ph:Math.random()*9,L:12})}
   stT-=dt;if(stT<=0){stT=35+Math.random()*50;const pp=curP();if(pp>.55&&pp<.95)parts.push({k:'star',x:Math.random()*W*.6,y:8+Math.random()*GY*.25,vx:55,vy:22,l:3.5,c:'#fff7c8'})}}
- for(const e of ents){e.x+=e.v*dt;const hw=W*.9;if(e.x>cam+hw)e.x-=2*hw;else if(e.x<cam-hw)e.x+=2*hw}
+ for(const e of ents){const hw=W*.9;if(e.k=='ant'||e.k=='mole'){moveSoil(e,dt);continue}if(e.k=='worm'||e.k=='grub'){moveSoil(e,dt);const d=e.x>cam+hw?-2*hw:e.x<cam-hw?2*hw:0;if(d){e.x+=d;e.h.forEach(p=>p[0]+=d);e.tr.length=0}continue}e.x+=e.v*dt;if(e.x>cam+hw)e.x-=2*hw;else if(e.x<cam-hw)e.x+=2*hw}
  for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt;
   if(p.k=='d'||p.k=='seed')p.vy+=140*dt;else if(p.k=='s')p.vy+=60*dt;if(p.k=='h'&&p.y>=GY)hailHit(p);if(p.k=='m'){p.y+=Math.sin(time*.9+p.ph)*4*dt;p.x+=Math.sin(time*.6+p.ph*2)*3*dt}if(p.k=='f')p.x+=Math.sin(time*1.7+p.ph)*9*dt;if(p.k=='r'&&p.y>=GY-1){rainHit(p);p.l=0}
   if(p.k=='d'&&p.y>=GY){gain(.4);coin(.06);if(fires.length){fires.forEach(f=>{if(Math.abs(f.x-(p.x+cam-CX))<16)f.hp--});fires=fires.filter(f=>f.hp>0)}S.wat=Math.min(3,S.wat+.25);for(let j=0;j<4;j++)parts.push({k:'s',x:p.x,y:GY-1,vx:(Math.random()-.5)*30,vy:-20-Math.random()*20,l:.4,c:'#7fd1ff'});p.l=0}

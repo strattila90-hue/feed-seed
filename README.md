@@ -42,6 +42,15 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Zene:** a menüben hét stílus közül választhatsz: Nyugodt, Lo-fi, Gitár, Természet, Zongora, Chill (alapértelmezett: ritkás, lágy zongora hosszú zengetéssel, csendes szünetekkel), Ki. A hang mind a készüléken generálódik.
 - **Megjelenés:** lekerekített gombok, nagyobb, képes áruházkártyák.
 
+## Hazai fák, óriások, ősidők, talajélet
+
+- **Őshonos magyar fafajok (Hazai fül):** bükk, gyertyán, kislevelű hárs (virágzik), magas kőris, fekete nyár, csertölgy, vadcseresznye (tavasszal fehér virágfelhő), mindegyik saját kéreggel, őszi színnel és gyökérformával.
+- **Valósághű fenyők:** az ágak örvökben nőnek, az alsók lejtenek, a végük felfelé hajlik, a koronában sűrű, sötét tűlevél-tömeg van. Az erdeifenyő törzsének felső része narancsos.
+- **Új óriásfák:** szitkai lucfenyő (96 m), óriás tuja (70 m), kauri (51 m, hatalmas ágtalan törzs).
+- **Ősidők: Lepidodendron (pikkelyfa)** – a karbon kori kőszénerdők 40 m-es óriása, kb. 300 millió évvel ezelőttről, jóval a dinoszauruszok előttről. Rombuszos levélripacsos törzs, villásan elágazó korona, fűszerű levélpamacsok, sporangiumfüzérek. Fiatalon ágtalan oszlop, csak éretten ágazik el. 35. szinttől.
+- **Talajélet:** hangyaboly kamrákkal (peték, bábok), a hangyák a járatokban közlekednek és terhet hordanak; a giliszták perisztaltikusan, kanyarogva fúrnak, járatot hagynak, eső idején feljebb jönnek; pajorok; vakond a járatában, a felszínen vakondtúrásokkal.
+- **Üregek:** nyúlüreg (14.), borzkotorék (17.), rókakotorék (23.) – bejárat földkupaccal, lejtős járat, kamra alvó, lélegző állattal.
+
 ## Élethű időjárás és grafika
 
 - **Időjárási modell:** légnyomás (hPa) és nyomástendencia határozza meg a helyzetet: süllyedő nyomás → front, csapadék; meleg, párás nappal → zivatarhajlam; magas nyomás → derült idő. A szélirány frontátvonuláskor megfordul.
