@@ -77,6 +77,21 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Offline:** a játék a telepítés után internet nélkül is megy (gyorsítótár-első service worker), betöltéskor betöltőképernyő látszik.
 - **Ikon:** a `tools/make_icon.py` generálja az ikont, a `tools/android_icons.py` pedig az Android indítóikonokat az APK építésekor.
 
+## Újradolgozott csapások
+
+- **Tornádó:** hatalmas, a képernyő tetejétől a talajig érő tölcsér forgó, árnyalt csíkokkal, kötélszerű hajlással, forgó falfelhővel és porfelhővel a talajon. A törmelék (föld, levelek, ágak, deszkák) a tölcsér körül kering, a tölcsér mögött és előtt is, majd kirepül. A fák a tornádó felé dőlnek (beáramló szél), lökésesen.
+- **Vihar / szupercella:** felülről sötétedő ég, gomolygó felhőalap, mozgó esőfüggönyök, alacsonyan száguldó foszlányfelhők, a szél leveleket sodor, a villám bevilágítja a felhőket.
+- **Erdőtűz:** rétegzett, lobogó lángnyelvek, parázs, felszálló, a széllel sodródó füst; az égő fák is füstölnek.
+- **Aszály:** hőremegés a talaj felett, repedezett föld, poros, vakító fény.
+- **Árvíz:** zavaros, tükröződő, hullámzó víz, úszó uszadék (rönkök, ágak, deszkák).
+- **Fagy:** jégvirágok a képernyő szélein, csillogó dér a talajon, kékes fény.
+- **Sáskajárás:** sűrűbb, hullámzó raj, árnyékkal a talajon.
+
+## Irányítás laptopon
+
+- Kattintás: vízcseppek (felhőre kattintva is, a felhő neve közben kiíródik). Nyomva tartás: folyamatos eső.
+- Egérgörgő / érintőpad: a kamera vízszintes mozgatása. Nyilak vagy A / D: kamera lendülettel.
+
 ## Csapások testreszabása
 
 - **Játékban:** a ⚡ gomb panelében minden csapásnál a ◀ ▶ gombokkal állíthatod az erősséget (Gyenge, Közepes, Erős), felül pedig az automatikus csapások gyakoriságát (Ki, Ritka, Gyakori). A beállítás mentődik.
