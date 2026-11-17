@@ -89,7 +89,13 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 
 ## Időjárás-ikonok gyerekeknek
 
-A főképernyő bal oldalán kis ikonos kártyák mutatják, mi történik éppen: napos, felhős, borult, szitálás, eső, felhőszakadás, havazás, havas eső, zivatar, villám, jégeső, tornádó, szellő, erős szél, köd, szivárvány, fagy, hőség, harmat, hullócsillag, napkelte, naplemente, éjszaka és a csapások. Egy kártyára koppintva egyszerű, gyerekeknek szóló magyarázat jelenik meg.
+A főképernyő bal oldalán kis, saját rajzolású pixel art ikonos kártyák mutatják, mi történik éppen: napos, felhős, borult, szitálás, eső, felhőszakadás, havazás, havas eső, zivatar, villám, jégeső, tornádó, szellő, erős szél, köd, szivárvány, fagy, hőség, harmat, hullócsillag, napkelte, naplemente, éjszaka és a csapások. Egy kártyára koppintva egyszerű, gyerekeknek szóló magyarázat jelenik meg.
+
+## Telepítés és megosztás (iPhone, Android)
+
+- A menü **Telepítés és megosztás** gombja lépésről lépésre megmutatja, hogyan kerül a játék a kezdőképernyőre: **iPhone/iPad** (Safari → Megosztás → Főképernyőhöz adás → Hozzáadás; ha más alkalmazásban nyílt meg a link, először Safariban kell megnyitni) és **Android** (Chrome → ⋮ → Alkalmazás telepítése, vagy közvetlen „Telepítés most” gomb, illetve APK letöltés).
+- A **Megosztás barátokkal** gomb a telefon megosztó menüjét nyitja meg (vagy a vágólapra másolja a linket). A megosztott link (`…/feed-seed/?telepit`) megnyitásakor a játék automatikusan az útmutatóval indul, a felismert telefonhoz igazítva.
+- Mobilon az első megnyitáskor magától is megjelenik az útmutató; telepített (főképernyőről indított) változatban nem.
 
 ## Irányítás laptopon
 
