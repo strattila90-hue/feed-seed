@@ -42,6 +42,18 @@ A szintek nem érnek véget. A 13. szint után (az igényelt tapasztalat lassan 
 - **Zene:** a menüben hat stílus közül választhatsz: Nyugodt, Lo-fi, Gitár, Természet, Zongora, Ki. A hang mind a készüléken generálódik.
 - **Megjelenés:** lekerekített gombok, nagyobb, képes áruházkártyák.
 
+## Élethű időjárás és grafika
+
+- **Időjárási modell:** légnyomás (hPa) és nyomástendencia határozza meg a helyzetet: süllyedő nyomás → front, csapadék; meleg, párás nappal → zivatarhajlam; magas nyomás → derült idő. A szélirány frontátvonuláskor megfordul.
+- **Páratartalom és harmatpont:** a relatív páratartalom éjjel, eső után nő, napsütésben és szélben csökken; a harmatpont a Magnus-képlettel számolódik.
+- **Köd:** ha a hőmérséklet megközelíti a harmatpontot, gyenge szélben (főleg hajnalban) ködréteg képződik, amit a nap feloszlat.
+- **Szél:** a nyomásból és a nyomásváltozásból jön, folyamatos széllökésekkel; dönti az esőt, hajlítja a fákat, viszi a leveleket és a felhőket.
+- **Csapadéktípus:** 2 °C fölött eső, −1 és 2 °C között havas eső, alatta lebegő hópelyhek. Rétegfelhőből szitálás, zivatarfelhőből felhőszakadás. Mennydörgés a villám távolságával arányos késéssel, eső- és szélzaj.
+- **Nedves talaj:** eső után sötétebb föld, tócsák tükröződéssel és hullámgyűrűkkel, amelyek napsütésben felszáradnak, fagyban befagynak.
+- **Időjárás-jelző:** a bal felső sávban hőmérséklet, páratartalom, szél; rákoppintva részletes jelentés (légnyomás, tendencia, harmatpont, Beaufort-fok).
+- **Grafika:** távoli hegyvonulat légköri perspektívával, fenyves erdősáv, sima égi színátmenet, fényudvar a nap és a fények körül, napsugarak, tükröződő tó, elágazó villám, aranyórás színezés, esőben és ködben fakóbb színek.
+- **Grafika: Éles** mód a menüben (Auto → Éles → Takarékos): kb. kétszer annyi képpont, finomabb részletek.
+
 ## Végtelen erdő, érintés, teljesítmény
 
 - **Végtelen világ:** az erdő vízszintesen végtelen. Húzd el az ujjad a kamera mozgatásához (lendülettel), vagy tartsd az ujjad a képernyő szélén a görgetéshez. A 🏠 gomb visszavisz a főfához. A zöld terület a szinttel és az ültetett fák körül nő.
