@@ -86,7 +86,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;image-rendering:pixelated;f
 <div id="hud" class="hide"><span id="lv"></span><div id="bar"><div id="fill"></div></div><button id="pb" aria-label="Szünet"></button></div>
 <div id="cn" class="hide"></div><div id="wx" class="hide"></div><div id="side" class="hide"><button class="ib" id="hb" aria-label="Középre">🏠</button><button class="ib" id="mb" aria-label="Piac">🛒</button><button class="ib" id="db" aria-label="Csapások">⚡</button></div><div id="inv"></div>
 <div id="hint" class="hide">Koppints a mag elültetéséhez</div><div id="toast"></div><pre id="dbg" class="hide"></pre>
-<div id="menu"><h1>Feed&amp;Seed</h1><small>a növekedés nyugodt játéka</small><button class="b" id="go">Játék indítása</button><button class="b" id="nw">Új játék</button><button class="b s" id="td">Napszak: Auto</button><button class="b s" id="gx">Grafika: Auto</button><button class="b s" id="jb">Napló</button><button class="b s" id="snd">Zene: be</button><button class="b" id="insb">Telepítés és megosztás</button></div>
+<div id="menu"><h1>Feed&amp;Seed</h1><small>a növekedés nyugodt játéka</small><small id="ver" style="margin:-12px 0 8px;font-size:10px;opacity:.55"></small><button class="b" id="go">Játék indítása</button><button class="b" id="nw">Új játék</button><button class="b s" id="td">Napszak: Auto</button><button class="b s" id="gx">Grafika: Auto</button><button class="b s" id="jb">Napló</button><button class="b s" id="snd">Zene: be</button><button class="b" id="insb">Telepítés és megosztás</button><button class="b s" id="upd">Frissítés</button></div>
 <div id="mk" class="hide"><h2>Piac</h2><div id="mc"></div><div id="mt"></div><div id="ml"></div><button class="b" id="mx">Vissza</button></div>
 <div id="dz" class="hide"><h2>Természeti csapások</h2><p style="max-width:460px;text-align:center;font-size:13px;margin:0 12px">A csapások károsítják az erdő egészségét (♥), de túlélésükért érmét kapsz. Vihar: villám csap a fákba. Aszály: tartsd nedvesen a talajt. Erdőtűz: koppintással oltsd el. Fagy: kitartás. Sáskák: koppints rájuk. Tornádó és szupercella: jég, villám, letört ágak, az Erős fokozat kitéphet kisebb fákat. Árvíz: a víz tápanyagot hagy maga után. A ◀ ▶ gombokkal állítsd be az erősséget (Gyenge, Közepes, Erős), vagy kapcsold be az automatikus csapásokat. A piacon védelmet vehetsz.</p><div id="zl"></div><button class="b s" id="zx">Vissza</button></div>
 <div id="ins" class="hide"><h2>Tedd fel a telefonodra!</h2><p class="isub">Ingyenes, nem kell hozzá áruház. Pár koppintás, és a Feed&amp;Seed ikonként ott lesz a kezdőképernyőn.</p><div id="il"></div><button class="b s" id="ix">Bezárás</button></div>
@@ -145,6 +145,7 @@ function mkEnts(){ents=[];const K=Math.max(1,W/320),L=S.lvl,A=(k,n,f)=>{for(let 
  if(L>=20)A('owl',1,()=>({y:30+Math.random()*GY*.25,v:8}));
  if(L>=23)A('fox',1,()=>({v:(Math.random()<.5?-1:1)*12}))}
 const MSG={2:'Virágok bújnak elő',3:'Gombák, páfrányok és hangyák',4:'Bokrok és sűrűbb fű',5:'Giliszták a talajban',6:'Magas virágok nyílnak',7:'Bogarak ásnak a gyökerek közt',8:'A fa szinte kifejlett!',9:'A fa kifejlett – a biom fejlődik: tó és pillangók',10:'Madarak érkeztek',11:'Szentjánosbogarak az éjszakában',12:'Erdőszél nő a láthatáron',13:'Teljes biom – gyönyörű!',14:'Nyulak költöztek az erdőbe',15:'Békák a tó partján',16:'Méhek dongják a virágokat',18:'Szarvas jelent meg a tisztáson',20:'Bagoly vadászik éjszaka',23:'Róka settenkedik a bokrok közt',30:'A fa ősfává érik'};
+const VER='2026.11.18';
 let tt;function toast(s){const t=$('toast');t.textContent=s;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),Math.max(2800,s.length*55))}
 function sparkle(x,y,n,c){for(let i=0;i<n;i++)parts.push({k:'z',x:x+(Math.random()-.5)*30,y:y-Math.random()*40,vx:(Math.random()-.5)*20,vy:-10-Math.random()*20,l:1.2,c})}
 function gain(a){if(!S.pl)return;a*=(.3+.7*S.hp/100)*gmul();S.trees.forEach(t=>{if(t.g<1)t.g=Math.min(1,t.g+a*.0035)});S.xp+=a;if(Math.random()<.4)sparkle(CX,GY-8,1,'#b6ff6b');
@@ -441,7 +442,7 @@ function endDz(){const L=S.lvl,c=Math.round((12+L*3+(dz.win?10+L*2:0))*dz.I.r);c
  if(dz.k=='flood'){S.wat=3;gain(2+L*.5);toast('Az árvíz tápanyagot hagyott a talajban. +'+c+' 🪙')}else toast((dz.win?'Sikeres védekezés! ':'Túlélted a csapást. ')+'+'+c+' 🪙');
  dz=null;dzCool=20;fires=[];lo=[];fd=null;save()}
 function updateDz(dt){const m=dmg()*(dz?dz.I.d:1);if(dzCool>0)dzCool-=dt;
- wind+=((dz&&(dz.k=='storm'||dz.k=='supercell')?3.2:tn?6:WX.wf)-wind)*Math.min(1,dt*1.5);if(flash>0)flash-=dt*1.8;if(bolt&&(bolt.t-=dt)<=0)bolt=null;
+ wind+=((dz&&(dz.k=='storm'||dz.k=='supercell')?3.2:tn?6:WX.wf)-wind)*Math.min(1,dt*1.5);if(flash>0)flash=Math.max(0,flash-dt*.9);if(bolt&&(bolt.t-=dt)<=0)bolt=null;
  if(scorch.length){scorch.forEach(q=>q.t-=dt);scorch=scorch.filter(q=>q.t>0)}
  for(const tr of allTrees()){const R=rt(tr);if(R.burn>0){R.burn-=dt;if(Math.random()<dt*3)smoke(cxOf(tr)+(Math.random()-.5)*30,GY-40*U-Math.random()*40,14*U,1);if(Math.random()<dt*25)parts.push({k:'z',x:cxOf(tr)+(Math.random()-.5)*60,y:GY-20-Math.random()*90,vx:0,vy:-25,l:.8,g:1,c:['#ff9a2a','#ffd23f','#d6401a'][Math.random()*3|0]})}for(const i in R.bk){R.bk[i]-=dt*.8;if(R.bk[i]<=0)delete R.bk[i]}}
  S.trees.forEach(t=>{const sp=SP[t.sp];if(t.g<1)t.g=Math.min(1,t.g+dt*.0006*(sp.gr||1)*gmul()*(S.wat>.1?1:.3)*S.hp/100);else if(!sp.bush)coin(.04*dt)});
@@ -495,7 +496,7 @@ function pufSpr(){if(PUF)return PUF;PUF=[];[PUFC,PUFB].forEach(P=>{for(let s=0;s
 const puf=(b,s,v)=>pufSpr()[(b*5+cl(s|0,0,4))*2+v];
 // --- vihar / szupercella: gomolygó, többszintes polcfelhő (shelf cloud), sötétedő ég, esőfüggönyök a felhőalapból, száguldó foszlányok, villámfény a felhőkben ---
 const stBase=()=>GY*(dz&&dz.k=='supercell'?.2:.24);
-function drawStormSky(){if(!tn&&(!dz||(dz.k!='storm'&&dz.k!='supercell')))return;const a=tn?Math.max(dzA(),Math.min(1,(tn.age||0)/3)):dzA(),sup=tn||dz.k=='supercell',cb=stBase(),fl=Math.min(1,flash*1.4);
+function drawStormSky(){if(!tn&&(!dz||(dz.k!='storm'&&dz.k!='supercell')))return;const a=tn?Math.max(dzA(),Math.min(1,(tn.age||0)/3)):dzA(),sup=tn||dz.k=='supercell',cb=stBase(),fl=Math.min(1,flash)*.25;
  const g=ctx.createLinearGradient(0,0,0,GY);g.addColorStop(0,'rgba(12,14,22,'+.85*a+')');g.addColorStop(.5,'rgba(22,28,40,'+.78*a+')');g.addColorStop(1,'rgba(40,48,58,'+.3*a+')');ctx.fillStyle=g;ctx.fillRect(0,0,W,GY);
  if(sup){ctx.fillStyle='rgba(40,84,72,'+.2*a+')';ctx.fillRect(0,GY*.3,W,GY*.7)}
  ctx.globalAlpha=a;ctx.fillStyle='#16151c';ctx.fillRect(0,0,W,cb*.55|0);
@@ -663,7 +664,7 @@ function drawClouds(dayf,warm){const sunk=warm>.12,c0=ctx;if(sunk){if(!cL||cL.wi
    ctx.globalAlpha=a*al*(bl?1-s*.5:1);ctx.drawImage(spr(k,c.v1),xx,yy,ww,hh);if(bl){ctx.globalAlpha=a*al*s*.5;ctx.drawImage(spr(k,1-c.v1),xx,yy,ww,hh)}return[xx,yy,ww,hh]};
   if(c.fade>0&&c.prev)put(c.prev,c.fade/4);const[xx,yy,ww,hh]=put(c.k,c.fade>0?1-c.fade/4:1),by=c.b*GY;
   if(c.rn>.08){ctx.globalAlpha=1;ctx.fillStyle='rgba(150,170,190,'+c.rn*.05+')';for(let q=0;q<3;q++){const hw=ww*(.38-q*.08);ctx.fillRect(sx-hw,by,hw*2,GY-by)}}
-  if(c.k=='cb'&&c.fl>0){ctx.globalCompositeOperation='lighter';ctx.fillStyle='rgba(190,200,255,'+c.fl*.4+')';ctx.fillRect(xx+ww*.2,yy+hh*.25,ww*.6,hh*.55);ctx.globalCompositeOperation='source-over'}
+  if(c.k=='cb'&&c.fl>0){ctx.globalCompositeOperation='lighter';ctx.fillStyle='rgba(190,200,255,'+c.fl*.12+')';ctx.fillRect(xx+ww*.2,yy+hh*.25,ww*.6,hh*.55);ctx.globalCompositeOperation='source-over'}
   if(c.sup&&c.k=='cb'){ctx.globalAlpha=a;for(let i=0;i<36;i++){const q=i/36,an=time*.7+i*.5;px(sx+Math.cos(an)*ww*.36*q,by-6+Math.sin(an)*4*q,'#9db0a8')}}}
   ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   if(sunk){ctx.globalCompositeOperation='source-atop';ctx.fillStyle='rgba(255,150,90,'+warm*.3+')';ctx.fillRect(0,0,W,GY);ctx.globalCompositeOperation='source-over'}
@@ -782,7 +783,7 @@ function boltPath(b){let n=b.s*1000|0;const R=()=>hs(n++*.731+b.s),pts=[],top=b.
  const walk=(x,y,ex,ey,seg,br)=>{const p=[[x,y]];let cx=x,cy=y;for(let i=1;i<=seg;i++){const t=i/seg;cx=x+(ex-x)*t+(R()-.5)*14*(1-t*.6);cy=y+(ey-y)*t;p.push([cx,cy]);
    if(br&&R()<.22&&i<seg-2){const bl=4+R()*6|0;pts.push(walk(cx,cy,cx+(R()-.5)*70,cy+(ey-y)*(.2+R()*.25),bl,0))}}return p};
  pts.unshift(walk(x0,top,b.x,ty,Math.max(8,(ty-top)/9|0),1));return pts}
-function drawBolt(){if(!bolt)return;if(!bolt.pts)bolt.pts=boltPath(bolt);if(Math.sin(bolt.t*70)<-.4&&bolt.t<.22)return;
+function drawBolt(){if(!bolt)return;if(!bolt.pts)bolt.pts=boltPath(bolt);
  bolt.pts.forEach((p,k)=>{for(let i=1;i<p.length;i++){const[a,b]=[p[i-1],p[i]];if(!k){ctx.globalAlpha=.35;seg(a[0]-1,a[1],b[0]-1,b[1],'#a8b8ff',3)}ctx.globalAlpha=1;seg(a[0],a[1],b[0],b[1],k?'#d8e0ff':'#fffef0',k?1:2)}});
  const e=bolt.pts[0][bolt.pts[0].length-1];glow(e[0],e[1],10,'200,210,255',.3);ctx.globalAlpha=1}
 let BL;function bloom(st){if(eco)return;const w=Math.max(1,W>>3),h=Math.max(1,H>>3);if(!BL||BL.width!=w||BL.height!=h){BL=document.createElement('canvas');BL.width=w;BL.height=h}
@@ -832,7 +833,11 @@ function wxNow(){const p=curP(),day=Math.sin(p*6.2832),k=[];
  if(parts.some(q=>q.k=='star'))k.push('star');
  if(dz&&WXK[dz.k])k.push(dz.k);
  return[...new Set(k)].slice(0,6)}
-function renderWxKids(){const k=wxNow(),s=k.join();if(s===wxT)return;wxT=s;$('wx').innerHTML=k.map(q=>'<button class="wc" data-w="'+q+'"><img src="'+wxIcon16(q)+'" alt="">'+WXK[q][1]+'</button>').join('')}
+const WXSEEN={},WXORD=Object.keys(WXK);
+function renderWxKids(){const now=time;wxNow().forEach(q=>WXSEEN[q]=now);if(WXSEEN.bolt)WXSEEN.storm=Math.max(WXSEEN.storm||0,WXSEEN.bolt);
+ const k=WXORD.filter(q=>WXSEEN[q]!=null&&now-WXSEEN[q]<8&&q!='bolt').slice(0,6),s=k.join();if(s===wxT)return;wxT=s;const box=$('wx');
+ [...box.children].forEach(el=>{if(!k.includes(el.dataset.w))el.remove()});
+ k.forEach((q,i)=>{let el=box.querySelector('[data-w="'+q+'"]');if(!el){el=document.createElement('button');el.className='wc';el.dataset.w=q;el.innerHTML='<img src="'+wxIcon16(q)+'" alt="">'+WXK[q][1]}if(box.children[i]!==el)box.insertBefore(el,box.children[i]||null)})}
 // ---- saját rajzolású, 16×16-os pixel art időjárás-ikonok ----
 const WXI={};
 function wxIcon16(k){if(WXI[k])return WXI[k];const c=document.createElement('canvas');c.width=c.height=16;const g=c.getContext('2d'),
@@ -947,7 +952,7 @@ function draw(){if(++fno%240==0)RT.forEach(r=>{if(r.cv&&fno-r.u>600){r.cv=null;r
  if(ptr&&!ptr.pan&&ptr.t>.25&&!sel&&S.pl){const x=ptr.x|0,y=Math.max(8,Math.min(ptr.y,GY-25)-34)|0;rc(x-10,y,20,5,'#e8eef6');rc(x-6,y-4,12,4,'#fff');rc(x+2,y-6,8,3,'#e8eef6');rc(x-10,y+4,20,2,'#a8b6c8')}
  if(!S.pl){const sy=GY-60+Math.sin(time*2)*3,sx=CX-cam;ctx.globalAlpha=.2+.1*Math.sin(time*3);disc(sx,sy+1|0,7,'#ffe27a');ctx.globalAlpha=1;rc(sx-1,sy,3,4,'#c8923c');px(sx,sy,'#f0c060')}
  for(const q of parts){if(q.k=='seed'){rc(q.x-1,q.y,3,4,'#c8923c');px(q.x,q.y,'#f0c060')}else if(q.k=='d'){rc(q.x,q.y,1,3,'#4aa8f0');px(q.x,q.y,'#cfeeff')}else if(q.k=='h'){rc(q.x,q.y,2,2,'#e8f4ff');px(q.x,q.y,'#fff')}else if(q.k=='r'){const n=q.d?2:(2+q.z*5)|0,dx=q.vx/q.vy;ctx.fillStyle='rgba(190,215,240,'+(q.d?.45:.25+q.z*.45)+')';for(let j=0;j<n;j++)ctx.fillRect(Math.round(q.x-dx*j),Math.round(q.y-j),1,1)}else if(q.k=='sm'){const f=q.l/q.L,s2=q.s*(1+(1-f)*2.2);ctx.globalAlpha=Math.min(1,f*1.6)*(q.d?.55:.35);ctx.drawImage(smkSpr(),q.x-s2/2,q.y-s2/2,s2,s2);ctx.globalAlpha=1}else if(q.k=='m'){const a=Math.min(1,q.l/2,(12-q.l)/2)*(.45+.35*Math.sin(time*3+q.ph)),ny=SUN&&Math.abs(q.x-SUN.x)<W*.4?1.6:1;ctx.globalAlpha=Math.max(0,a*ny*.8);ctx.fillStyle=q.ph>6?'#fff2b0':'#ffffff';ctx.fillRect(q.x|0,q.y|0,1,1);ctx.globalAlpha=1}else if(q.k=='f'){ctx.fillStyle=q.z>.8?'#fff':'rgba(240,246,255,'+(.5+q.z*.4)+')';ctx.fillRect(q.x|0,q.y|0,q.w,q.w);if(q.w>1&&q.z>.8){ctx.fillRect((q.x|0)-1,(q.y|0)+.5|0,1,1);ctx.fillRect((q.x|0)+2,q.y|0,1,1)}}else if(q.k=='star'){for(let j=0;j<9;j++)rc(q.x-j*1.6,q.y-j*.65,1,1,'rgba(255,247,200,'+(1-j/9)+')');rc(q.x,q.y,2,2,'#fff')}else{if(q.g)glow(q.x,q.y,2,'255,150,40',.12);rc(q.x,q.y,q.w||1,q.h||1,q.c)}}
- bloom(.32+(1-dayf)*.25+warm*.15);if(flash>0){ctx.fillStyle='rgba(255,255,255,'+Math.min(.6,flash*.6)+')';ctx.fillRect(0,0,W,H)}
+ bloom(.32+(1-dayf)*.25+warm*.15);if(flash>0){const f=Math.min(1,flash);ctx.fillStyle='rgba(205,215,255,'+(f*f*.1)+')';ctx.fillRect(0,0,W,H)}
  const ct='🪙 '+(S.c|0)+'  🌡 '+Math.round(TEMP)+'°  '+wxIcon()+' 💧'+Math.round(WX.rh*100)+'%  💨'+Math.round(WX.ws)+' m/s';if(ct!==cnT){cnT=ct;$('cn').textContent=ct}if(fno%15==0)renderWxKids();
  const fw=((S.xp/need(S.lvl)*100)|0)+'%';if(fw!==fwT){fwT=fw;$('fill').style.width=fw}
  const lv=(L<=TL?stg(g)+' · '+L+'. szint ':'Biom · '+(L-TL)+'. szint ')+(SI[SID]||'')+(S.hp<99?' ♥'+(S.hp|0):'');if(lv!==lvT){lvT=lv;$('lv').textContent=lv}}
@@ -1053,7 +1058,8 @@ $('zl').onclick=e=>{const sb=e.target.closest('button.sb');if(sb){const k=sb.dat
 $('inv').onclick=e=>{const b=e.target.closest('button[data-i]');if(!b)return;const t=b.dataset.t,i=t=='s'?+b.dataset.i:b.dataset.i;sel=(sel&&sel.t==t&&sel.i==i)?null:{t,i};if(sel)toast('Koppints a talajra az ültetéshez');renderInv()};
 $('mt').onclick=e=>{const b=e.target.closest('button[data-tab]');if(b){tab=b.dataset.tab;renderMk()}};$('hb').onclick=()=>{camT=0};$('td').onclick=()=>{S.tod=(S.tod+1)%5;lab();save()};
 $('gx').onclick=()=>{if(eco){eco=false}else if(hd){hd=false;eco=true}else hd=true;localStorage.setItem('fs_eco',eco?'1':'0');localStorage.setItem('fs_hd',hd?'1':'0');qual=1;lab();size()};
-$('cn').onclick=()=>toast(wxInfo());$('wx').onclick=e=>{const b=e.target.closest('.wc');if(b){const w=WXK[b.dataset.w];toast(w[1]+': '+w[2])}};$('insb').onclick=showIns;$('ix').onclick=()=>{$('ins').classList.add('hide');paused=!$('menu').classList.contains('hide')};$('il').onclick=e=>{const b=e.target.closest('.itab button');if(b){insTab=b.dataset.t;insRender()}};$('jx').onclick=()=>$('jr').classList.add('hide');
+$('cn').onclick=()=>toast(wxInfo());$('wx').onclick=e=>{const b=e.target.closest('.wc');if(b){const w=WXK[b.dataset.w];toast(w[1]+': '+w[2])}};$('insb').onclick=showIns;$('ver').textContent='verzió '+VER;
+$('upd').onclick=async()=>{save();$('upd').textContent='Frissítés…';try{if(navigator.serviceWorker){const r=await navigator.serviceWorker.getRegistration();if(r)await r.update()}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}location.replace(location.pathname+'?v='+Date.now())};$('ix').onclick=()=>{$('ins').classList.add('hide');paused=!$('menu').classList.contains('hide')};$('il').onclick=e=>{const b=e.target.closest('.itab button');if(b){insTab=b.dataset.t;insRender()}};$('jx').onclick=()=>$('jr').classList.add('hide');
 let tc=0;document.querySelector('#menu h1').onclick=()=>{if(++tc>=5){tc=0;$('dbg').classList.toggle('hide')}};
 eco=localStorage.getItem('fs_eco')=='1';hd=!eco&&localStorage.getItem('fs_hd')=='1';if(navigator.hardwareConcurrency<=4||navigator.deviceMemory<=3)qual=1.12;
 size();lab();seedClouds();

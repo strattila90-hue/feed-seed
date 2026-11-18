@@ -97,6 +97,11 @@ A főképernyő bal oldalán kis, saját rajzolású pixel art ikonos kártyák 
 - A **Megosztás barátokkal** gomb a telefon megosztó menüjét nyitja meg (vagy a vágólapra másolja a linket). A megosztott link (`…/feed-seed/?telepit`) megnyitásakor a játék automatikusan az útmutatóval indul, a felismert telefonhoz igazítva.
 - Mobilon az első megnyitáskor magától is megjelenik az útmutató; telepített (főképernyőről indított) változatban nem.
 
+## Villogásmentes megjelenítés, frissítés
+
+- A villám nem villogtatja a képet: lágy, lassan elhalványuló derengés jelzi. Az időjárás-kártyák nem ugrálnak: egy jelenség legalább 8 másodpercig kint marad, csak az újonnan megjelenő kártya animál.
+- A menü **Frissítés** gombja menti a játékot, törli a gyorsítótárat, és betölti a legújabb változatot. A menüben látszik a verziószám is. (Az APK-ban az új verzióhoz az új APK-t kell telepíteni.)
+
 ## Irányítás laptopon
 
 - Kattintás: vízcseppek (felhőre kattintva is, a felhő neve közben kiíródik). Nyomva tartás: folyamatos eső.
